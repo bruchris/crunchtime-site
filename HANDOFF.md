@@ -23,12 +23,14 @@ What is not done yet:
 - `crunchtime.no` is not fully wired into the deploy chain.
 - Mail and sender deliverability are not complete.
 - Production env vars are not fully verified.
-- The code is not yet pushed to a GitHub repo under `bruchris`.
+- The code now lives in GitHub, but the branded production chain is still incomplete.
 
 ## Source of Truth
 
 - Local site workspace:
   - `C:\Users\Chris\.paperclip\instances\default\projects\94dbb427-819a-4ec4-a02e-22fb24589604\aa2b0907-d47d-43b0-8498-60598efc5c75\_default`
+- GitHub repo:
+  - `https://github.com/bruchris/crunchtime-site`
 - Public Vercel preview:
   - `https://crunchtime-site-17w2auklk-bru-broch.vercel.app`
 - Paperclip parent issue:
@@ -85,13 +87,35 @@ Status: blocked
 This is the most important blocker right now.
 
 Needs:
-- register `crunchtime.no`
+- `crunchtime.no` DNS to be pointed and verified
 - Cloudflare DNS
-- Zoho mailboxes
+- mailbox provider decision finalized and configured
 - SPF / DKIM / DMARC
 - `christian@crunchtime.no` mail-tester score >= 9/10
 
 Without this, the site can exist as a preview but not as the real branded public asset.
+
+### Revised mail recommendation
+
+If `bruchris.me` is already on a real **Google Workspace admin** setup, that is now the preferred path over Zoho.
+
+Why:
+
+- central admin instead of splitting email across providers
+- enterprise-ready mail stack from day one
+- easier long-term user/account management
+- cleaner place to host both `christian@crunchtime.no` and `hello@crunchtime.no`
+
+Recommended approach:
+
+- add `crunchtime.no` into the existing Google Workspace tenant as either a **secondary domain** or a **domain alias**
+- create the required sender/support addresses there
+- point MX to Google instead of Zoho
+- then configure SPF, DKIM, and DMARC for Google sending
+
+Fallback:
+
+- if `bruchris.me` is not a Google Workspace admin tenant and is only simple forwarding/consumer mail, then the old Zoho fallback remains viable
 
 ### `CRUA-41` Day 2: scaffold, home, contact
 
@@ -145,19 +169,14 @@ The main thing to understand is that the next bottleneck is not design or React 
 Current state:
 
 - Connected GitHub account in agent tooling: `bruchris`
-- No target repo exists yet for the site push
-- The site workspace is not yet a git repo
+- GitHub repo exists: `https://github.com/bruchris/crunchtime-site`
+- Local site workspace is now a git repo
+- Current source is pushed on `main`
 
-Desired next step:
+Immediate implication:
 
-- Create an empty public repo under `bruchris`, ideally `bruchris/crunchtime-site`
-
-Once that exists, an agent can:
-
-1. initialize git
-2. commit the site
-3. add the remote
-4. push to GitHub
+- Christian can work locally with the repo as the shared source base
+- agents can now patch against a real GitHub-backed codebase instead of only the local managed workspace
 
 ## What Christian Can Safely Work On Directly
 
@@ -202,7 +221,8 @@ That is enough for a fast follow-up.
 
 ### Mail
 
-- Zoho tenant created
+- preferred: Google Workspace tenant handles `crunchtime.no`
+- fallback: Zoho tenant created
 - `christian@crunchtime.no`
 - `hello@crunchtime.no`
 - forwarding configured if needed
@@ -245,16 +265,15 @@ For the immediate business goal, only `crunchtime-site` needs active attention.
 
 ### Immediate
 
-1. Create empty GitHub repo `bruchris/crunchtime-site`
+1. Decide whether `bruchris.me` is a real Google Workspace admin tenant and, if yes, use it for `crunchtime.no`
 2. Finish `CRUA-40`
-3. Post the repo URL and any domain/provider progress in Paperclip comments
+3. Post DNS/mail/provider progress in Paperclip comments
 
 ### Then
 
-1. Agent pushes code to GitHub
-2. Agent completes branded deploy hookup
-3. Agent validates forms + booking + SEO artifacts
-4. Agent closes the website chain and hands off to CMO
+1. Agent completes branded deploy hookup
+2. Agent validates forms + booking + SEO artifacts
+3. Agent closes the website chain and hands off to CMO
 
 ## Notion Note
 
