@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { DM_Sans, Syne } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
+import { CursorEffect } from "./_components/CursorEffect";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -109,6 +110,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <p>© {new Date().getFullYear()} Crunchtime</p>
           </div>
         </footer>
+        <CursorEffect />
       </body>
     </html>
   );

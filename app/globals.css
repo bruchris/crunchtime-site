@@ -224,3 +224,78 @@ a {
     scroll-behavior: auto !important;
   }
 }
+
+/* Custom cursor effect — see docs/superpowers/specs/2026-05-01-custom-cursor-effect-design.md */
+.cursor-effect-host {
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  transition: opacity 200ms ease;
+}
+
+.cursor-effect-host[data-active="true"] {
+  opacity: 1;
+}
+
+/* Position layer — moved every frame by JS, no transitions to avoid fighting rAF. */
+.cursor-dot,
+.cursor-ring-wrap {
+  left: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  will-change: transform;
+}
+
+.cursor-dot {
+  background: var(--color-accent);
+  border-radius: 50%;
+  height: 10px;
+  margin-left: -5px;
+  margin-top: -5px;
+  width: 10px;
+}
+
+/* Visual layer — scaled via CSS with transition; sits inside the wrap. */
+.cursor-ring {
+  border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+  border-radius: 50%;
+  height: 36px;
+  margin-left: -18px;
+  margin-top: -18px;
+  transition: transform 200ms ease;
+  width: 36px;
+}
+
+.cursor-ring[data-hover="true"] {
+  transform: scale(1.6);
+}
+
+.cursor-ring[data-tap="true"] {
+  animation: cursorTap 280ms ease-out;
+}
+
+@keyframes cursorTap {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+html.cursor-effect-fine,
+html.cursor-effect-fine body,
+html.cursor-effect-fine a,
+html.cursor-effect-fine button,
+html.cursor-effect-fine input,
+html.cursor-effect-fine textarea,
+html.cursor-effect-fine select,
+html.cursor-effect-fine label {
+  cursor: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-effect-host {
+    display: none;
+  }
+}
