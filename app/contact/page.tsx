@@ -24,40 +24,38 @@ export default async function ContactPage({
 
   return (
     <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-24">
-      <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-        <section>
-          <p className="eyebrow">Book your call</p>
-          <h1 className="hero-title mt-5 text-balance">
-            Ready to stop doing everything yourself?
-          </h1>
-          <p className="mt-7 max-w-2xl text-xl font-light leading-8 text-[var(--color-muted)]">
-            Book a 30-minute call. We will map out your first AI agent in the session.
+      <section>
+        <p className="eyebrow">Book your call</p>
+        <h1 className="hero-title mt-5 text-balance">
+          Ready to stop doing everything yourself?
+        </h1>
+        <p className="mt-7 max-w-2xl text-xl font-light leading-8 text-[var(--color-muted)]">
+          Book a 30-minute call. We will map out your first AI agent in the session.
+        </p>
+
+        <div className="accent-panel mt-10 max-w-2xl rounded-md p-6">
+          <p className="eyebrow">No commitment</p>
+          <p className="mt-3 leading-7 text-[var(--color-muted)]">
+            No jargon. Just clarity on what AI can actually do for your business.
           </p>
+        </div>
+      </section>
 
-          <div className="accent-panel mt-10 rounded-md p-6">
-            <p className="eyebrow">No commitment</p>
-            <p className="mt-3 leading-7 text-[var(--color-muted)]">
-              No jargon. Just clarity on what AI can actually do for your business.
-            </p>
-          </div>
-        </section>
-
-        <section className="accent-panel overflow-hidden rounded-md">
-          <div className="border-b border-white/8 p-5">
-            <h2 className="font-display text-2xl font-extrabold tracking-tight">
-              Pick a time that works
-            </h2>
-            <p className="mt-2 text-sm text-[var(--color-muted)]">
-              Pick a 30-minute slot. A Google Meet link is added to the invite automatically.
-            </p>
-          </div>
-          <iframe
-            title="Crunchtime booking calendar"
-            src={bookingLink}
-            className="h-[680px] w-full bg-white"
-          />
-        </section>
-      </div>
+      <section className="accent-panel mt-12 overflow-hidden rounded-md">
+        <div className="border-b border-white/8 p-5">
+          <h2 className="font-display text-2xl font-extrabold tracking-tight">
+            Pick a time that works
+          </h2>
+          <p className="mt-2 text-sm text-[var(--color-muted)]">
+            Pick a 30-minute slot. A Google Meet link is added to the invite automatically.
+          </p>
+        </div>
+        <iframe
+          title="Crunchtime booking calendar"
+          src={bookingLink}
+          className="block h-[760px] w-full bg-white"
+        />
+      </section>
 
       <section className="mt-10 grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="accent-panel rounded-md p-6">
