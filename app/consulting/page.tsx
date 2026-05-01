@@ -13,7 +13,8 @@ export const metadata: Metadata = {
   }
 };
 
-const FIT_CALL_FALLBACK = "https://cal.com/crunchtime/fit-call";
+const FIT_CALL_FALLBACK =
+  "https://calendar.google.com/calendar/appointments/schedules/AcZssZ3I8SZIfyI8qMSoX5wo0tY3dlfxajUj0eDlrgpzpN29AcUzDT3EEyQmH9PJpCjZ-Q0-DrtAX5oa?gv=true";
 const EMBED_HEIGHT_PX = 720;
 
 type Tier = {
@@ -108,9 +109,6 @@ export default function ConsultingPage() {
     process.env.NEXT_PUBLIC_CAL_FIT_CALL_LINK ??
     process.env.NEXT_PUBLIC_CAL_BOOKING_LINK ??
     FIT_CALL_FALLBACK;
-  const embedSrc = fitCallLink.includes("?")
-    ? `${fitCallLink}&embed=true`
-    : `${fitCallLink}?embed=true`;
 
   return (
     <div className="mx-auto max-w-5xl px-6 pb-28 pt-16 sm:pb-20 sm:pt-20">
@@ -277,7 +275,7 @@ export default function ConsultingPage() {
         <div className="mt-8 overflow-hidden rounded-xl border border-white/5 bg-[var(--color-surface)]">
           <iframe
             title="Book a 15-minute fit call with Crunchtime"
-            src={embedSrc}
+            src={fitCallLink}
             loading="lazy"
             className="block h-[720px] w-full border-0"
             style={{ height: `${EMBED_HEIGHT_PX}px` }}
