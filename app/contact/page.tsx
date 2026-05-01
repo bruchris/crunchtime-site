@@ -19,7 +19,8 @@ export default async function ContactPage({
 }) {
   const { sent, error, subject } = await searchParams;
   const bookingLink =
-    process.env.NEXT_PUBLIC_CAL_BOOKING_LINK ?? "https://cal.com/crunchtime/discovery-sprint";
+    process.env.NEXT_PUBLIC_CAL_BOOKING_LINK ??
+    "https://calendar.google.com/calendar/appointments/schedules/AcZssZ3I8SZIfyI8qMSoX5wo0tY3dlfxajUj0eDlrgpzpN29AcUzDT3EEyQmH9PJpCjZ-Q0-DrtAX5oa?gv=true";
 
   return (
     <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-24">
@@ -47,7 +48,7 @@ export default async function ContactPage({
               Pick a time that works
             </h2>
             <p className="mt-2 text-sm text-[var(--color-muted)]">
-              Cal.com booking opens here when the production link is configured.
+              Pick a 30-minute slot. A Google Meet link is added to the invite automatically.
             </p>
           </div>
           <iframe
