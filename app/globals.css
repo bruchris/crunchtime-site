@@ -88,6 +88,7 @@ a {
 }
 
 .accent-panel {
+  border: 1px solid #5e5e5a;
   border: 1px solid color-mix(in srgb, var(--color-line) 78%, white);
   background:
     linear-gradient(135deg, rgba(212, 239, 58, 0.08), transparent 32%),
