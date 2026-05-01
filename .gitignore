@@ -8,3 +8,7 @@ out
 .vercel
 next-env.d.ts
 .claude
+
+.env*.local
+
+.superpowers/
