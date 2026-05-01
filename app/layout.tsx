@@ -63,6 +63,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </Link>
               </li>
               <li>
+                <Link href="/consulting" className="hover:text-[var(--color-fg)]">
+                  Consulting
+                </Link>
+              </li>
+              <li>
                 <Link href="/contact" className="hover:text-[var(--color-fg)]">
                   Book a call
                 </Link>
@@ -90,6 +95,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="flex flex-wrap gap-5">
               <Link href="/#how-it-works" className="hover:text-[var(--color-fg)]">
                 How it works
+              </Link>
+              <Link href="/consulting" className="hover:text-[var(--color-fg)]">
+                Consulting
               </Link>
               <Link href="/contact" className="hover:text-[var(--color-fg)]">
                 Book a call

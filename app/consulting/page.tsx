@@ -15,7 +15,6 @@ export const metadata: Metadata = {
 
 const FIT_CALL_FALLBACK =
   "https://calendar.google.com/calendar/appointments/schedules/AcZssZ3I8SZIfyI8qMSoX5wo0tY3dlfxajUj0eDlrgpzpN29AcUzDT3EEyQmH9PJpCjZ-Q0-DrtAX5oa?gv=true";
-const EMBED_HEIGHT_PX = 720;
 
 type Tier = {
   name: string;
@@ -278,7 +277,6 @@ export default function ConsultingPage() {
             src={fitCallLink}
             loading="lazy"
             className="block h-[720px] w-full border-0"
-            style={{ height: `${EMBED_HEIGHT_PX}px` }}
           />
         </div>
         <p className="mt-6 text-sm text-[var(--color-muted)]">

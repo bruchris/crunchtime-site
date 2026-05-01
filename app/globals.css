@@ -22,6 +22,7 @@ body {
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 a {
@@ -40,7 +41,6 @@ a {
 
 .page-shell {
   position: relative;
-  overflow: hidden;
 }
 
 .page-shell::before {
@@ -50,6 +50,7 @@ a {
   background-size: 88px 88px;
   content: "";
   inset: 0;
+  -webkit-mask-image: radial-gradient(ellipse 70% 45% at 50% 0%, black 0%, transparent 72%);
   mask-image: radial-gradient(ellipse 70% 45% at 50% 0%, black 0%, transparent 72%);
   pointer-events: none;
   position: fixed;
@@ -87,6 +88,7 @@ a {
 }
 
 .accent-panel {
+  border: 1px solid #5e5e5a;
   border: 1px solid color-mix(in srgb, var(--color-line) 78%, white);
   background:
     linear-gradient(135deg, rgba(212, 239, 58, 0.08), transparent 32%),
