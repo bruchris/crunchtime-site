@@ -66,7 +66,7 @@ export default function HomePage() {
           </h1>
           <p className="mt-8 max-w-2xl text-xl font-light leading-8 text-[var(--color-muted)] sm:text-2xl sm:leading-9">
             Crunchtime builds and manages teams of AI agents for your business - agents that work
-            in Slack, your inbox, your calendar, your tools. We run them 24/7, on Paperclip.
+            in Slack, your inbox, your calendar, your tools. We run them 24/7.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <Link
@@ -122,8 +122,8 @@ export default function HomePage() {
           <span>AI agent implementation</span>
           <span>Back-office automation</span>
           <span>Hosted agent teams</span>
-          <span>Paperclip dashboards</span>
-          <span>OpenClaw runtimes</span>
+          <span>Live activity dashboards</span>
+          <span>24/7 task execution</span>
           <span>AI agent implementation</span>
           <span>Back-office automation</span>
           <span>Hosted agent teams</span>
@@ -208,12 +208,12 @@ export default function HomePage() {
               [
                 "02",
                 "We hire and configure your AI team",
-                "We set up agents on Paperclip: sales, back-office, support - each with the skills, tools, and permissions to get your work done."
+                "We set up your agent team: sales, back-office, support - each with the skills, tools, and permissions to do your work."
               ],
               [
                 "03",
                 "They work. You watch.",
-                "OpenClaw runs your agents around the clock. You get a live dashboard, Slack updates, and weekly reports."
+                "Your agents run around the clock. You get a live dashboard, Slack updates, and weekly reports on what got shipped."
               ]
             ].map(([num, title, body]) => (
               <article key={num} className="bg-[var(--color-surface)] p-8">
@@ -228,26 +228,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-10 px-5 py-24 sm:px-8 lg:grid-cols-[0.8fr_1.2fr]">
-        <div>
-          <p className="eyebrow">Under the hood</p>
-          <h2 className="section-title mt-4">Paperclip is the org chart. OpenClaw is the team.</h2>
-        </div>
-        <div className="border-l-2 border-[var(--color-accent)] pl-6 text-lg font-light leading-8 text-[var(--color-muted)]">
-          <p>
-            <strong className="font-bold text-[var(--color-fg)]">Paperclip</strong> is the platform
-            where your AI agents live. It gives them tasks, tracks their progress, and lets you see
-            exactly what they are doing.
-          </p>
-          <p className="mt-6">
-            <strong className="font-bold text-[var(--color-fg)]">OpenClaw</strong> is the engine
-            that powers each agent. It is what makes them think, act, and respond, connecting to
-            your email, calendar, Slack, and tools.
-          </p>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-5 pb-24 sm:px-8">
+      <section className="mx-auto max-w-7xl px-5 pb-24 pt-24 sm:px-8">
         <div className="grid gap-4 sm:grid-cols-4">
           {[
             ["3 hrs", "Average daily time reclaimed per business"],

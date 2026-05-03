@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: "%s · Crunchtime"
   },
   description:
-    "Crunchtime builds and manages AI agent teams for businesses, powered by Paperclip and OpenClaw.",
+    "Crunchtime builds and manages AI agent teams for businesses. Norwegian AI agency based in Bergen.",
   alternates: {
     canonical: "/"
   },
@@ -90,7 +90,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <p className="font-display text-base font-extrabold text-[var(--color-fg)]">
                 Crunch<span className="text-[var(--color-accent)]">time</span>
               </p>
-              <p className="mt-1">AI Agency Consulting. Powered by Paperclip + OpenClaw.</p>
+              <p className="mt-1">Norwegian AI agency · Bergen, Norway</p>
+              <p className="mt-1 text-xs opacity-70">Built on Paperclip.</p>
             </div>
             <div className="flex flex-wrap gap-5">
               <Link href="/#how-it-works" className="hover:text-[var(--color-fg)]">
