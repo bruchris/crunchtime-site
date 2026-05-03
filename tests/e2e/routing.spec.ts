@@ -34,4 +34,19 @@ test.describe("locale routing", () => {
     await page.goto("/en/consulting");
     await expect(page).toHaveURL(/\/en\/consulting/);
   });
+
+  test("/consulting (bare) 301-redirects to /no/consulting", async ({ page }) => {
+    const response = await page.goto("/consulting", { waitUntil: "domcontentloaded" });
+    expect(response?.url()).toMatch(/\/no\/consulting/);
+  });
+
+  test("/contact (bare) 301-redirects to /no/contact", async ({ page }) => {
+    const response = await page.goto("/contact", { waitUntil: "domcontentloaded" });
+    expect(response?.url()).toMatch(/\/no\/contact/);
+  });
+
+  test("/back-office/finance returns 404", async ({ page }) => {
+    const response = await page.goto("/back-office/finance");
+    expect(response?.status()).toBe(404);
+  });
 });

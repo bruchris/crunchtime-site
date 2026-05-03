@@ -11,6 +11,12 @@ const nextConfig = {
   poweredByHeader: false,
   turbopack: {
     root: projectRoot
+  },
+  async redirects() {
+    return [
+      { source: "/consulting", destination: "/no/consulting", permanent: true },
+      { source: "/contact", destination: "/no/contact", permanent: true }
+    ];
   }
 };
 
