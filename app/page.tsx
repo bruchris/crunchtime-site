@@ -59,7 +59,7 @@ export default function HomePage() {
     <div>
       <section className="mx-auto grid min-h-[calc(100svh-73px)] max-w-7xl items-center gap-12 px-5 py-16 sm:px-8 lg:grid-cols-[1.04fr_0.96fr] lg:py-20">
         <div>
-          <p className="eyebrow">Powered by Paperclip + OpenClaw</p>
+          <p className="eyebrow">Norwegian AI agency · Bergen</p>
           <h1 className="hero-title mt-5">
             Your <span className="text-[var(--color-accent)]">AI team</span>, hired and running by
             tomorrow.
