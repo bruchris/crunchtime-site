@@ -12,3 +12,7 @@ next-env.d.ts
 .env*.local
 
 .superpowers/
+
+playwright-report/
+test-results/
+/playwright/.cache/
