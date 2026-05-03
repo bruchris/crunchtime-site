@@ -1,0 +1,17 @@
+{
+  "nav": {
+    "home": "Home",
+    "consulting": "Consulting",
+    "contact": "Contact",
+    "cta": "Get started"
+  },
+  "footer": {
+    "tagline": "Norwegian AI agency · Bergen",
+    "rights": "All rights reserved"
+  },
+  "localeToggle": {
+    "label": "Language",
+    "no": "NO",
+    "en": "EN"
+  }
+}

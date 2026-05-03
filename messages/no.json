@@ -1,0 +1,17 @@
+{
+  "nav": {
+    "home": "Hjem",
+    "consulting": "Konsulent",
+    "contact": "Kontakt",
+    "cta": "Kom i gang"
+  },
+  "footer": {
+    "tagline": "Norsk AI-byrå · Bergen",
+    "rights": "Alle rettigheter forbeholdt"
+  },
+  "localeToggle": {
+    "label": "Språk",
+    "no": "NO",
+    "en": "EN"
+  }
+}
