@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Newsroom } from "./_components/Newsroom";
+import { Newsroom } from "../_components/Newsroom";
 
 const services = [
   ["AI Agent Implementation", "We design, hire, and deploy your custom AI workforce."],
