@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Newsroom } from "./_components/Newsroom";
 
 const agents = [
   {
@@ -36,15 +37,6 @@ const agents = [
     result: "Weekly summary ready",
     tone: "bg-amber-300"
   }
-];
-
-const tasks = [
-  ["done", "Send Q2 proposal to Acme Corp", "done 2 min ago"],
-  ["running", "Reconcile March expenses", "in progress"],
-  ["done", "Write 3 LinkedIn posts", "done 14 min ago"],
-  ["running", "Book meeting with Anna Karenina", "in progress"],
-  ["done", "Update CRM with call notes", "done 1 hr ago"],
-  ["queued", "Audit subscription renewals", "queued"]
 ];
 
 const services = [
@@ -130,70 +122,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <section id="agents" className="mx-auto max-w-7xl px-5 py-24 sm:px-8">
-        <div className="max-w-3xl">
-          <p className="eyebrow">Live right now</p>
-          <h2 className="section-title mt-4">A business that keeps moving.</h2>
-        </div>
-
-        <div className="workflow-grid mt-12">
-          <div className="accent-panel rounded-md p-5">
-            <p className="eyebrow">Your AI workforce</p>
-            <p className="mt-3 text-sm leading-6 text-[var(--color-muted)]">
-              Each agent has a role, a tool belt, and a task queue. They pick up work, do it, and
-              move on.
-            </p>
-            <div className="mt-6 grid gap-3">
-              {agents.map((agent) => (
-                <article key={agent.name} className="agent-card relative overflow-hidden rounded-sm p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex min-w-0 items-center gap-3">
-                      <span className={`h-8 w-8 shrink-0 rounded-sm ${agent.tone}`} />
-                      <div className="min-w-0">
-                        <h3 className="truncate text-sm font-bold">{agent.name}</h3>
-                        <p className="truncate text-xs text-[var(--color-muted)]">{agent.status}</p>
-                      </div>
-                    </div>
-                    <span className="text-xs text-[var(--color-accent)]">active</span>
-                  </div>
-                  <p className="mt-3 text-sm text-[var(--color-fg)]">{agent.result}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-
-          <div className="accent-panel rounded-md p-5">
-            <p className="eyebrow">What they are working on</p>
-            <p className="mt-3 text-sm leading-6 text-[var(--color-muted)]">
-              Every task is tracked, updated in real time, and handed off automatically.
-            </p>
-            <div className="mt-6 overflow-hidden rounded-sm border border-white/8">
-              <div className="demo-rail" />
-              <div className="grid gap-2 bg-black/20 p-3">
-                {tasks.map(([state, title, meta]) => (
-                  <div
-                    key={title}
-                    data-state={state}
-                    className="task-row grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-sm px-3 py-3"
-                  >
-                    <span
-                      className={`h-2.5 w-2.5 rounded-full ${
-                        state === "done"
-                          ? "bg-emerald-300"
-                          : state === "running"
-                            ? "bg-blue-300"
-                            : "bg-[var(--color-accent)]"
-                      }`}
-                    />
-                    <span className="truncate text-sm">{title}</span>
-                    <span className="text-xs text-[var(--color-muted)]">{meta}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Newsroom />
 
       <section id="how-it-works" className="border-y border-white/8 bg-[var(--color-surface)]">
         <div className="mx-auto max-w-7xl px-5 py-24 sm:px-8">
