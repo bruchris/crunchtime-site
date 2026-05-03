@@ -1,338 +1,553 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
+import type { JSX } from "react";
 
 type AgentId = "sales" | "back-office" | "copy" | "support" | "analyst";
+
+type TaskType = "Assignment" | "Automation";
 
 type Task = {
   id: string;
   title: string;
-  threshold: number;
+  type: TaskType;
+  tokens: number;
 };
 
 type Agent = {
   id: AgentId;
   name: string;
   role: string;
-  tone: string;
-  tasks: Task[];
+  Icon: () => JSX.Element;
 };
 
-type FeedKind = "complete" | "issue" | "resolve";
+type AgentState = {
+  running: Task[];
+  queued: Task[];
+  doneToday: number;
+  hasIssue: boolean;
+};
 
 type FeedEvent = {
-  threshold: number;
+  key: string;
   agentId: AgentId;
-  kind: FeedKind;
-  text: string;
+  kind: "complete" | "issue" | "resolve";
+  task: Task;
+  tickIndex: number;
 };
+
+type SimState = {
+  agents: Record<AgentId, AgentState>;
+  feed: FeedEvent[];
+  tickIndex: number;
+};
+
+type Action =
+  | { kind: "complete"; agentId: AgentId; nextQueued: Task }
+  | { kind: "issue"; agentId: AgentId }
+  | { kind: "resolve"; agentId: AgentId };
+
+const TICK_MS = 2400;
+const FAKE_MINUTES_PER_TICK = 11;
+const FEED_LIMIT = 7;
+
+const TrendingUpIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+    <polyline points="16 7 22 7 22 13" />
+  </svg>
+);
+
+const BriefcaseIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="2" y="7" width="20" height="14" rx="2" />
+    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+  </svg>
+);
+
+const PenIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M12 19l7-7 3 3-7 7-3-3z" />
+    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
+    <path d="M2 2l7.586 7.586" />
+  </svg>
+);
+
+const HeadphonesIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+    <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z" />
+    <path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+  </svg>
+);
+
+const BarChartIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <line x1="12" y1="20" x2="12" y2="10" />
+    <line x1="18" y1="20" x2="18" y2="4" />
+    <line x1="6" y1="20" x2="6" y2="16" />
+  </svg>
+);
+
+const PlusIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <line x1="12" y1="5" x2="12" y2="19" />
+    <line x1="5" y1="12" x2="19" y2="12" />
+  </svg>
+);
 
 const agents: Agent[] = [
-  {
-    id: "sales",
-    name: "Sales Rep",
-    role: "Pipeline",
-    tone: "bg-lime-300",
-    tasks: [
-      { id: "T-204", title: "Send Q2 proposal to Acme Corp", threshold: 0.10 },
-      { id: "T-208", title: "Qualify inbound lead from contact form", threshold: 0.34 },
-      { id: "T-211", title: "Follow up: 12 cold prospects", threshold: 0.58 },
-      { id: "T-217", title: "Book demo with Anna Karenina", threshold: 0.82 }
-    ]
-  },
-  {
-    id: "back-office",
-    name: "Back-Office",
-    role: "Finance",
-    tone: "bg-blue-300",
-    tasks: [
-      { id: "T-145", title: "Reconcile 14 March expenses", threshold: 0.16 },
-      { id: "T-149", title: "Process 7 invoices to Tripletex", threshold: 0.40 },
-      { id: "T-152", title: "Audit subscription renewals", threshold: 0.65 },
-      { id: "T-156", title: "Export Q1 P&L to drive", threshold: 0.88 }
-    ]
-  },
-  {
-    id: "copy",
-    name: "Copywriter",
-    role: "Content",
-    tone: "bg-rose-300",
-    tasks: [
-      { id: "T-088", title: "Post 3 LinkedIn drafts", threshold: 0.06 },
-      { id: "T-091", title: "Draft Q2 newsletter", threshold: 0.30 },
-      { id: "T-094", title: "Tighten landing page hero copy", threshold: 0.52 },
-      { id: "T-097", title: "Repurpose webinar to 8-tweet thread", threshold: 0.76 }
-    ]
-  },
-  {
-    id: "support",
-    name: "Support",
-    role: "Customers",
-    tone: "bg-emerald-300",
-    tasks: [
-      { id: "T-302", title: "Resolve order #4421 (refund)", threshold: 0.20 },
-      { id: "T-307", title: "Reply to 5 tickets", threshold: 0.46 },
-      { id: "T-311", title: "Update FAQ: refund window", threshold: 0.70 },
-      { id: "T-314", title: "Refund processed: order #4488", threshold: 0.92 }
-    ]
-  },
-  {
-    id: "analyst",
-    name: "Analyst",
-    role: "Reporting",
-    tone: "bg-amber-300",
-    tasks: [
-      { id: "T-501", title: "Publish weekly performance report", threshold: 0.12 },
-      { id: "T-504", title: "Summarize 5 Slack standups", threshold: 0.36 },
-      { id: "T-507", title: "Refresh CRM dashboard", threshold: 0.62 },
-      { id: "T-510", title: "Compile board summary deck", threshold: 0.86 }
-    ]
-  }
+  { id: "sales", name: "Sales Rep", role: "Pipeline", Icon: TrendingUpIcon },
+  { id: "back-office", name: "Back-Office", role: "Finance", Icon: BriefcaseIcon },
+  { id: "copy", name: "Copywriter", role: "Content", Icon: PenIcon },
+  { id: "support", name: "Support", role: "Customers", Icon: HeadphonesIcon },
+  { id: "analyst", name: "Analyst", role: "Reporting", Icon: BarChartIcon }
 ];
 
-const feedEvents: FeedEvent[] = [
-  { threshold: 0.06, agentId: "copy", kind: "complete", text: "Posted 3 LinkedIn drafts" },
-  { threshold: 0.10, agentId: "sales", kind: "complete", text: "Sent Q2 proposal to Acme Corp" },
-  { threshold: 0.12, agentId: "analyst", kind: "complete", text: "Published weekly performance report" },
-  { threshold: 0.16, agentId: "back-office", kind: "complete", text: "Reconciled 14 March expenses" },
-  { threshold: 0.20, agentId: "support", kind: "complete", text: "Resolved order #4421 (refund)" },
-  { threshold: 0.24, agentId: "support", kind: "issue", text: "Customer escalation, needs human review" },
-  { threshold: 0.30, agentId: "copy", kind: "complete", text: "Drafted Q2 newsletter, sent for approval" },
-  { threshold: 0.34, agentId: "sales", kind: "complete", text: "Qualified inbound lead from contact form" },
-  { threshold: 0.36, agentId: "analyst", kind: "complete", text: "Summarized 5 Slack standups" },
-  { threshold: 0.40, agentId: "back-office", kind: "complete", text: "Processed 7 invoices to Tripletex" },
-  { threshold: 0.46, agentId: "support", kind: "complete", text: "Replied to 5 tickets" },
-  { threshold: 0.52, agentId: "copy", kind: "complete", text: "Tightened landing page hero copy" },
-  { threshold: 0.56, agentId: "support", kind: "resolve", text: "Escalation routed to Anna, resolved" },
-  { threshold: 0.58, agentId: "sales", kind: "complete", text: "Followed up: 12 cold prospects" },
-  { threshold: 0.62, agentId: "analyst", kind: "complete", text: "Refreshed CRM dashboard" },
-  { threshold: 0.65, agentId: "back-office", kind: "complete", text: "Audited subscription renewals" },
-  { threshold: 0.70, agentId: "support", kind: "complete", text: "Updated FAQ: refund window" },
-  { threshold: 0.76, agentId: "copy", kind: "complete", text: "Repurposed webinar into 8-tweet thread" },
-  { threshold: 0.82, agentId: "sales", kind: "complete", text: "Booked demo with Anna Karenina" },
-  { threshold: 0.86, agentId: "analyst", kind: "complete", text: "Compiled board summary deck" },
-  { threshold: 0.88, agentId: "back-office", kind: "complete", text: "Exported Q1 P&L to drive" },
-  { threshold: 0.92, agentId: "support", kind: "complete", text: "Refund processed: order #4488" }
-];
-
-const ISSUE_OPEN = 0.24;
-const ISSUE_RESOLVE = 0.56;
-const ISSUE_AGENT: AgentId = "support";
-const ISSUE_TEXT = "Customer escalation, awaiting review";
-
-const ACTIVE_BASE = 11;
-const ACTIVE_PEAK_DELTA = 4;
-const DONE_FROM = 6;
-const DONE_TO = 23;
-
-const RUNNING_BAND = 0.04;
-const FEED_VISIBLE = 6;
-
-type TaskState = "queued" | "running" | "done";
-
-function taskState(threshold: number, progress: number): TaskState {
-  if (progress < threshold - RUNNING_BAND) return "queued";
-  if (progress < threshold) return "running";
-  return "done";
-}
-
-function relativeAgo(eventThreshold: number, currentProgress: number): string {
-  const seconds = Math.max(1, Math.round((currentProgress - eventThreshold) * 360));
-  if (seconds < 60) return `${seconds}s`;
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes}m`;
-  const hours = Math.floor(minutes / 60);
-  return `${hours}h`;
-}
-
-function activeCount(progress: number): number {
-  return Math.round(ACTIVE_BASE + Math.sin(progress * Math.PI) * ACTIVE_PEAK_DELTA);
-}
-
-function doneCount(progress: number): number {
-  return Math.round(DONE_FROM + (DONE_TO - DONE_FROM) * progress);
-}
-
-function agentById(id: AgentId): Agent {
-  const agent = agents.find((a) => a.id === id);
-  if (!agent) throw new Error(`Unknown agent ${id}`);
-  return agent;
-}
-
-type AgentSummary = {
-  agent: Agent;
-  current: { task: Task; state: TaskState };
-  queued: number;
-  done: number;
+const initialState: SimState = {
+  agents: {
+    sales: {
+      running: [
+        { id: "f3a8c1d2", title: "Send **Q2 proposal** to Acme Corp", type: "Assignment", tokens: 7.9 }
+      ],
+      queued: [
+        { id: "8b29ef41", title: "Qualify lead from **contact form**", type: "Assignment", tokens: 3.4 },
+        { id: "1c5d6a07", title: "Follow up: 12 **cold prospects**", type: "Automation", tokens: 8.2 },
+        { id: "9e4b2c80", title: "Book demo with **Anna Karenina**", type: "Assignment", tokens: 2.1 }
+      ],
+      doneToday: 4,
+      hasIssue: false
+    },
+    "back-office": {
+      running: [
+        { id: "a721ce04", title: "Reconcile **14 March expenses**", type: "Automation", tokens: 6.7 }
+      ],
+      queued: [
+        { id: "55b81e92", title: "Process **7 invoices** to Tripletex", type: "Automation", tokens: 11.4 },
+        { id: "0fe2dd61", title: "Audit **subscription renewals**", type: "Automation", tokens: 5.8 },
+        { id: "47a39c12", title: "Export **Q1 P&L** to drive", type: "Automation", tokens: 9.0 }
+      ],
+      doneToday: 6,
+      hasIssue: false
+    },
+    copy: {
+      running: [
+        { id: "d042ba35", title: "Post **3 LinkedIn drafts**", type: "Assignment", tokens: 4.2 }
+      ],
+      queued: [
+        { id: "c1ff8e76", title: "Draft **Q2 newsletter**", type: "Assignment", tokens: 5.6 },
+        { id: "7a604b88", title: "Tighten **landing page hero**", type: "Assignment", tokens: 3.1 }
+      ],
+      doneToday: 3,
+      hasIssue: false
+    },
+    support: {
+      running: [
+        { id: "e0892a14", title: "Resolve **order #4421** (refund)", type: "Assignment", tokens: 5.3 }
+      ],
+      queued: [
+        { id: "b3759cd1", title: "Reply to **5 tickets**", type: "Automation", tokens: 9.7 },
+        { id: "2d44ee05", title: "Update FAQ: **refund window**", type: "Assignment", tokens: 4.4 }
+      ],
+      doneToday: 9,
+      hasIssue: false
+    },
+    analyst: {
+      running: [
+        { id: "6c01f3a8", title: "Publish **weekly performance report**", type: "Automation", tokens: 12.3 }
+      ],
+      queued: [
+        { id: "ab3f7e10", title: "Summarize **5 Slack standups**", type: "Automation", tokens: 7.5 },
+        { id: "f99d1c44", title: "Refresh **CRM dashboard**", type: "Automation", tokens: 6.0 }
+      ],
+      doneToday: 5,
+      hasIssue: false
+    }
+  },
+  feed: [],
+  tickIndex: 0
 };
 
-function agentSummary(agent: Agent, progress: number): AgentSummary {
-  const states = agent.tasks.map((task) => ({ task, state: taskState(task.threshold, progress) }));
-  const running = states.find((s) => s.state === "running");
-  const lastDone = [...states].reverse().find((s) => s.state === "done");
-  const current = running ?? lastDone ?? states[0];
-  const queued = states.filter((s) => s.state === "queued").length;
-  const done = states.filter((s) => s.state === "done").length;
-  return { agent, current, queued, done };
+const script: Action[] = [
+  { kind: "complete", agentId: "copy", nextQueued: { id: "ec88a201", title: "Repurpose **webinar to thread**", type: "Assignment", tokens: 6.4 } },
+  { kind: "complete", agentId: "back-office", nextQueued: { id: "70bc4f55", title: "Categorize **23 receipts**", type: "Automation", tokens: 4.9 } },
+  { kind: "complete", agentId: "sales", nextQueued: { id: "31a002fe", title: "Refresh **HubSpot stages**", type: "Automation", tokens: 5.2 } },
+  { kind: "complete", agentId: "analyst", nextQueued: { id: "82b71d09", title: "Compile **board summary deck**", type: "Automation", tokens: 8.8 } },
+  { kind: "issue", agentId: "support" },
+  { kind: "complete", agentId: "copy", nextQueued: { id: "06ae22c1", title: "Edit **case study draft**", type: "Assignment", tokens: 5.0 } },
+  { kind: "complete", agentId: "back-office", nextQueued: { id: "f1c5d4be", title: "Match **vendor payments**", type: "Automation", tokens: 7.1 } },
+  { kind: "complete", agentId: "analyst", nextQueued: { id: "29ea6173", title: "Tag **anomalies** in cash flow", type: "Automation", tokens: 6.7 } },
+  { kind: "resolve", agentId: "support" },
+  { kind: "complete", agentId: "sales", nextQueued: { id: "73f08aa9", title: "Send **renewal reminder** to 4 customers", type: "Automation", tokens: 4.0 } },
+  { kind: "complete", agentId: "support", nextQueued: { id: "55c721ea", title: "Triage **3 escalated tickets**", type: "Assignment", tokens: 6.8 } },
+  { kind: "complete", agentId: "copy", nextQueued: { id: "9e4407dd", title: "Draft **product launch post**", type: "Assignment", tokens: 7.2 } },
+  { kind: "complete", agentId: "analyst", nextQueued: { id: "ba12f056", title: "Pull **conversion funnel** report", type: "Automation", tokens: 9.4 } },
+  { kind: "complete", agentId: "back-office", nextQueued: { id: "44d8e09b", title: "Reconcile **Stripe payouts**", type: "Automation", tokens: 8.3 } }
+];
+
+function reducer(state: SimState, action: { type: "tick" }): SimState {
+  if (action.type !== "tick") return state;
+  const next: SimState = {
+    agents: { ...state.agents },
+    feed: state.feed,
+    tickIndex: state.tickIndex + 1
+  };
+  const op = script[state.tickIndex % script.length];
+  const agent = next.agents[op.agentId];
+  let event: FeedEvent | null = null;
+
+  if (op.kind === "complete") {
+    if (agent.running.length === 0) return state;
+    const finished = agent.running[0];
+    const remainingRunning = agent.running.slice(1);
+    const promoted = agent.queued[0];
+    const remainingQueued = agent.queued.slice(1);
+    next.agents[op.agentId] = {
+      running: promoted ? [promoted, ...remainingRunning] : remainingRunning,
+      queued: [...remainingQueued, op.nextQueued],
+      doneToday: agent.doneToday + 1,
+      hasIssue: false
+    };
+    event = {
+      key: `${next.tickIndex}-${finished.id}`,
+      agentId: op.agentId,
+      kind: "complete",
+      task: finished,
+      tickIndex: next.tickIndex
+    };
+  } else if (op.kind === "issue") {
+    next.agents[op.agentId] = { ...agent, hasIssue: true };
+    const flagged = agent.running[0] ?? agent.queued[0];
+    if (flagged) {
+      event = {
+        key: `${next.tickIndex}-issue-${flagged.id}`,
+        agentId: op.agentId,
+        kind: "issue",
+        task: { ...flagged, title: "Customer escalation, needs human review" },
+        tickIndex: next.tickIndex
+      };
+    }
+  } else if (op.kind === "resolve") {
+    next.agents[op.agentId] = { ...agent, hasIssue: false };
+    const recovered = agent.running[0] ?? agent.queued[0];
+    if (recovered) {
+      event = {
+        key: `${next.tickIndex}-resolve-${recovered.id}`,
+        agentId: op.agentId,
+        kind: "resolve",
+        task: { ...recovered, title: "Escalation routed to Anna, resolved" },
+        tickIndex: next.tickIndex
+      };
+    }
+  }
+
+  next.feed = event ? [event, ...state.feed].slice(0, FEED_LIMIT) : state.feed;
+  return next;
+}
+
+function relativeAgo(eventTick: number, currentTick: number): string {
+  const ticks = currentTick - eventTick;
+  if (ticks <= 0) return "just now";
+  const minutes = ticks * FAKE_MINUTES_PER_TICK;
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.floor(hours / 24)}d ago`;
+}
+
+function formatTokens(value: number): string {
+  return `${value.toFixed(1)}k tok`;
+}
+
+function renderTitle(title: string): JSX.Element[] {
+  const parts = title.split(/(\*\*[^*]+\*\*)/);
+  return parts
+    .filter((p) => p.length > 0)
+    .map((part, i) => {
+      if (part.startsWith("**") && part.endsWith("**")) {
+        return <strong key={i}>{part.slice(2, -2)}</strong>;
+      }
+      return <span key={i}>{part}</span>;
+    });
+}
+
+function totalRunning(state: SimState, agentId: AgentId): number {
+  return state.agents[agentId].running.length;
 }
 
 export function Newsroom() {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const [progress, setProgress] = useState(0);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [selectedAgentId, setSelectedAgentId] = useState<AgentId | null>(null);
   const [staticMode, setStaticMode] = useState(false);
 
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion) {
       setStaticMode(true);
-      setProgress(1);
+      for (let i = 0; i < 8; i++) dispatch({ type: "tick" });
       return;
     }
 
     const section = sectionRef.current;
     if (!section) return;
 
-    let inView = false;
-    let rafId = 0;
+    let interval: ReturnType<typeof setInterval> | null = null;
 
-    const update = () => {
-      const rect = section.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const totalDistance = rect.height + vh;
-      const traveled = vh - rect.top;
-      const p = Math.max(0, Math.min(1, traveled / totalDistance));
-      setProgress(p);
+    const start = () => {
+      if (interval) return;
+      dispatch({ type: "tick" });
+      interval = setInterval(() => dispatch({ type: "tick" }), TICK_MS);
     };
-
-    const onScroll = () => {
-      if (!inView) return;
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(update);
+    const stop = () => {
+      if (!interval) return;
+      clearInterval(interval);
+      interval = null;
     };
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        inView = entry.isIntersecting;
-        if (inView) update();
+        if (entry.isIntersecting) start();
+        else stop();
       },
-      { threshold: 0 }
+      { threshold: 0.2 }
     );
     observer.observe(section);
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    update();
+    const onVisibility = () => {
+      if (document.hidden) stop();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
       observer.disconnect();
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      cancelAnimationFrame(rafId);
+      document.removeEventListener("visibilitychange", onVisibility);
+      stop();
     };
   }, []);
 
-  const issueOpen = progress >= ISSUE_OPEN && progress < ISSUE_RESOLVE;
-  const active = activeCount(progress);
-  const done = doneCount(progress);
-  const issues = issueOpen ? 1 : 0;
-
-  const visibleFeed = feedEvents.filter((e) => e.threshold <= progress).slice(-FEED_VISIBLE).reverse();
+  const selectedAgent = selectedAgentId ? state.agents[selectedAgentId] : null;
 
   return (
     <section
       ref={sectionRef}
       id="agents"
       className="newsroom mx-auto max-w-7xl px-5 py-24 sm:px-8"
-      data-mode={staticMode ? "static" : "scroll"}
+      data-mode={staticMode ? "static" : "live"}
     >
       <div className="max-w-3xl">
         <p className="eyebrow">Live right now</p>
         <h2 className="section-title mt-4">A business that keeps moving.</h2>
         <p className="mt-6 max-w-xl text-lg leading-7 text-[var(--color-muted)]">
-          A real Crunchtime agent team in motion. Scroll, and watch the queue clear.
+          A real Crunchtime agent team in motion. Click an agent to see what they are running.
         </p>
       </div>
 
-      <div className="newsroom-strip mt-12">
-        <span className="newsroom-pulse" aria-hidden="true" />
-        <span className="newsroom-strip-label">live</span>
-        <span className="newsroom-stat">
-          <span className="newsroom-stat-num">{active}</span>
-          <span className="newsroom-stat-label">active</span>
-        </span>
-        <span className="newsroom-stat">
-          <span className="newsroom-stat-num">{done}</span>
-          <span className="newsroom-stat-label">done today</span>
-        </span>
-        <span className="newsroom-stat" data-tone={issues > 0 ? "warn" : "neutral"}>
-          <span className="newsroom-stat-num">{issues}</span>
-          <span className="newsroom-stat-label">{issues === 1 ? "issue flagged" : "issues flagged"}</span>
-        </span>
-      </div>
-
-      <div className="newsroom-grid mt-4">
-        <div className="newsroom-card">
-          <header className="newsroom-card-header">
-            <span className="newsroom-card-title">Agents</span>
-            <span className="newsroom-card-meta font-mono">{agents.length} online</span>
+      <div className="newsroom-shell mt-12">
+        <aside className="newsroom-rail" aria-label="Agents">
+          <header className="newsroom-rail-header">
+            <span>Agents</span>
+            <button
+              type="button"
+              className="newsroom-rail-add"
+              aria-label="Add agent"
+              tabIndex={-1}
+            >
+              <PlusIcon />
+            </button>
           </header>
           <ul>
+            <li>
+              <button
+                type="button"
+                className="newsroom-agent-row"
+                data-selected={selectedAgentId === null}
+                onClick={() => setSelectedAgentId(null)}
+              >
+                <span className="newsroom-agent-icon" aria-hidden="true">
+                  <BarChartIcon />
+                </span>
+                <span className="newsroom-agent-name">All activity</span>
+              </button>
+            </li>
             {agents.map((a) => {
-              const summary = agentSummary(a, progress);
-              const showIssue = issueOpen && a.id === ISSUE_AGENT;
-              const taskTitle = showIssue ? ISSUE_TEXT : summary.current.task.title;
-              const taskId = showIssue ? "T-309" : summary.current.task.id;
-              const stateAttr = showIssue ? "issue" : summary.current.state;
+              const live = totalRunning(state, a.id);
+              const hasIssue = state.agents[a.id].hasIssue;
               return (
-                <li key={a.id} className="newsroom-agent" data-issue={showIssue}>
-                  <span className={`newsroom-agent-dot ${a.tone}`} aria-hidden="true" />
-                  <div className="newsroom-agent-info">
-                    <h3 className="newsroom-agent-name">{a.name}</h3>
-                    <p className="newsroom-agent-role">{a.role}</p>
-                  </div>
-                  <div className="newsroom-agent-task" data-state={stateAttr}>
-                    <span className="newsroom-agent-task-id font-mono">{taskId}</span>
-                    <span className="newsroom-agent-task-title">{taskTitle}</span>
-                  </div>
-                  <div className="newsroom-agent-meta">
-                    <span>{summary.queued} queued</span>
-                    <span>{summary.done} done</span>
-                  </div>
+                <li key={a.id}>
+                  <button
+                    type="button"
+                    className="newsroom-agent-row"
+                    data-selected={selectedAgentId === a.id}
+                    data-issue={hasIssue}
+                    onClick={() => setSelectedAgentId(a.id)}
+                  >
+                    <span className="newsroom-agent-icon" aria-hidden="true">
+                      <a.Icon />
+                    </span>
+                    <span className="newsroom-agent-name">{a.name}</span>
+                    {hasIssue ? (
+                      <span className="newsroom-agent-pill" data-tone="warn">
+                        <span className="newsroom-pill-dot" />
+                        issue
+                      </span>
+                    ) : live > 0 ? (
+                      <span className="newsroom-agent-pill">
+                        <span className="newsroom-pill-dot" />
+                        {live} live
+                      </span>
+                    ) : null}
+                  </button>
                 </li>
               );
             })}
           </ul>
-        </div>
+        </aside>
 
-        <div className="newsroom-card">
-          <header className="newsroom-card-header">
-            <span className="newsroom-card-title">Activity</span>
-            <span className="newsroom-card-meta font-mono">last {Math.min(visibleFeed.length, FEED_VISIBLE)}</span>
-          </header>
-          <ol>
-            {visibleFeed.length === 0 ? (
-              <li className="newsroom-feed-empty">Scroll to start the team.</li>
-            ) : (
-              visibleFeed.map((event) => {
-                const ago = relativeAgo(event.threshold, progress);
-                const agentName = agentById(event.agentId).name;
-                return (
-                  <li
-                    key={`${event.threshold}-${event.kind}`}
-                    className="newsroom-feed-item"
-                    data-kind={event.kind}
-                  >
-                    <span className="newsroom-feed-time font-mono">{ago}</span>
-                    <span className="newsroom-feed-dot" aria-hidden="true" />
-                    <span className="newsroom-feed-agent">{agentName}</span>
-                    <span className="newsroom-feed-text">{event.text}</span>
-                  </li>
-                );
-              })
-            )}
-          </ol>
+        <div className="newsroom-panel">
+          {selectedAgent && selectedAgentId ? (
+            <AgentDetail
+              agent={agents.find((a) => a.id === selectedAgentId)!}
+              state={selectedAgent}
+              tickIndex={state.tickIndex}
+              feed={state.feed.filter((e) => e.agentId === selectedAgentId)}
+            />
+          ) : (
+            <ActivityList feed={state.feed} tickIndex={state.tickIndex} />
+          )}
         </div>
       </div>
     </section>
+  );
+}
+
+function ActivityList({ feed, tickIndex }: { feed: FeedEvent[]; tickIndex: number }) {
+  return (
+    <>
+      <header className="newsroom-panel-header">
+        <span className="newsroom-panel-title">Activity</span>
+        <span className="newsroom-panel-meta">
+          <span className="newsroom-live-dot" aria-hidden="true" />
+          live
+        </span>
+      </header>
+      <ol className="newsroom-cards">
+        {feed.length === 0 ? (
+          <li className="newsroom-empty">Warming up.</li>
+        ) : (
+          feed.map((event) => (
+            <TaskCard key={event.key} event={event} tickIndex={tickIndex} agentName={agents.find((a) => a.id === event.agentId)?.name ?? ""} />
+          ))
+        )}
+      </ol>
+    </>
+  );
+}
+
+function AgentDetail({
+  agent,
+  state,
+  tickIndex,
+  feed
+}: {
+  agent: Agent;
+  state: AgentState;
+  tickIndex: number;
+  feed: FeedEvent[];
+}) {
+  return (
+    <>
+      <header className="newsroom-panel-header">
+        <span className="newsroom-panel-title">
+          {agent.name} <span className="newsroom-panel-role">/ {agent.role}</span>
+        </span>
+        <span className="newsroom-panel-meta">
+          {state.doneToday} done today
+        </span>
+      </header>
+
+      <div className="newsroom-section-label">Running ({state.running.length})</div>
+      <ol className="newsroom-cards">
+        {state.running.map((task) => (
+          <li key={task.id} className="newsroom-card-row" data-state={state.hasIssue ? "issue" : "running"}>
+            <span className="newsroom-status-dot" aria-hidden="true" />
+            <div className="newsroom-card-body">
+              <div className="newsroom-card-meta-row">
+                <span className="newsroom-hash font-mono">{task.id}</span>
+                <span className="newsroom-type-badge" data-type={task.type}>{task.type}</span>
+                <span className="newsroom-card-time">{state.hasIssue ? "needs review" : "running"}</span>
+              </div>
+              <p className="newsroom-card-title">
+                {state.hasIssue ? <em>Customer escalation, needs human review</em> : renderTitle(task.title)}
+              </p>
+              <p className="newsroom-card-tokens font-mono">{formatTokens(task.tokens)}</p>
+            </div>
+          </li>
+        ))}
+        {state.running.length === 0 ? <li className="newsroom-empty">Idle.</li> : null}
+      </ol>
+
+      <div className="newsroom-section-label newsroom-section-label--muted">Queued ({state.queued.length})</div>
+      <ol className="newsroom-cards">
+        {state.queued.map((task) => (
+          <li key={task.id} className="newsroom-card-row" data-state="queued">
+            <span className="newsroom-status-dot" aria-hidden="true" />
+            <div className="newsroom-card-body">
+              <div className="newsroom-card-meta-row">
+                <span className="newsroom-hash font-mono">{task.id}</span>
+                <span className="newsroom-type-badge" data-type={task.type}>{task.type}</span>
+                <span className="newsroom-card-time">queued</span>
+              </div>
+              <p className="newsroom-card-title">{renderTitle(task.title)}</p>
+              <p className="newsroom-card-tokens font-mono">{formatTokens(task.tokens)}</p>
+            </div>
+          </li>
+        ))}
+        {state.queued.length === 0 ? <li className="newsroom-empty">No queue.</li> : null}
+      </ol>
+
+      {feed.length > 0 ? (
+        <>
+          <div className="newsroom-section-label newsroom-section-label--muted">Recent</div>
+          <ol className="newsroom-cards">
+            {feed.slice(0, 4).map((event) => (
+              <TaskCard key={event.key} event={event} tickIndex={tickIndex} agentName="" compact />
+            ))}
+          </ol>
+        </>
+      ) : null}
+    </>
+  );
+}
+
+function TaskCard({
+  event,
+  tickIndex,
+  agentName,
+  compact
+}: {
+  event: FeedEvent;
+  tickIndex: number;
+  agentName: string;
+  compact?: boolean;
+}) {
+  const ago = relativeAgo(event.tickIndex, tickIndex);
+  const dataState = event.kind === "issue" ? "issue" : event.kind === "resolve" ? "resolve" : "done";
+  return (
+    <li className="newsroom-card-row" data-state={dataState} data-fresh={tickIndex === event.tickIndex ? "true" : "false"}>
+      <span className="newsroom-status-dot" aria-hidden="true" />
+      <div className="newsroom-card-body">
+        <div className="newsroom-card-meta-row">
+          <span className="newsroom-hash font-mono">{event.task.id}</span>
+          <span className="newsroom-type-badge" data-type={event.task.type}>{event.task.type}</span>
+          <span className="newsroom-card-time">{ago}</span>
+        </div>
+        <p className="newsroom-card-title">
+          {!compact && agentName ? <span className="newsroom-card-agent">{agentName} </span> : null}
+          {renderTitle(event.task.title)}
+        </p>
+        <p className="newsroom-card-tokens font-mono">{formatTokens(event.task.tokens)}</p>
+      </div>
+    </li>
   );
 }
