@@ -1,44 +1,6 @@
 import Link from "next/link";
 import { Newsroom } from "./_components/Newsroom";
 
-const agents = [
-  {
-    name: "Sales Rep",
-    role: "Pipeline",
-    status: "3 tasks running",
-    result: "Sent 12 follow-ups today",
-    tone: "bg-lime-300"
-  },
-  {
-    name: "Back-Office",
-    role: "Finance",
-    status: "Reviewing invoices",
-    result: "Flagged 2 anomalies",
-    tone: "bg-blue-300"
-  },
-  {
-    name: "Copywriter",
-    role: "Content",
-    status: "Writing blog post",
-    result: "Draft ready for review",
-    tone: "bg-rose-300"
-  },
-  {
-    name: "Support",
-    role: "Customers",
-    status: "Active: 5 tickets",
-    result: "Resolved 4 today",
-    tone: "bg-emerald-300"
-  },
-  {
-    name: "Analyst",
-    role: "Reporting",
-    status: "Pulling reports",
-    result: "Weekly summary ready",
-    tone: "bg-amber-300"
-  }
-];
-
 const services = [
   ["AI Agent Implementation", "We design, hire, and deploy your custom AI workforce."],
   ["Back-Office Automation", "Invoices, scheduling, data entry, and reporting handled end to end."],
@@ -49,63 +11,29 @@ const services = [
 export default function HomePage() {
   return (
     <div>
-      <section className="mx-auto grid min-h-[calc(100svh-73px)] max-w-7xl items-center gap-12 px-5 py-16 sm:px-8 lg:grid-cols-[1.04fr_0.96fr] lg:py-20">
-        <div>
-          <p className="eyebrow">Norwegian AI agency · Bergen</p>
-          <h1 className="hero-title mt-5">
-            Your <span className="text-[var(--color-accent)]">AI team</span>, hired and running by
-            tomorrow.
-          </h1>
-          <p className="mt-8 max-w-2xl text-xl font-light leading-8 text-[var(--color-muted)] sm:text-2xl sm:leading-9">
-            Crunchtime builds and manages teams of AI agents for your business - agents that work
-            in Slack, your inbox, your calendar, your tools. We run them 24/7.
-          </p>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <Link
-              href="#agents"
-              className="rounded-sm bg-[var(--color-accent)] px-6 py-3 text-sm font-bold text-black hover:bg-[var(--color-accent-strong)]"
-            >
-              See it live
-            </Link>
-            <Link
-              href="/contact"
-              className="rounded-sm border border-white/15 px-6 py-3 text-sm font-bold hover:border-white/35 hover:bg-white/5"
-            >
-              Book a call
-            </Link>
-          </div>
-        </div>
-
-        <div className="accent-panel overflow-hidden rounded-md p-4 shadow-2xl shadow-black/40 sm:p-5">
-          <div className="flex items-center justify-between border-b border-white/8 pb-4">
-            <div>
-              <p className="font-display text-sm font-bold">Crunchtime control room</p>
-              <p className="text-xs text-[var(--color-muted)]">Live agent activity</p>
-            </div>
-            <div className="flex items-center gap-2 rounded-full bg-lime-300/10 px-3 py-1 text-xs text-[var(--color-accent)]">
-              <span className="status-dot h-2 w-2 rounded-full bg-[var(--color-accent)]" />
-              running now
-            </div>
-          </div>
-          <div className="mt-4 grid gap-3">
-            {agents.slice(0, 4).map((agent) => (
-              <article key={agent.name} className="agent-card relative overflow-hidden rounded-sm p-4">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex min-w-0 items-center gap-3">
-                    <span className={`h-9 w-9 shrink-0 rounded-sm ${agent.tone}`} />
-                    <div className="min-w-0">
-                      <h2 className="truncate text-sm font-bold">{agent.name}</h2>
-                      <p className="text-xs text-[var(--color-muted)]">{agent.role}</p>
-                    </div>
-                  </div>
-                  <span className="shrink-0 rounded-full border border-white/10 px-2 py-1 text-[0.68rem] text-[var(--color-muted)]">
-                    {agent.status}
-                  </span>
-                </div>
-                <p className="mt-3 text-sm text-[var(--color-accent)]">{agent.result}</p>
-              </article>
-            ))}
-          </div>
+      <section className="mx-auto flex min-h-[calc(100svh-73px)] max-w-5xl flex-col justify-center px-5 py-16 sm:px-8 lg:py-20">
+        <p className="eyebrow">Norwegian AI agency · Bergen</p>
+        <h1 className="hero-title mt-5">
+          Your <span className="text-[var(--color-accent)]">AI team</span>, hired and running by
+          tomorrow.
+        </h1>
+        <p className="mt-8 max-w-2xl text-xl font-light leading-8 text-[var(--color-muted)] sm:text-2xl sm:leading-9">
+          Crunchtime builds and manages teams of AI agents for your business - agents that work
+          in Slack, your inbox, your calendar, your tools. We run them 24/7.
+        </p>
+        <div className="mt-10 flex flex-wrap gap-4">
+          <Link
+            href="#agents"
+            className="rounded-sm bg-[var(--color-accent)] px-6 py-3 text-sm font-bold text-black hover:bg-[var(--color-accent-strong)]"
+          >
+            See it live
+          </Link>
+          <Link
+            href="/contact"
+            className="rounded-sm border border-white/15 px-6 py-3 text-sm font-bold hover:border-white/35 hover:bg-white/5"
+          >
+            Book a call
+          </Link>
         </div>
       </section>
 
