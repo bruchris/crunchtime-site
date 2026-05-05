@@ -77,7 +77,7 @@ export default async function LocaleLayout({
   const tFooter = await getTranslations({ locale, namespace: "footer" });
 
   return (
-    <html lang={locale} className={`${syne.variable} ${dmSans.variable}`}>
+    <html lang={locale} className={`${syne.variable} ${dmSans.variable}`} data-scroll-behavior="smooth">
       <body className="page-shell flex min-h-screen flex-col antialiased">
         <NextIntlClientProvider>
           <header className="sticky top-0 z-50 border-b border-white/8 bg-[rgba(10,10,9,0.84)] backdrop-blur-xl">
