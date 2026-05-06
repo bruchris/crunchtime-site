@@ -136,29 +136,15 @@ export function createDemoScheduler(
   }
 
   function skip() {
-    if (finished) return;
+    if (finished || cancelled) return;
     timeouts.forEach(clearTimeout);
     timeouts.length = 0;
     // Emit everything not yet emitted so React renders the final state.
     payload.agents.forEach((a, ai) => {
-      if (!spawnedAgents.has(ai)) {
-        spawnedAgents.add(ai);
-        opts.onEvent({ type: "agent-spawn", index: ai });
-      }
-      a.tools.forEach((_, ti) => {
-        const key = `${ai}:${ti}`;
-        if (!connectedTools.has(key)) {
-          connectedTools.add(key);
-          opts.onEvent({ type: "tool-connect", agentIndex: ai, toolIndex: ti });
-        }
-      });
+      emitAgentSpawn(ai);
+      a.tools.forEach((_, ti) => emitToolConnect(ai, ti));
     });
-    payload.logs.forEach((_, i) => {
-      if (!streamedLogs.has(i)) {
-        streamedLogs.add(i);
-        opts.onEvent({ type: "log-line", index: i });
-      }
-    });
+    payload.logs.forEach((_, i) => emitLogLine(i));
     opts.onEvent({ type: "phase", phase: "end-card" });
     finished = true;
   }
