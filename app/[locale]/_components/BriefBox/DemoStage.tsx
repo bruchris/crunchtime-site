@@ -120,7 +120,7 @@ export function DemoStage({ lang }: Props) {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ brief: text, lang })
       });
-      if (res.status === 429) {
+      if (res.status === 429 || !res.ok) {
         setThrottled(true);
         setSubmitting(false);
         return;
