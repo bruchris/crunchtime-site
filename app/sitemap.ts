@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { routing } from "../i18n/routing";
 
-const PATHS = ["", "/consulting", "/contact"];
+const PATHS = ["", "/services", "/contact"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://crunchtime.no";

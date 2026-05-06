@@ -87,8 +87,8 @@ export default async function LocaleLayout({
               </Link>
               <ul className="hidden gap-8 text-sm text-[var(--color-muted)] sm:flex">
                 <li>
-                  <Link href={`/${locale}/consulting`} className="hover:text-[var(--color-fg)]">
-                    {t("consulting")}
+                  <Link href={`/${locale}/services`} className="hover:text-[var(--color-fg)]">
+                    {t("services")}
                   </Link>
                 </li>
                 <li>
