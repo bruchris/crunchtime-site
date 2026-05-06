@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 type Mode = "off" | "fine" | "coarse";
 
 const HOVER_SELECTOR = "a, button, input, textarea, select, label, [role=\"button\"]";
-const RING_LERP = 0.18;
+const RING_LERP = 0.32;
 const TOUCH_FADE_OUT_MS = 220;
 const TAP_DURATION_MS = 300;
 
@@ -80,6 +80,7 @@ export function CursorEffect() {
     const tick = () => {
       ringX += (dotX - ringX) * RING_LERP;
       ringY += (dotY - ringY) * RING_LERP;
+      writeDot();
       writeRingWrap();
       rafId = requestAnimationFrame(tick);
     };
@@ -103,7 +104,6 @@ export function CursorEffect() {
       const onMove = (e: MouseEvent) => {
         dotX = e.clientX;
         dotY = e.clientY;
-        writeDot();
       };
       const onOver = (e: MouseEvent) => {
         const target = e.target as Element | null;
