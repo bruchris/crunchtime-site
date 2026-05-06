@@ -1,10 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("lead capture form", () => {
-  // Skipped until Plan #2's EmailCaptureForm lands in the repo.
-  // Re-enable when app/[locale]/_components/BriefBox/EndCard.tsx exists and
-  // form field labels match the regex selectors below.
-  test.skip("submits a valid payload and shows success", async ({ page }) => {
+  test("submits a valid payload and shows success", async ({ page }) => {
     let capturedPayload: Record<string, unknown> = {};
 
     await page.route("**/api/lead", async (route) => {
