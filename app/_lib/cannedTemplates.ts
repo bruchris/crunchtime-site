@@ -1,4 +1,4 @@
-import type { BriefResponse } from "./briefSchema";
+import type { BriefResponse, Lang } from "./briefSchema";
 
 export type TemplateKey =
   | "ar_cashflow"
@@ -30,8 +30,6 @@ export const TEMPLATE_KEYS: TemplateKey[] = [
   "research",
   "general"
 ];
-
-export type Lang = "no" | "en";
 
 type Library = Record<TemplateKey, Record<Lang, BriefResponse>>;
 
@@ -467,14 +465,14 @@ const KEYWORDS: Array<[TemplateKey, RegExp]> = [
   ["sales_crm", /\b(leads?|sales?|salg|crm|pipeline|prospect\w*|outreach|cold)\b/i],
   ["inbox_triage", /\b(e-post|epost|email|inbox|innboks)\b/i],
   ["support_tier1", /\b(support\w*|kundeservice|ticket\w*|sak|helpdesk|customer\s*service)\b/i],
+  ["research", /\b(research\w*|undersøk\w*|search\w*|finn\s+ut|kartlegg\w*|analyse\w*|analys\w*)\b/i],
   ["content_social", /\b(market\w*|markedsf\w*|content|innhold|social\w*|sosiale|post\w*|linkedin|instagram)\b/i],
-  ["scheduling", /\b(møte\w*|meeting\w*|schedule\w*|book\w*|kalender|calendar|appointment\w*)\b/i],
+  ["scheduling", /\b(møte\w*|meeting\w*|schedule\w*|\bbook(?:ed|ing|er|ings|s)?\b|kalender|calendar|appointment\w*)\b/i],
   ["hr_onboarding", /\b(onboard\w*|hr|ansatt\w*|employee\w*|hire\w*|new\s+hire)\b/i],
-  ["data_entry", /\b(data\s*entry|skriv\s+inn|punche\w*|kvittering\w*|receipt\w*|spreadsheet\w*|regneark)\b/i],
+  ["data_entry", /\b(data\s*entry|skriv\s+inn|punche\w*|kvittering\w*|receipt\w*|spreadsheet\w*|regneark|bookkeep\w*)\b/i],
   ["reporting", /\b(rapport\w*|report\w*|kpi|dashboard\w*|metric\w*|måltall)\b/i],
   ["procurement", /\b(innkjøp\w*|procure\w*|tilbud\w*|quote\w*|leverandør\w*|vendor\w*|supplier\w*)\b/i],
-  ["compliance", /\b(compliance|audit\w*|revisjon\w*|policy|gdpr|regulatory|samsvar)\b/i],
-  ["research", /\b(research\w*|undersøk\w*|search\w*|finn\s+ut|kartlegg\w*|analyse\w*|analys\w*)\b/i]
+  ["compliance", /\b(compliance|audit\w*|revisjon\w*|policy|gdpr|regulatory|samsvar)\b/i]
 ];
 
 export function pickTemplate(brief: string, _lang: Lang): TemplateKey {

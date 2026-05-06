@@ -43,4 +43,12 @@ describe("cannedTemplates", () => {
   it("falls back to 'general' on a brief with no keyword hits", () => {
     expect(pickTemplate("xyzzy plover frobnitz", "no")).toBe("general");
   });
+
+  it("routes 'bookkeeping software' to data_entry", () => {
+    expect(pickTemplate("bookkeeping software", "en")).toBe("data_entry");
+  });
+
+  it("routes 'research the market for product' to research", () => {
+    expect(pickTemplate("research the market for product", "en")).toBe("research");
+  });
 });

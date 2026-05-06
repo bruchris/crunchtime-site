@@ -36,3 +36,5 @@ export const briefRequestSchema = z.object({
 });
 
 export type BriefRequest = z.infer<typeof briefRequestSchema>;
+export type Lang = z.infer<typeof briefRequestSchema>["lang"];
+export type Recommendation = z.infer<typeof recommendationSchema>;
