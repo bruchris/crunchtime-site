@@ -140,6 +140,10 @@
   .agentRow { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* Standalone .visible class definition so CSS Modules exports `styles.visible`.
+   Compound selectors below keyframe by element type. */
+.visible { /* token */ }
+
 .agentCard {
   pointer-events: none;
   background: #1a1a18;
