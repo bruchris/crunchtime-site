@@ -14,8 +14,45 @@
     "no": "NO",
     "en": "EN"
   },
-  "briefBox": {},
-  "endCard": {},
+  "briefBox": {
+    "statusLive": "live · oslo",
+    "headline": "Drop a challenge. Meet your team.",
+    "subline": "Write what's actually hard. We'll assemble a team and show you how they'd handle it.",
+    "inputPlaceholder": "tell us what's hard...",
+    "inputAriaLabel": "Describe a challenge",
+    "submit": "Send",
+    "analyzing": "▸ analyzing...",
+    "skip": "skip to result →",
+    "spawning": "spawning...",
+    "toolConnecting": "⟳ connecting",
+    "toolConnected": "✓ connected",
+    "rateLimited": "we're a bit overwhelmed. Try again in an hour, or book a chat directly.",
+    "tooltipEmpty": "write a real problem",
+    "chips": {
+      "ar": "invoices are slow",
+      "leads": "we lose leads",
+      "inbox": "email is eating my life",
+      "support": "support is on fire",
+      "marketing": "no time for marketing"
+    }
+  },
+  "endCard": {
+    "eyebrow": "▸ team is ready",
+    "ctaBook": "Book a 30-min chat",
+    "ctaMore": "Show me more first",
+    "ctaEmail": "Email me this plan",
+    "form": {
+      "name": "name",
+      "email": "email",
+      "company": "company name",
+      "website": "website",
+      "note": "anything else we should know?",
+      "submit": "Send",
+      "sending": "sending...",
+      "success": "Thanks. A plan is on the way within 30 min.",
+      "error": "Something went wrong. Try again, or email christian@crunchtime.no directly."
+    }
+  },
   "leadForm": {},
   "services": {
     "meta": {

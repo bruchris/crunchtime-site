@@ -14,8 +14,45 @@
     "no": "NO",
     "en": "EN"
   },
-  "briefBox": {},
-  "endCard": {},
+  "briefBox": {
+    "statusLive": "live · oslo",
+    "headline": "Slipp en utfordring. Møt teamet ditt.",
+    "subline": "Skriv det som koker. Vi setter sammen et team og viser deg hvordan de ville løst det.",
+    "inputPlaceholder": "fortell hva som koker...",
+    "inputAriaLabel": "Beskriv en utfordring",
+    "submit": "Send",
+    "analyzing": "▸ analyserer...",
+    "skip": "skip til resultat →",
+    "spawning": "spawner...",
+    "toolConnecting": "⟳ kobler",
+    "toolConnected": "✓ koblet",
+    "rateLimited": "vi er litt overvelmet. Prøv igjen om en time, eller book en prat direkte.",
+    "tooltipEmpty": "skriv et reelt problem",
+    "chips": {
+      "ar": "fakturaene er sene",
+      "leads": "vi mister leads",
+      "inbox": "e-post tar over livet",
+      "support": "kundeservice koker",
+      "marketing": "ingen tid til markedsføring"
+    }
+  },
+  "endCard": {
+    "eyebrow": "▸ teamet er klart",
+    "ctaBook": "Book en 30-min prat",
+    "ctaMore": "Vis meg mer først",
+    "ctaEmail": "Send dette på e-post",
+    "form": {
+      "name": "navn",
+      "email": "e-post",
+      "company": "firmanavn",
+      "website": "nettside",
+      "note": "noe annet vi bør vite?",
+      "submit": "Send",
+      "sending": "sender...",
+      "success": "Takk. Plan kommer på e-post innen 30 min.",
+      "error": "Noe gikk galt. Prøv igjen, eller send en e-post direkte til christian@crunchtime.no."
+    }
+  },
   "leadForm": {},
   "services": {
     "meta": {
