@@ -1,142 +1,156 @@
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
+import { routing, type Locale } from "../../../i18n/routing";
 import { submitContact } from "./actions";
 
-export const metadata: Metadata = {
-  title: "Book a call",
-  description: "Book a 30-minute call with Crunchtime and map your first AI agent.",
-  alternates: {
-    canonical: "/contact"
-  },
-  openGraph: {
-    url: "https://crunchtime.no/contact"
-  }
-};
+const BOOKING_FALLBACK =
+  "https://calendar.google.com/calendar/appointments/schedules/AcZssZ3I8SZIfyI8qMSoX5wo0tY3dlfxajUj0eDlrgpzpN29AcUzDT3EEyQmH9PJpCjZ-Q0-DrtAX5oa?gv=true";
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "contact.meta" });
+  return {
+    title: t("title"),
+    description: t("description"),
+    alternates: {
+      canonical: `/${locale}/contact`,
+      languages: {
+        no: "/no/contact",
+        en: "/en/contact",
+        "x-default": "/no/contact"
+      }
+    },
+    openGraph: { url: `https://crunchtime.no/${locale}/contact` }
+  };
+}
 
 export default async function ContactPage({
+  params,
   searchParams
 }: {
-  searchParams: Promise<{ sent?: string; error?: string; subject?: string }>;
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ sent?: string; error?: string }>;
 }) {
-  const { sent, error, subject } = await searchParams;
-  const bookingLink =
-    process.env.NEXT_PUBLIC_CAL_BOOKING_LINK ??
-    "https://calendar.google.com/calendar/appointments/schedules/AcZssZ3I8SZIfyI8qMSoX5wo0tY3dlfxajUj0eDlrgpzpN29AcUzDT3EEyQmH9PJpCjZ-Q0-DrtAX5oa?gv=true";
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
+  setRequestLocale(locale);
+
+  const { sent, error } = await searchParams;
+  const tHero = await getTranslations({ locale, namespace: "contact.hero" });
+  const tCal = await getTranslations({ locale, namespace: "contact.calendar" });
+  const tForm = await getTranslations({ locale, namespace: "contact.form" });
+
+  const bookingLink = process.env.NEXT_PUBLIC_CAL_BOOKING_LINK ?? BOOKING_FALLBACK;
 
   return (
-    <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-24">
+    <div className="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-28">
       <section>
-        <p className="eyebrow">Book your call</p>
-        <h1 className="hero-title mt-5 text-balance">
-          Ready to stop doing everything yourself?
-        </h1>
-        <p className="mt-7 max-w-2xl text-xl font-light leading-8 text-[var(--color-muted)]">
-          Book a 30-minute call. We will map out your first AI agent in the session.
+        <p className="text-xs uppercase tracking-[0.24em] text-[var(--color-accent)]">
+          {tHero("eyebrow")}
         </p>
-
-        <div className="accent-panel mt-10 max-w-2xl rounded-md p-6">
-          <p className="eyebrow">No commitment</p>
-          <p className="mt-3 leading-7 text-[var(--color-muted)]">
-            No jargon. Just clarity on what AI can actually do for your business.
-          </p>
-        </div>
+        <h1 className="font-display mt-6 text-balance text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
+          {tHero("headline")}
+        </h1>
+        <p className="mt-7 max-w-2xl text-lg font-light leading-8 text-[var(--color-muted)]">
+          {tHero("subline")}
+        </p>
       </section>
 
-      <section className="accent-panel mt-12 overflow-hidden rounded-md">
-        <div className="border-b border-white/8 p-5">
-          <h2 className="font-display text-2xl font-extrabold tracking-tight">
-            Pick a time that works
-          </h2>
-          <p className="mt-2 text-sm text-[var(--color-muted)]">
-            Pick a 30-minute slot. A Google Meet link is added to the invite automatically.
-          </p>
+      <section className="mt-14">
+        <div className="mb-4 flex items-baseline justify-between gap-4">
+          <h2 className="font-display text-xl font-bold tracking-tight">{tCal("title")}</h2>
+          <a
+            href={bookingLink}
+            className="font-mono text-xs text-[var(--color-muted)] hover:text-[var(--color-accent)]"
+            target="_blank"
+            rel="noopener"
+          >
+            {tCal("fallback")} →
+          </a>
         </div>
         <iframe
           title="Crunchtime booking calendar"
           src={bookingLink}
-          className="block h-[760px] w-full bg-white"
+          loading="lazy"
+          className="block h-[720px] w-full border border-white/8 bg-white"
         />
       </section>
 
-      <section className="mt-10 grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="accent-panel rounded-md p-6">
-          <p className="eyebrow">Prefer email?</p>
-          <h2 className="font-display mt-4 text-3xl font-extrabold tracking-tight">
-            Tell us what you want off your plate.
-          </h2>
-          <p className="mt-4 leading-7 text-[var(--color-muted)]">
-            We reply from{" "}
-            <a href="mailto:hello@crunchtime.no" className="text-[var(--color-accent)]">
-              hello@crunchtime.no
-            </a>
-            . Send the business context, the work that keeps repeating, and the tools your team
-            already uses.
-          </p>
-        </div>
+      <section className="mt-16">
+        <h2 className="font-display text-2xl font-extrabold tracking-tight sm:text-3xl">
+          {tForm("heading")}
+        </h2>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--color-muted)]">
+          {tForm("subheading")}
+        </p>
 
-        <div className="accent-panel rounded-md p-6">
-          {sent === "1" ? (
-            <p className="rounded-sm bg-emerald-500/10 p-4 text-sm text-emerald-200">
-              Got it. We will reply from hello@crunchtime.no within one business day.
-            </p>
-          ) : (
-            <form action={submitContact} className="grid gap-4">
-              {error ? (
-                <p className="rounded-sm bg-rose-500/10 p-3 text-sm text-rose-200">
-                  Something went wrong sending that. Please email us directly at
-                  hello@crunchtime.no.
-                </p>
-              ) : null}
-              <label className="grid gap-1 text-sm">
-                <span className="text-[var(--color-muted)]">Your name</span>
-                <input
-                  required
-                  name="name"
-                  autoComplete="name"
-                  className="rounded-sm border border-white/10 bg-black/30 px-3 py-3 text-sm focus:border-[var(--color-accent)] focus:outline-none"
-                />
-              </label>
-              <label className="grid gap-1 text-sm">
-                <span className="text-[var(--color-muted)]">Email</span>
-                <input
-                  required
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  className="rounded-sm border border-white/10 bg-black/30 px-3 py-3 text-sm focus:border-[var(--color-accent)] focus:outline-none"
-                />
-              </label>
-              <label className="grid gap-1 text-sm">
-                <span className="text-[var(--color-muted)]">Company</span>
-                <input
-                  name="company"
-                  autoComplete="organization"
-                  className="rounded-sm border border-white/10 bg-black/30 px-3 py-3 text-sm focus:border-[var(--color-accent)] focus:outline-none"
-                />
-              </label>
-              <label className="grid gap-1 text-sm">
-                <span className="text-[var(--color-muted)]">What should your first agent do?</span>
-                <textarea
-                  required
-                  name="message"
-                  rows={5}
-                  defaultValue={
-                    subject === "backoffice-trial"
-                      ? "I would like to start a Back-Office Finance 14-day trial."
-                      : ""
-                  }
-                  className="rounded-sm border border-white/10 bg-black/30 px-3 py-3 text-sm focus:border-[var(--color-accent)] focus:outline-none"
-                />
-              </label>
-              {subject ? <input type="hidden" name="subject" value={subject} /> : null}
-              <button
-                type="submit"
-                className="mt-2 rounded-sm bg-[var(--color-accent)] px-5 py-3 text-sm font-bold text-black hover:bg-[var(--color-accent-strong)] sm:justify-self-start"
-              >
-                Send message
-              </button>
-            </form>
-          )}
-        </div>
+        {sent === "1" ? (
+          <div className="mt-8 max-w-2xl rounded-sm border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/8 p-6">
+            <p className="font-display text-lg font-bold">{tForm("sentHeading")}</p>
+            <p className="mt-2 text-sm leading-6 text-[var(--color-muted)]">{tForm("sent")}</p>
+          </div>
+        ) : (
+          <form action={submitContact} className="mt-8 grid max-w-2xl gap-4">
+            <input type="hidden" name="locale" value={locale} />
+            {error ? (
+              <p className="rounded-sm border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-200">
+                {tForm("error")}
+              </p>
+            ) : null}
+            <label className="grid gap-1 text-sm">
+              <span className="text-[var(--color-muted)]">{tForm("name")}</span>
+              <input
+                required
+                name="name"
+                autoComplete="name"
+                className="rounded-sm border border-white/10 bg-black/30 px-3 py-3 text-sm focus:border-[var(--color-accent)] focus:outline-none"
+              />
+            </label>
+            <label className="grid gap-1 text-sm">
+              <span className="text-[var(--color-muted)]">{tForm("email")}</span>
+              <input
+                required
+                type="email"
+                name="email"
+                autoComplete="email"
+                className="rounded-sm border border-white/10 bg-black/30 px-3 py-3 text-sm focus:border-[var(--color-accent)] focus:outline-none"
+              />
+            </label>
+            <label className="grid gap-1 text-sm">
+              <span className="text-[var(--color-muted)]">{tForm("company")}</span>
+              <input
+                name="company"
+                autoComplete="organization"
+                className="rounded-sm border border-white/10 bg-black/30 px-3 py-3 text-sm focus:border-[var(--color-accent)] focus:outline-none"
+              />
+            </label>
+            <label className="grid gap-1 text-sm">
+              <span className="text-[var(--color-muted)]">{tForm("message")}</span>
+              <textarea
+                required
+                name="message"
+                rows={5}
+                className="rounded-sm border border-white/10 bg-black/30 px-3 py-3 text-sm focus:border-[var(--color-accent)] focus:outline-none"
+              />
+            </label>
+            <button
+              type="submit"
+              className="mt-2 rounded-sm bg-[var(--color-accent)] px-5 py-3 text-sm font-bold text-black hover:bg-[var(--color-accent-strong)] sm:justify-self-start"
+            >
+              {tForm("submit")}
+            </button>
+          </form>
+        )}
       </section>
     </div>
   );
