@@ -14,7 +14,12 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      { source: "/consulting", destination: "/no/consulting", permanent: true },
+      { source: "/consulting", destination: "/no/services", permanent: true },
+      {
+        source: "/:locale(no|en)/consulting",
+        destination: "/:locale/services",
+        permanent: true
+      },
       { source: "/contact", destination: "/no/contact", permanent: true }
     ];
   }

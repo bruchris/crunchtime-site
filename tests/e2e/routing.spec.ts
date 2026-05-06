@@ -25,19 +25,25 @@ test.describe("locale routing", () => {
     await context.close();
   });
 
-  test("/no/consulting renders Norwegian consulting page", async ({ page }) => {
-    await page.goto("/no/consulting");
-    await expect(page).toHaveURL(/\/no\/consulting/);
+  test("/no/services renders the Norwegian services page", async ({ page }) => {
+    await page.goto("/no/services");
+    await expect(page).toHaveURL(/\/no\/services$/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(
+      /AI-team som faktisk gjør jobben/
+    );
   });
 
-  test("/en/consulting renders English consulting page", async ({ page }) => {
-    await page.goto("/en/consulting");
-    await expect(page).toHaveURL(/\/en\/consulting/);
+  test("/en/services renders the English services page", async ({ page }) => {
+    await page.goto("/en/services");
+    await expect(page).toHaveURL(/\/en\/services$/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(
+      /AI teams that actually do the work/
+    );
   });
 
-  test("/consulting (bare) 301-redirects to /no/consulting", async ({ page }) => {
+  test("/consulting (bare) 301-redirects to /no/services", async ({ page }) => {
     const response = await page.goto("/consulting", { waitUntil: "domcontentloaded" });
-    expect(response?.url()).toMatch(/\/no\/consulting/);
+    expect(response?.url()).toMatch(/\/no\/services$/);
   });
 
   test("/contact (bare) 301-redirects to /no/contact", async ({ page }) => {
