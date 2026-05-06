@@ -586,11 +586,12 @@ html.cursor-effect-fine label {
   mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .ct-fade-up,
-  .ct-slide-in-left {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
+:root {
+  --ct-lime: var(--color-accent);
+  --ct-blue: #5fa9ff;
+  --ct-amber: #f5b740;
+  --ct-violet: #a98fff;
+  --ct-cyan: #5fe0d8;
+  --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
 }

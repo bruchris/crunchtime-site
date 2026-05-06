@@ -20,7 +20,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #d4ef3a;
+  background: var(--ct-lime);
   animation: ct-status-pulse 2s ease-out infinite;
 }
 
@@ -62,7 +62,7 @@
 }
 
 .inputWrap:focus-within {
-  border-color: #d4ef3a;
+  border-color: var(--ct-lime);
 }
 
 .input {
@@ -77,7 +77,7 @@
 .cursor {
   width: 8px;
   height: 18px;
-  background: #d4ef3a;
+  background: var(--ct-lime);
   animation: ct-cursor-blink 1s steps(1) infinite;
 }
 
@@ -87,7 +87,7 @@
   margin-top: 12px;
   font-family: var(--font-jetbrains, ui-monospace, monospace);
   font-size: 13px;
-  color: #d4ef3a;
+  color: var(--ct-lime);
 }
 
 .chips {
@@ -109,7 +109,7 @@
   transition: border-color 120ms ease, color 120ms ease;
 }
 
-.chip:hover { border-color: #d4ef3a; color: #d4ef3a; }
+.chip:hover { border-color: var(--ct-lime); color: var(--ct-lime); }
 
 .skipLink {
   position: absolute;
@@ -122,7 +122,7 @@
   border: 0;
   cursor: pointer;
 }
-.skipLink:hover { color: #d4ef3a; }
+.skipLink:hover { color: var(--ct-lime); }
 
 .stage {
   margin-top: 40px;
@@ -147,7 +147,7 @@
   padding: 16px 18px;
   opacity: 0;
 }
-.agentCard.visible { animation: ct-fade-up 500ms ease-out forwards; }
+.agentCard.visible { animation: ct-fade-up 500ms var(--ease-out-quart) forwards; }
 
 .agentName {
   font-family: var(--font-syne), sans-serif;
@@ -163,11 +163,11 @@
   height: 8px;
   border-radius: 50%;
 }
-.agentDot.lime { background: #d4ef3a; }
-.agentDot.blue { background: #5fa9ff; }
-.agentDot.amber { background: #f5b740; }
-.agentDot.violet { background: #a98fff; }
-.agentDot.cyan { background: #5fe0d8; }
+.agentDot.lime { background: var(--ct-lime); }
+.agentDot.blue { background: var(--ct-blue); }
+.agentDot.amber { background: var(--ct-amber); }
+.agentDot.violet { background: var(--ct-violet); }
+.agentDot.cyan { background: var(--ct-cyan); }
 
 .agentSpawning {
   font-family: var(--font-jetbrains, ui-monospace, monospace);
@@ -185,8 +185,8 @@
   border-radius: 999px;
   color: var(--color-muted, #8a8a82);
 }
-.toolPill.connecting { color: #f5b740; }
-.toolPill.connected { color: #d4ef3a; border-color: #d4ef3a; }
+.toolPill.connecting { color: var(--ct-amber); }
+.toolPill.connected { color: var(--ct-lime); border-color: var(--ct-lime); }
 
 .logFeed {
   pointer-events: none;
@@ -204,14 +204,14 @@
   gap: 12px;
   padding: 4px 0;
 }
-.logLine.visible { animation: ct-slide-in-left 400ms ease-out forwards; }
+.logLine.visible { animation: ct-slide-in-left 400ms var(--ease-out-quart) forwards; }
 .logTs { color: var(--color-muted, #8a8a82); }
-.logAgent { color: #d4ef3a; }
+.logAgent { color: var(--ct-lime); }
 
 .endCard {
   margin-top: 24px;
   background: #1a1a18;
-  border-left: 2px solid #d4ef3a;
+  border-left: 2px solid var(--ct-lime);
   padding: 24px;
   opacity: 0;
 }
@@ -220,7 +220,7 @@
 .endEyebrow {
   font-family: var(--font-jetbrains, ui-monospace, monospace);
   font-size: 11px;
-  color: #d4ef3a;
+  color: var(--ct-lime);
   margin-bottom: 8px;
 }
 
@@ -243,7 +243,7 @@
 .ctaPrimary {
   display: block;
   text-align: center;
-  background: #d4ef3a;
+  background: var(--ct-lime);
   color: #0a0a09;
   font-family: var(--font-syne), sans-serif;
   font-weight: 700;
@@ -266,7 +266,7 @@
   border: 1px solid #2a2a27;
   cursor: pointer;
 }
-.ctaSecondary:hover, .ctaTertiary:hover { border-color: #d4ef3a; color: #d4ef3a; }
+.ctaSecondary:hover, .ctaTertiary:hover { border-color: var(--ct-lime); color: var(--ct-lime); }
 
 .emailForm { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
 .emailField {
@@ -277,7 +277,16 @@
   font-family: var(--font-dm-sans), sans-serif;
   font-size: 14px;
 }
-.emailField:focus { outline: none; border-color: #d4ef3a; }
+.emailField:focus { outline: none; border-color: var(--ct-lime); }
 .honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
-.emailSuccess { color: #d4ef3a; font-family: var(--font-jetbrains, ui-monospace, monospace); font-size: 13px; }
-.emailError { color: #f5b740; font-family: var(--font-jetbrains, ui-monospace, monospace); font-size: 13px; }
+.emailSuccess { color: var(--ct-lime); font-family: var(--font-jetbrains, ui-monospace, monospace); font-size: 13px; }
+.emailError { color: var(--ct-amber); font-family: var(--font-jetbrains, ui-monospace, monospace); font-size: 13px; }
+
+.chip:focus-visible,
+.skipLink:focus-visible,
+.ctaPrimary:focus-visible,
+.ctaSecondary:focus-visible,
+.ctaTertiary:focus-visible {
+  outline: 2px solid var(--ct-lime);
+  outline-offset: 2px;
+}
