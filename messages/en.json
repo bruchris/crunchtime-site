@@ -1,12 +1,12 @@
 {
   "nav": {
     "home": "Home",
-    "consulting": "Consulting",
+    "services": "Services",
     "contact": "Contact",
-    "cta": "Get started"
+    "cta": "Book a call"
   },
   "footer": {
-    "tagline": "Norwegian AI agency · Bergen",
+    "tagline": "Norwegian AI agency, based in Bergen.",
     "rights": "All rights reserved"
   },
   "localeToggle": {
@@ -16,7 +16,201 @@
   },
   "briefBox": {},
   "endCard": {},
-  "services": {},
-  "contact": {},
-  "leadForm": {}
+  "leadForm": {},
+  "services": {
+    "meta": {
+      "title": "Services",
+      "description": "AI teams that actually do the work. Three services, four steps, fixed price."
+    },
+    "hero": {
+      "eyebrow": "Services",
+      "headline": "AI teams that actually do the work.",
+      "subline": "We build agents that take the repetitive work off your calendar. Fixed price, live in under a month."
+    },
+    "servicesGrid": {
+      "sectionLabel": "What we do",
+      "items": {
+        "automation": {
+          "number": "01",
+          "title": "AI automation and agents",
+          "body": "We set up agents that run in the background, talk to your tools (Tripletex, Fiken, Shopify, Slack), and do the work without anyone lifting a finger."
+        },
+        "strategy": {
+          "number": "02",
+          "title": "AI strategy and advisory",
+          "body": "A couple of workshops, a prioritised list of what is actually worth automating, and a plan you can work from. No slide decks."
+        },
+        "implementation": {
+          "number": "03",
+          "title": "AI implementation",
+          "body": "We build and ship one concrete workflow end to end. Fixed price, fixed scope, and a runbook you own after handover."
+        }
+      }
+    },
+    "process": {
+      "sectionLabel": "How we work",
+      "headline": "Four steps, no surprises.",
+      "steps": {
+        "discovery": {
+          "number": "01",
+          "title": "Discovery",
+          "body": "We walk through your processes, find what is grinding, and score every candidate on hours saved per month."
+        },
+        "strategy": {
+          "number": "02",
+          "title": "Strategy",
+          "body": "We pick the one workflow that pays back the most first, and write a clear scope with acceptance criteria."
+        },
+        "build": {
+          "number": "03",
+          "title": "Build",
+          "body": "We build the agent in your environment, connect it to the tools you already use, and test against real data."
+        },
+        "followup": {
+          "number": "04",
+          "title": "Follow-up",
+          "body": "Two weeks of close support after launch. After that you can take it over yourself, or we can run it on retainer."
+        }
+      }
+    },
+    "results": {
+      "sectionLabel": "What clients walk away with",
+      "headline": "Numbers from the first pilots.",
+      "items": {
+        "hours": {
+          "tag": "Time saved",
+          "number": "23h",
+          "label": "per week",
+          "body": "Average across three pilots, measured against baseline before the agent ran."
+        },
+        "throughput": {
+          "tag": "Volume",
+          "number": "3x",
+          "label": "more cases handled",
+          "body": "Same team, three times the inbound resolved within the same day."
+        },
+        "errors": {
+          "tag": "Quality",
+          "number": "62%",
+          "label": "fewer errors",
+          "body": "Fewer typos, fewer forgotten tasks, fewer chase emails from clients."
+        },
+        "speed": {
+          "tag": "Time to live",
+          "number": "18 days",
+          "label": "from kickoff to live",
+          "body": "Median for a pilot. We have done it in 11, we have spent 25, it scales with scope."
+        }
+      }
+    },
+    "pricing": {
+      "sectionLabel": "Pricing",
+      "headline": "Pick the smallest door.",
+      "subline": "Three tiers. No open retainers. No surprise invoices.",
+      "tiers": {
+        "discovery": {
+          "name": "Discovery Sprint",
+          "price": "15,000 NOK",
+          "duration": "1 to 2 weeks",
+          "pitch": "Map three to five candidate workflows, score them by hours saved, leave with a prioritised roadmap.",
+          "detail": "Two workshops. If you go ahead with a pilot within 30 days, the Sprint fee is credited in full.",
+          "cta": "Book a call"
+        },
+        "pilot": {
+          "name": "Implementation Pilot",
+          "price": "45,000 to 90,000 NOK",
+          "duration": "3 to 5 weeks",
+          "pitch": "Build and ship one production workflow end to end.",
+          "detail": "You walk away with an agent live in your environment, a runbook, and two weeks of post-launch support. Fixed scope, fixed price.",
+          "cta": "Book a call",
+          "recommended": true,
+          "recommendedLabel": "Most picked"
+        },
+        "retainer": {
+          "name": "Agent Ops Retainer",
+          "price": "12,000 NOK / month",
+          "duration": "3-month minimum",
+          "pitch": "Maintain the agents, add new workflows, monthly optimisation review.",
+          "detail": "Available after a successful pilot. Monthly report on what ran, what failed, what we tuned.",
+          "cta": "Book a call"
+        }
+      }
+    },
+    "faq": {
+      "sectionLabel": "Questions we get",
+      "headline": "What people ask us.",
+      "items": {
+        "safety": {
+          "q": "Is this safe? AI hallucinates.",
+          "a": "Every agent we ship has bounded scope, approval gates on anything outbound (emails, invoices, payments), and full audit logs. You sign off on the policy before the agent goes live."
+        },
+        "messy": {
+          "q": "Our data is messy.",
+          "a": "That is what the Discovery Sprint is for. We scope what is doable now versus what needs cleanup first, and we price both."
+        },
+        "waiting": {
+          "q": "We are waiting for ChatGPT Enterprise or Copilot.",
+          "a": "Those are chat assistants, they answer when someone opens them. We install workflows: agents that run in the background as part of operations."
+        },
+        "ownership": {
+          "q": "Who owns the agent after launch?",
+          "a": "You do. It runs on your account, against your tools, on your data. If we walk away tomorrow, it keeps running."
+        },
+        "team": {
+          "q": "Who actually builds this?",
+          "a": "A small Norwegian team in Bergen, supervised by an accountable principal. We take a limited number of engagements per quarter."
+        },
+        "languages": {
+          "q": "Does the agent speak Norwegian?",
+          "a": "Yes. We explicitly test on Norwegian documents, emails, and customer data, not just English."
+        },
+        "industries": {
+          "q": "Which industries fit best?",
+          "a": "Most of our delivery has been in accounting, law, and e-commerce. The common thread: many small repetitive tasks with clear rules."
+        },
+        "starting": {
+          "q": "What is the first step?",
+          "a": "A 30-minute call. We ask what is grinding, you tell us, and we say honestly whether an agent is the right shape for the problem."
+        }
+      }
+    },
+    "ctaBanner": {
+      "headline": "Ready to put agents on the work?",
+      "subline": "30 minutes on a call. We scope the problem and tell you honestly whether this is the right path.",
+      "button": "Book a free call"
+    },
+    "briefHandoff": {
+      "prefix": "You came here from a brief about",
+      "ask": "Want to book a call instead?",
+      "cta": "Book",
+      "dismiss": "Dismiss"
+    }
+  },
+  "contact": {
+    "meta": {
+      "title": "Contact",
+      "description": "Book a 30-minute call or send us a message."
+    },
+    "hero": {
+      "eyebrow": "Contact",
+      "headline": "Book a call or write to us.",
+      "subline": "Pick a slot below, or send a message via the form."
+    },
+    "calendar": {
+      "title": "Pick a time",
+      "fallback": "If the calendar does not load, open it directly."
+    },
+    "form": {
+      "heading": "Prefer email?",
+      "subheading": "Tell us briefly what is grinding. We reply from hello@crunchtime.no within one business day.",
+      "name": "Name",
+      "email": "Email",
+      "company": "Company",
+      "message": "What do you want off your plate?",
+      "submit": "Send message",
+      "sentHeading": "Got it.",
+      "sent": "We will reply from hello@crunchtime.no within one business day.",
+      "error": "Something went wrong. Please email us at hello@crunchtime.no."
+    }
+  }
 }

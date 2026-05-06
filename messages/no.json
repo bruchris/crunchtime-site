@@ -1,12 +1,12 @@
 {
   "nav": {
     "home": "Hjem",
-    "consulting": "Konsulent",
+    "services": "Tjenester",
     "contact": "Kontakt",
-    "cta": "Kom i gang"
+    "cta": "Book en prat"
   },
   "footer": {
-    "tagline": "Norsk AI-byrå · Bergen",
+    "tagline": "Norsk AI-byrå, basert i Bergen.",
     "rights": "Alle rettigheter forbeholdt"
   },
   "localeToggle": {
@@ -16,7 +16,201 @@
   },
   "briefBox": {},
   "endCard": {},
-  "services": {},
-  "contact": {},
-  "leadForm": {}
+  "leadForm": {},
+  "services": {
+    "meta": {
+      "title": "Tjenester",
+      "description": "AI-team som faktisk gjør jobben. Tre tjenester, fire steg, fast pris."
+    },
+    "hero": {
+      "eyebrow": "Tjenester",
+      "headline": "AI-team som faktisk gjør jobben.",
+      "subline": "Vi bygger agenter som tar det repetitive arbeidet ut av kalenderen din. Fast pris, klar i drift på under en måned."
+    },
+    "servicesGrid": {
+      "sectionLabel": "Hva vi gjør",
+      "items": {
+        "automation": {
+          "number": "01",
+          "title": "AI-automatisering og agenter",
+          "body": "Vi setter opp agenter som kjører i bakgrunnen, snakker med verktøyene dine (Tripletex, Fiken, Shopify, Slack), og gjør jobben uten at noen må løfte en finger."
+        },
+        "strategy": {
+          "number": "02",
+          "title": "AI-strategi og rådgivning",
+          "body": "Et par workshops, en prioritert liste over hva som faktisk er verdt å automatisere, og en plan du kan jobbe etter. Ingen plansjeshow."
+        },
+        "implementation": {
+          "number": "03",
+          "title": "AI-implementering",
+          "body": "Vi bygger og setter i drift én konkret arbeidsflyt fra ende til ende. Fast pris, fast scope, og en runbook du eier etter overlevering."
+        }
+      }
+    },
+    "process": {
+      "sectionLabel": "Slik jobber vi",
+      "headline": "Fire steg, ingen overraskelser.",
+      "steps": {
+        "discovery": {
+          "number": "01",
+          "title": "Kartlegging",
+          "body": "Vi går gjennom prosessene dine, finner det som koker, og scorer hver kandidat på timer spart per måned."
+        },
+        "strategy": {
+          "number": "02",
+          "title": "Strategi",
+          "body": "Vi velger den ene arbeidsflyten som gir mest tilbake først, og skriver et tydelig scope med akseptkriterier."
+        },
+        "build": {
+          "number": "03",
+          "title": "Bygging",
+          "body": "Vi bygger agenten i miljøet ditt, kobler den på verktøyene du allerede bruker, og tester mot ekte data."
+        },
+        "followup": {
+          "number": "04",
+          "title": "Oppfølging",
+          "body": "To uker med tett oppfølging etter lansering. Etter det kan du ta over selv eller la oss drifte videre på retainer."
+        }
+      }
+    },
+    "results": {
+      "sectionLabel": "Hva kundene sitter igjen med",
+      "headline": "Tall fra de første pilotene.",
+      "items": {
+        "hours": {
+          "tag": "Tid spart",
+          "number": "23t",
+          "label": "per uke",
+          "body": "Snittet på tvers av tre piloter, målt mot baseline før agenten kjørte."
+        },
+        "throughput": {
+          "tag": "Volum",
+          "number": "3x",
+          "label": "flere saker behandlet",
+          "body": "Samme team, tre ganger så mange henvendelser løst innen samme dag."
+        },
+        "errors": {
+          "tag": "Kvalitet",
+          "number": "62%",
+          "label": "færre feil",
+          "body": "Færre tastefeil, færre glemte oppgaver, færre purringer fra kunder."
+        },
+        "speed": {
+          "tag": "Tid til drift",
+          "number": "18 dager",
+          "label": "fra start til live",
+          "body": "Median for en pilot. Vi har gjort det på 11, vi har brukt 25, det varierer med scope."
+        }
+      }
+    },
+    "pricing": {
+      "sectionLabel": "Pris",
+      "headline": "Velg den minste døra.",
+      "subline": "Tre nivåer. Ingen åpne retainere. Ingen overraskende fakturaer.",
+      "tiers": {
+        "discovery": {
+          "name": "Discovery Sprint",
+          "price": "15 000 kr",
+          "duration": "1 til 2 uker",
+          "pitch": "Kartlegg tre til fem kandidater, score dem på timer spart, gå hjem med en prioritert liste.",
+          "detail": "To workshops. Hvis du går videre med en pilot innen 30 dager, krediteres hele Sprint-honoraret.",
+          "cta": "Book en prat"
+        },
+        "pilot": {
+          "name": "Implementation Pilot",
+          "price": "45 000 til 90 000 kr",
+          "duration": "3 til 5 uker",
+          "pitch": "Bygg og lanser én produksjonsagent fra ende til ende.",
+          "detail": "Du sitter igjen med en agent som kjører i miljøet ditt, en runbook, og to uker med oppfølging. Fast pris, fast scope.",
+          "cta": "Book en prat",
+          "recommended": true,
+          "recommendedLabel": "Mest valgt"
+        },
+        "retainer": {
+          "name": "Agent Ops Retainer",
+          "price": "12 000 kr / mnd",
+          "duration": "3 mnd minimum",
+          "pitch": "Drifting av agentene, nye arbeidsflyter, månedlig optimalisering.",
+          "detail": "Tilgjengelig etter en vellykket pilot. Månedlig rapport på hva som kjørte, hva som feilet, hva vi justerte.",
+          "cta": "Book en prat"
+        }
+      }
+    },
+    "faq": {
+      "sectionLabel": "Spørsmål vi får",
+      "headline": "Det vi får spørsmål om.",
+      "items": {
+        "safety": {
+          "q": "Er dette trygt? AI hallusinerer.",
+          "a": "Hver agent vi sender ut har avgrenset scope, godkjenningssteg på alt som går ut (e-post, fakturaer, betalinger), og full audit-logg. Du godkjenner policyen før agenten går live."
+        },
+        "messy": {
+          "q": "Dataen vår er rotete.",
+          "a": "Det er derfor vi starter med en Discovery Sprint. Vi scoper hva som kan gjøres nå mot hva som krever opprydding først, og priser begge deler."
+        },
+        "waiting": {
+          "q": "Vi venter på ChatGPT Enterprise eller Copilot.",
+          "a": "Det er chat-assistenter, de svarer når noen åpner dem. Vi installerer arbeidsflyter, agenter som kjører i bakgrunnen som en del av driften."
+        },
+        "ownership": {
+          "q": "Hvem eier agenten etter lansering?",
+          "a": "Du. Den kjører på din konto, mot dine verktøy, på din data. Hvis vi går vår vei i morgen, kjører den videre."
+        },
+        "team": {
+          "q": "Hvem bygger faktisk dette?",
+          "a": "Et lite norsk team i Bergen, supervisert av en ansvarlig prinsipal. Vi tar et begrenset antall engasjementer per kvartal."
+        },
+        "languages": {
+          "q": "Snakker agenten norsk?",
+          "a": "Ja. Vi tester eksplisitt på norske dokumenter, e-poster og kundedata, ikke bare engelske."
+        },
+        "industries": {
+          "q": "Hvilke bransjer passer best?",
+          "a": "Vi har levert mest til regnskap, advokat, og e-handel. Felles for dem: mange små repetitive oppgaver med klare regler."
+        },
+        "starting": {
+          "q": "Hva er første steg?",
+          "a": "En 30-minutters samtale. Vi spør hva som koker, du forteller, og vi sier ærlig om en agent er riktig form på løsningen."
+        }
+      }
+    },
+    "ctaBanner": {
+      "headline": "Klar til å sette agenter i jobb?",
+      "subline": "30 minutter på telefon. Vi scoper problemet og sier ærlig om dette er riktig vei.",
+      "button": "Book en gratis samtale"
+    },
+    "briefHandoff": {
+      "prefix": "Du kom hit fra en brief om",
+      "ask": "Vil du heller booke en prat?",
+      "cta": "Book",
+      "dismiss": "Lukk"
+    }
+  },
+  "contact": {
+    "meta": {
+      "title": "Kontakt",
+      "description": "Book en 30-minutters prat eller send oss en melding."
+    },
+    "hero": {
+      "eyebrow": "Kontakt",
+      "headline": "Book en prat eller skriv til oss.",
+      "subline": "Pick et tidspunkt under, eller send melding via skjemaet."
+    },
+    "calendar": {
+      "title": "Velg et tidspunkt",
+      "fallback": "Hvis kalenderen ikke laster, åpne den direkte."
+    },
+    "form": {
+      "heading": "Foretrekker e-post?",
+      "subheading": "Skriv kort hva som koker. Vi svarer fra hello@crunchtime.no innen én arbeidsdag.",
+      "name": "Navn",
+      "email": "E-post",
+      "company": "Firma",
+      "message": "Hva vil du ta av planka?",
+      "submit": "Send melding",
+      "sentHeading": "Mottatt.",
+      "sent": "Vi svarer fra hello@crunchtime.no innen én arbeidsdag.",
+      "error": "Noe gikk galt. Send oss heller en e-post på hello@crunchtime.no."
+    }
+  }
 }
