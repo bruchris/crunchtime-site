@@ -191,6 +191,7 @@ export function DemoStage({ lang }: Props) {
             payload={payload}
             agentsVisible={state.agentsVisible}
             visibleCount={state.logsVisible}
+            forceDone={state.phase === "end-card"}
           />
           <EndCard
             visible={state.phase === "end-card"}

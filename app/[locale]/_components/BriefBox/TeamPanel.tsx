@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import styles from "./briefBox.module.css";
 import type { Agent, BriefResponse, LogLine } from "../../../_lib/briefSchema";
@@ -9,6 +9,8 @@ interface Props {
   payload: BriefResponse;
   agentsVisible: boolean[];
   visibleCount: number;
+  /** When true, force all cards to "done" immediately (e.g. on skip-to-end). */
+  forceDone?: boolean;
 }
 
 type ActivityKind = "assignment" | "automation" | "issue";
@@ -64,9 +66,24 @@ function timeAgo(_ts: string, idxFromEnd: number): string {
   return `${Math.min(99, idxFromEnd)}m ago`;
 }
 
-export function TeamPanel({ payload, agentsVisible, visibleCount }: Props) {
+export function TeamPanel({ payload, agentsVisible, visibleCount, forceDone }: Props) {
   const t = useTranslations("briefBox");
   const [selected, setSelected] = useState<number | "all">("all");
+
+  // Detect reduced-motion preference once (client-only, safe in useEffect).
+  const prefersReducedMotion = useRef(false);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      prefersReducedMotion.current = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+    }
+  }, []);
+
+  // Track per-card status: "running" (spinner visible) or "done" (ring gone).
+  const [cardStatus, setCardStatus] = useState<Record<string, "running" | "done">>({});
+  // Keep a ref of the previous visible id set so we can detect newly-arrived cards.
+  const prevVisibleIds = useRef<Set<string>>(new Set());
 
   const allCards = useMemo<CardData[]>(() => {
     return payload.logs.map((log, i) => {
@@ -88,6 +105,67 @@ export function TeamPanel({ payload, agentsVisible, visibleCount }: Props) {
   }, [payload]);
 
   const visibleCards = allCards.slice(0, visibleCount);
+
+  // When new cards arrive, enqueue them as "running" then settle to "done" after
+  // a random delay (800–2200ms). Uses a ref-tracked id set to handle Strict Mode
+  // double-effect idempotently (timer ids cleaned up on re-run).
+  useEffect(() => {
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    if (prefersReducedMotion.current || forceDone) {
+      // Skip animation: mark everything done immediately.
+      setCardStatus((prev) => {
+        const next: Record<string, "running" | "done"> = { ...prev };
+        for (const card of visibleCards) next[card.id] = "done";
+        return next;
+      });
+      prevVisibleIds.current = new Set(visibleCards.map((c) => c.id));
+      return;
+    }
+
+    const newIds: string[] = [];
+    for (const card of visibleCards) {
+      if (!prevVisibleIds.current.has(card.id)) {
+        newIds.push(card.id);
+      }
+    }
+
+    if (newIds.length > 0) {
+      setCardStatus((prev) => {
+        const next = { ...prev };
+        for (const id of newIds) {
+          // Only set to running if not already tracked (idempotent under double-effect).
+          if (!next[id]) next[id] = "running";
+        }
+        return next;
+      });
+
+      for (const id of newIds) {
+        const delay = 800 + Math.random() * 1400;
+        const t = setTimeout(() => {
+          setCardStatus((prev) => ({ ...prev, [id]: "done" }));
+        }, delay);
+        timers.push(t);
+      }
+    }
+
+    prevVisibleIds.current = new Set(visibleCards.map((c) => c.id));
+
+    return () => {
+      for (const t of timers) clearTimeout(t);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visibleCount, forceDone]);
+
+  // When forceDone flips to true, immediately settle any still-running cards.
+  useEffect(() => {
+    if (!forceDone) return;
+    setCardStatus((prev) => {
+      const next: Record<string, "running" | "done"> = { ...prev };
+      for (const id of Object.keys(next)) next[id] = "done";
+      return next;
+    });
+  }, [forceDone]);
 
   // Per-agent live counts (visible cards by agent index).
   const liveByAgent = useMemo(() => {
@@ -177,10 +255,19 @@ export function TeamPanel({ payload, agentsVisible, visibleCount }: Props) {
             .reverse()
             .map((card) => {
               const fromEnd = visibleCards.length - 1 - card.index;
+              const status = cardStatus[card.id] ?? "running";
+              const isRunning = status === "running";
               return (
                 <li key={card.id} className={styles.feedCard} data-kind={card.kind}>
                   <div className={styles.cardHeader}>
-                    <span className={styles.cardStatus} aria-hidden />
+                    <span className={styles.cardStatusWrap} aria-hidden>
+                      <span className={styles.cardStatus} />
+                      <span
+                        className={styles.cardStatusRing}
+                        data-running={isRunning}
+                        aria-hidden
+                      />
+                    </span>
                     <span className={styles.cardId}>{card.id}</span>
                     <span className={`${styles.cardBadge} ${styles[`badge_${card.kind}`]}`}>
                       {t(`kind.${card.kind}`)}
@@ -196,7 +283,7 @@ export function TeamPanel({ payload, agentsVisible, visibleCount }: Props) {
                     <span className={styles.cardAction}>{card.log.action}</span>
                   </div>
                   <div className={styles.cardMeta}>
-                    {(card.tokens / 1000).toFixed(1)}k tok
+                    {isRunning ? "…" : `${(card.tokens / 1000).toFixed(1)}k tok`}
                   </div>
                 </li>
               );

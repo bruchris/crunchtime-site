@@ -6,6 +6,11 @@
   50%, 100% { opacity: 0; }
 }
 
+@keyframes ct-spinner-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 @keyframes ct-status-pulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(212, 239, 58, 0.45); }
   70% { box-shadow: 0 0 0 6px rgba(212, 239, 58, 0); }
@@ -424,6 +429,16 @@
   font-size: 11px;
 }
 
+.cardStatusWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
 .cardStatus {
   width: 6px;
   height: 6px;
@@ -432,6 +447,31 @@
 }
 .feedCard[data-kind="issue"] .cardStatus { background: #ff8a8a; }
 .feedCard[data-kind="assignment"] .cardStatus { background: var(--ct-blue); }
+
+/* Spinner ring — sits around the dot while the card is in "running" state.
+   Always rendered so opacity transition works on settle; hidden by default. */
+.cardStatusRing {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  border-top-color: var(--ct-lime);
+  opacity: 0;
+  transition: opacity 200ms ease;
+  /* animation paused by default — only runs when data-running="true" */
+  animation: ct-spinner-rotate 900ms linear infinite paused;
+  pointer-events: none;
+}
+.cardStatusRing[data-running="true"] {
+  opacity: 1;
+  animation-play-state: running;
+}
+.feedCard[data-kind="issue"] .cardStatusRing { border-top-color: #ff8a8a; }
+.feedCard[data-kind="assignment"] .cardStatusRing { border-top-color: var(--ct-blue); }
+
+@media (prefers-reduced-motion: reduce) {
+  .cardStatusRing { display: none; }
+}
 
 .cardId {
   color: var(--color-muted, #8a8a82);
