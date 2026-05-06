@@ -12,8 +12,8 @@ test.describe("locale toggle", () => {
   });
 
   test("toggling preserves the current page path", async ({ page }) => {
-    await page.goto("/no/consulting");
+    await page.goto("/no/services");
     await page.getByRole("link", { name: "EN", exact: true }).click();
-    await expect(page).toHaveURL(/\/en\/consulting/);
+    await expect(page).toHaveURL(/\/en\/services/);
   });
 });

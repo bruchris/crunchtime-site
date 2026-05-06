@@ -8,7 +8,7 @@ test.describe("/no/services page", () => {
     );
     await expect(page.getByText("AI-automatisering og agenter")).toBeVisible();
     await expect(page.getByText("Kartlegging")).toBeVisible();
-    await expect(page.getByText("Discovery Sprint")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Discovery Sprint" })).toBeVisible();
     await expect(page.getByText("Det vi får spørsmål om.")).toBeVisible();
     await expect(page.getByRole("link", { name: /Book en gratis samtale/ })).toBeVisible();
   });
@@ -40,6 +40,6 @@ test.describe("/no/services page", () => {
       /AI teams that actually do the work/
     );
     await expect(page.getByText("AI automation and agents")).toBeVisible();
-    await expect(page.getByText("Discovery Sprint")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Discovery Sprint" })).toBeVisible();
   });
 });

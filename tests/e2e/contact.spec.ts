@@ -33,6 +33,6 @@ test.describe("/no/contact page", () => {
   test("success state shows after ?sent=1", async ({ page }) => {
     await page.goto("/no/contact?sent=1");
     await expect(page.getByText("Mottatt.")).toBeVisible();
-    await expect(page.getByText(/innen én arbeidsdag/)).toBeVisible();
+    await expect(page.getByText("Mottatt.").locator("..").getByText(/innen én arbeidsdag/)).toBeVisible();
   });
 });
