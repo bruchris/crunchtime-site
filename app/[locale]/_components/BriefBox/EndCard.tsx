@@ -17,8 +17,9 @@ export function EndCard({ visible, brief, payload, lang }: Props) {
   const t = useTranslations("endCard");
   const [emailOpen, setEmailOpen] = useState(false);
 
-  const calLink = process.env.NEXT_PUBLIC_CAL_BOOKING_LINK || `/${lang}/contact`;
-  const servicesHref = `/${lang}/services?brief=${encodeURIComponent(brief)}`;
+  const calLink = process.env.NEXT_PUBLIC_CAL_BOOKING_LINK ?? `/${lang}/contact`;
+  const isExternal = calLink.startsWith("http");
+  const servicesHref = `/${lang}/services?from-brief=${encodeURIComponent(brief)}`;
 
   return (
     <section className={`${styles.endCard} ${visible ? styles.visible : ""}`} aria-live="polite">
@@ -26,7 +27,12 @@ export function EndCard({ visible, brief, payload, lang }: Props) {
       <h2 className={styles.endHeadline}>{payload.recommendation.headline}</h2>
       <p className={styles.endAsk}>{payload.recommendation.ask}</p>
       <div className={styles.ctaStack}>
-        <a className={styles.ctaPrimary} href={calLink} target="_blank" rel="noopener noreferrer">
+        <a
+          className={styles.ctaPrimary}
+          href={calLink}
+          target={isExternal ? "_blank" : undefined}
+          rel={isExternal ? "noopener noreferrer" : undefined}
+        >
           {t("ctaBook")}
         </a>
         <a className={styles.ctaSecondary} href={servicesHref}>
