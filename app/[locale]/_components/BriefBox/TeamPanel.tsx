@@ -141,7 +141,9 @@ export function TeamPanel({ payload, agentsVisible, visibleCount, forceDone }: P
       });
 
       for (const id of newIds) {
-        const delay = 800 + Math.random() * 1400;
+        // Per-card random duration: 2.5s to 8s. Each card spins independently
+        // so the feed feels like real work happening at different speeds.
+        const delay = 2500 + Math.random() * 5500;
         const t = setTimeout(() => {
           setCardStatus((prev) => ({ ...prev, [id]: "done" }));
         }, delay);
