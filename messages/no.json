@@ -53,7 +53,6 @@
       "error": "Noe gikk galt. Prøv igjen, eller send en e-post direkte til christian@crunchtime.no."
     }
   },
-  "leadForm": {},
   "services": {
     "meta": {
       "title": "Tjenester",
@@ -231,7 +230,7 @@
     "hero": {
       "eyebrow": "Kontakt",
       "headline": "Book en prat eller skriv til oss.",
-      "subline": "Pick et tidspunkt under, eller send melding via skjemaet."
+      "subline": "Velg et tidspunkt under, eller send melding via skjemaet."
     },
     "calendar": {
       "title": "Velg et tidspunkt",

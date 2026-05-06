@@ -8,7 +8,7 @@ Customer comms site — MVP landing pages for both GTM plans. Tracked by [CRUA-3
 
 ```bash
 npm install
-cp .env.example .env.local  # fill in RESEND_API_KEY + NEXT_PUBLIC_CAL_BOOKING_LINK
+cp .env.local.example .env.local  # see env table below for required values
 npm run dev
 ```
 
@@ -17,11 +17,14 @@ Dev server on `http://localhost:3000`.
 ## Deploy (Vercel)
 
 1. `npx vercel link` in this directory (or push to GitHub + connect Vercel project).
-2. Set env vars in Vercel project settings:
-   - `RESEND_API_KEY` — Resend API key (after verifying `crunchtime.no` in Resend dashboard)
+2. Set env vars in Vercel project settings (see `.env.local.example` for the canonical list):
+   - `ANTHROPIC_API_KEY` — required for the Brief Box demo (Haiku call)
+   - `NOTION_TOKEN` and `NOTION_DATABASE_ID` — required for lead capture; CRM schema documented in `docs/runbooks/notion-crm-setup.md`
+   - `RESEND_API_KEY` — required for lead ack + admin notification emails (verify `crunchtime.no` in Resend first)
+   - `PAPERCLIP_WEBHOOK_URL` — Paperclip endpoint that triggers the research agent for "email me a plan" leads
    - `CONTACT_INBOX=hello@crunchtime.no`
    - `CONTACT_FROM=Crunchtime <noreply@crunchtime.no>`
-   - `NEXT_PUBLIC_CAL_BOOKING_LINK` — Cal.com link for the Discovery Sprint booking
+   - `NEXT_PUBLIC_CAL_BOOKING_LINK` — Cal.com link for the booking CTA (optional; falls back to `/contact`)
 3. Production deploy: `npx vercel --prod`.
 4. In Vercel Project → Settings → Domains: add `crunchtime.no` + `www.crunchtime.no`.
 5. Confirm Cloudflare DNS records resolve to Vercel (A `76.76.21.21` + CNAME `www → cname.vercel-dns.com`, both DNS-only / grey cloud).
@@ -41,13 +44,16 @@ Full step-by-step for Day 1 infra lives in the [CRUA-40 playbook doc](../../../.
 
 ## Pages
 
-| Path | Day shipped | Status |
+Bilingual: every route serves `/no/...` (default) and `/en/...`. Bare `/<path>` redirects to the locale-prefixed equivalent.
+
+| Path | Purpose | Status |
 |---|---|---|
-| `/` | Day 2 (CRUA-41) | scaffold done |
-| `/contact` | Day 2 (CRUA-41) | scaffold done |
-| `/consulting` | Day 3 (CRUA-42) | placeholder |
-| `/back-office/finance` | Day 4 (CRUA-43) | placeholder |
-| `/insights` (blog) | v1.1 (week 3–4) | deferred |
+| `/` | Brief Box demo (the page IS the demo) | shipped on `feat/redesign` |
+| `/services` | Tiers, process, results, FAQ, pricing | shipped on `feat/redesign` (replaces `/consulting`, which 301s in) |
+| `/contact` | Cal.com iframe + Resend-backed message form | shipped on `feat/redesign` |
+| `/api/brief` | POST: brief → Haiku → demo payload | shipped |
+| `/api/lead` | POST: lead capture → Notion + Resend + Paperclip webhook | shipped |
+| `/insights` (blog) | v1.1 (week 3–4) as MDX in repo | deferred |
 
 ## What's deliberately not here yet
 
