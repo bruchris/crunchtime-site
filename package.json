@@ -41,5 +41,12 @@
     "edge >= 120",
     "safari >= 17",
     "ios >= 17"
-  ]
+  ],
+  "packageManager": "pnpm@10.11.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "sharp"
+    ]
+  }
 }
