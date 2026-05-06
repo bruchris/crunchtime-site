@@ -42,9 +42,13 @@ const TEMPLATES: Library = {
         { name: "Cashflow", color: "amber", tools: ["fiken"] }
       ],
       logs: [
-        { agent: "AR-spesialist", action: "skrev 7 påminnelser", ts: "11:42" },
-        { agent: "Kundeservice", action: "myket opp tonen i 2", ts: "11:43" },
-        { agent: "Cashflow", action: "flagget 3 over 30d", ts: "11:44" }
+        { agent: "AR-spesialist", action: "hentet 23 åpne fakturaer fra Tripletex", ts: "11:41", type: "automation", tokens: 2400 },
+        { agent: "Cashflow", action: "rangerte etter beløp og forfall, valgte ut 8", ts: "11:42", type: "automation", tokens: 1800 },
+        { agent: "AR-spesialist", action: "skrev 7 påminnelser, 1 trenger manuell godkjenning", ts: "11:43", type: "assignment", tokens: 5300 },
+        { agent: "Cashflow", action: "flagget 3 fakturaer over 30 dager til oppfølging", ts: "11:44", type: "issue", tokens: 1100 },
+        { agent: "Kundeservice", action: "myket opp tonen i 2 utkast for å beholde relasjon", ts: "11:45", type: "automation", tokens: 3200 },
+        { agent: "AR-spesialist", action: "sendte 6 påminnelser, lagret 1 i utkast", ts: "11:46", type: "assignment", tokens: 4100 },
+        { agent: "Cashflow", action: "oppdaterte cashflow-prognose med forventet innkommende", ts: "11:47", type: "automation", tokens: 2700 }
       ],
       recommendation: {
         headline: "3 agenter, ~4t/uke spart.",
@@ -58,9 +62,13 @@ const TEMPLATES: Library = {
         { name: "Cashflow", color: "amber", tools: ["fiken"] }
       ],
       logs: [
-        { agent: "AR specialist", action: "drafted 7 chase emails", ts: "11:42" },
-        { agent: "Customer voice", action: "softened tone on 2", ts: "11:43" },
-        { agent: "Cashflow", action: "flagged 3 invoices >30d", ts: "11:44" }
+        { agent: "AR specialist", action: "pulled 23 open invoices from Tripletex", ts: "11:41", type: "automation", tokens: 2400 },
+        { agent: "Cashflow", action: "ranked by amount and due date, picked 8 to chase", ts: "11:42", type: "automation", tokens: 1800 },
+        { agent: "AR specialist", action: "drafted 7 chase emails, 1 needs human review", ts: "11:43", type: "assignment", tokens: 5300 },
+        { agent: "Cashflow", action: "flagged 3 invoices >30d for escalation", ts: "11:44", type: "issue", tokens: 1100 },
+        { agent: "Customer voice", action: "softened tone on 2 drafts to protect the relationship", ts: "11:45", type: "automation", tokens: 3200 },
+        { agent: "AR specialist", action: "sent 6 reminders, kept 1 in drafts", ts: "11:46", type: "assignment", tokens: 4100 },
+        { agent: "Cashflow", action: "updated cash-flow forecast with expected incoming", ts: "11:47", type: "automation", tokens: 2700 }
       ],
       recommendation: {
         headline: "3 agents, ~4h/wk saved.",

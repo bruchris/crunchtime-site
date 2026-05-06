@@ -34,6 +34,19 @@
       "inbox": "e-post tar over livet",
       "support": "kundeservice koker",
       "marketing": "ingen tid til markedsføring"
+    },
+    "railTitle": "AGENTER",
+    "railAll": "All aktivitet",
+    "activityTitle": "Aktivitet",
+    "activityLive": "live",
+    "pillLive": "{count} live",
+    "pillIssue": "issue",
+    "pillIdle": "klar",
+    "feedEmpty": "ingen aktivitet på denne agenten ennå.",
+    "kind": {
+      "assignment": "Oppdrag",
+      "automation": "Automasjon",
+      "issue": "Avvik"
     }
   },
   "endCard": {

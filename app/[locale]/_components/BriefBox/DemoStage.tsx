@@ -5,8 +5,7 @@ import { useTranslations } from "next-intl";
 import styles from "./briefBox.module.css";
 import { BriefInput } from "./BriefInput";
 import { ChipRow } from "./ChipRow";
-import { AgentCard } from "./AgentCard";
-import { LogStream } from "./LogStream";
+import { TeamPanel } from "./TeamPanel";
 import { EndCard } from "./EndCard";
 import { SkipLink } from "./SkipLink";
 import { StatusPill } from "./StatusPill";
@@ -16,7 +15,8 @@ import {
   type DemoPhase
 } from "../../../_lib/demoScheduler";
 import type { BriefResponse } from "../../../_lib/briefSchema";
-import type { ToolState } from "./ToolList";
+
+type ToolState = "idle" | "connecting" | "connected";
 
 interface Props {
   lang: "no" | "en";
@@ -187,20 +187,11 @@ export function DemoStage({ lang }: Props) {
 
       {payload && (
         <div className={styles.stage}>
-          <div className={styles.agentRow}>
-            {payload.agents.map((agent, i) => (
-              <AgentCard
-                key={i}
-                agent={agent}
-                visible={state.agentsVisible[i] ?? false}
-                spawningLabel={t("spawning")}
-                toolStates={state.toolStates[i] ?? []}
-                connectingLabel={t("toolConnecting")}
-                connectedLabel={t("toolConnected")}
-              />
-            ))}
-          </div>
-          <LogStream logs={payload.logs} visibleCount={state.logsVisible} />
+          <TeamPanel
+            payload={payload}
+            agentsVisible={state.agentsVisible}
+            visibleCount={state.logsVisible}
+          />
           <EndCard
             visible={state.phase === "end-card"}
             brief={brief}

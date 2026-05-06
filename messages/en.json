@@ -34,6 +34,19 @@
       "inbox": "email is eating my life",
       "support": "support is on fire",
       "marketing": "no time for marketing"
+    },
+    "railTitle": "AGENTS",
+    "railAll": "All activity",
+    "activityTitle": "Activity",
+    "activityLive": "live",
+    "pillLive": "{count} live",
+    "pillIssue": "issue",
+    "pillIdle": "ready",
+    "feedEmpty": "no activity for this agent yet.",
+    "kind": {
+      "assignment": "Assignment",
+      "automation": "Automation",
+      "issue": "Issue"
     }
   },
   "endCard": {

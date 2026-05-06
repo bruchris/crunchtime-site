@@ -9,10 +9,15 @@ export const agentSchema = z.object({
   tools: z.array(z.string().min(1).max(30)).min(1).max(4)
 });
 
+export const ACTIVITY_TYPES = ["assignment", "automation", "issue"] as const;
+export type ActivityType = (typeof ACTIVITY_TYPES)[number];
+
 export const logSchema = z.object({
   agent: z.string().min(1).max(40),
-  action: z.string().min(1).max(120),
-  ts: z.string().regex(/^\d{2}:\d{2}$/)
+  action: z.string().min(1).max(160),
+  ts: z.string().regex(/^\d{2}:\d{2}$/),
+  type: z.enum(ACTIVITY_TYPES).optional(),
+  tokens: z.number().int().min(0).max(99999).optional()
 });
 
 export const recommendationSchema = z.object({
@@ -22,7 +27,7 @@ export const recommendationSchema = z.object({
 
 export const briefResponseSchema = z.object({
   agents: z.array(agentSchema).min(1).max(4),
-  logs: z.array(logSchema).min(3).max(5),
+  logs: z.array(logSchema).min(3).max(12),
   recommendation: recommendationSchema
 });
 
