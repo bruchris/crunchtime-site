@@ -17,14 +17,13 @@ export function ChipRow({
   const t = useTranslations("briefBox.chips");
   if (hidden) return null;
   return (
-    <div className={styles.chips} role="list">
+    <div className={styles.chips}>
       {CHIP_KEYS.map((key) => {
         const label = t(key);
         return (
           <button
             key={key}
             type="button"
-            role="listitem"
             className={styles.chip}
             onClick={() => onPick(label)}
           >
