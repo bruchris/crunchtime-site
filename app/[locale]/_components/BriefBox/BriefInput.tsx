@@ -40,7 +40,10 @@ export function BriefInput({ dimmed, analyzing, onSubmit, noscriptAction, lang }
       method="post"
     >
       <input type="hidden" name="lang" value={lang} />
-      <div className={`${styles.inputWrap} ${dimmed ? styles.inputDimmed : ""}`}>
+      <div
+        className={`${styles.inputWrap} ${dimmed ? styles.inputDimmed : ""}`}
+        onClick={() => inputRef.current?.focus()}
+      >
         <input
           ref={inputRef}
           className={styles.input}
@@ -52,7 +55,9 @@ export function BriefInput({ dimmed, analyzing, onSubmit, noscriptAction, lang }
           maxLength={500}
           disabled={dimmed}
           autoComplete="off"
+          style={{ width: `${Math.max((value || t("inputPlaceholder")).length, 1)}ch` }}
         />
+        {!dimmed && <span className={styles.cursor} aria-hidden />}
         <button type="submit" hidden>{t("submit")}</button>
       </div>
       {tooltip && <p className={styles.analyzing} role="alert">{tooltip}</p>}

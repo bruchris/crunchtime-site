@@ -72,6 +72,10 @@
   opacity: 0.7;
 }
 
+.accent {
+  color: var(--ct-lime);
+}
+
 .inputWrap {
   position: relative;
   border: 1px solid #2a2a27;
@@ -81,7 +85,8 @@
   font-size: 16px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
+  cursor: text;
 }
 
 .inputWrap:focus-within {
@@ -89,13 +94,23 @@
 }
 
 .input {
-  flex: 1;
   background: transparent;
   border: 0;
   outline: none;
   color: #f5f3ee;
   font: inherit;
-  caret-color: var(--ct-lime);
+  caret-color: transparent;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0;
+}
+
+.cursor {
+  width: 8px;
+  height: 18px;
+  background: var(--ct-lime);
+  animation: ct-cursor-blink 1s steps(1) infinite;
+  flex-shrink: 0;
 }
 
 .inputDimmed { opacity: 0.5; }

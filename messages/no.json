@@ -15,8 +15,8 @@
     "en": "EN"
   },
   "briefBox": {
-    "statusLive": "live · oslo",
-    "headline": "Slipp en utfordring. Møt teamet ditt.",
+    "statusLive": "live · bergen",
+    "headline": "Slipp en <accent>utfordring</accent>. Møt <accent>teamet</accent> ditt.",
     "subline": "Skriv det som koker. Vi setter sammen et team og viser deg hvordan de ville løst det.",
     "inputPlaceholder": "fortell hva som koker...",
     "inputAriaLabel": "Beskriv en utfordring",

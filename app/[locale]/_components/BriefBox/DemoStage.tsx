@@ -170,7 +170,9 @@ export function DemoStage({ lang }: Props) {
       {showSkip && <SkipLink label={t("skip")} onClick={handleSkip} />}
       <StatusPill label={t("statusLive")} />
       <h1 className={`${styles.headline} ${submitted ? styles.headlineCollapsed : ""}`}>
-        {t("headline")}
+        {t.rich("headline", {
+          accent: (chunks) => <span className={styles.accent}>{chunks}</span>
+        })}
       </h1>
       {!submitted && <p className={styles.subline}>{t("subline")}</p>}
 

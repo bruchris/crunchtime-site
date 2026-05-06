@@ -15,8 +15,8 @@
     "en": "EN"
   },
   "briefBox": {
-    "statusLive": "live · oslo",
-    "headline": "Drop a challenge. Meet your team.",
+    "statusLive": "live · bergen",
+    "headline": "Drop a <accent>challenge</accent>. Meet your <accent>team</accent>.",
     "subline": "Write what's actually hard. We'll assemble a team and show you how they'd handle it.",
     "inputPlaceholder": "tell us what's hard...",
     "inputAriaLabel": "Describe a challenge",
