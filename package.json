@@ -15,10 +15,12 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.95.0",
+    "@notionhq/client": "^2.3.0",
     "next": "^16.0.0",
     "next-intl": "^4.11.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "resend": "^4.8.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
