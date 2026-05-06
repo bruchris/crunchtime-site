@@ -1,4 +1,5 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { generateText, Output } from "ai";
+import { createAnthropic } from "@ai-sdk/anthropic";
 import { briefRequestSchema, briefResponseSchema, type BriefResponse, type Lang } from "../../_lib/briefSchema";
 import {
   BRIEF_MODEL_ID,
@@ -26,35 +27,13 @@ function fallback(brief: string, lang: Lang): BriefResponse {
   return getTemplate(pickTemplate(brief, lang), lang);
 }
 
-function extractText(message: { content: Array<{ type: string; text?: string }> }): string {
-  for (const block of message.content) {
-    if (block.type === "text" && block.text) return block.text;
-  }
-  return "";
-}
-
-function tryParseJson(raw: string): unknown {
-  // Tolerate fenced output even though the prompt forbids it.
-  const stripped = raw
-    .trim()
-    .replace(/^```(?:json)?/i, "")
-    .replace(/```$/, "")
-    .trim();
-  try {
-    return JSON.parse(stripped);
-  } catch {
-    return null;
-  }
-}
-
-let cachedClient: Anthropic | null = null;
-function getClient(): Anthropic {
-  if (cachedClient) return cachedClient;
-  cachedClient = new Anthropic({
-    apiKey: process.env.ANTHROPIC_API_KEY ?? "",
-    timeout: BRIEF_TIMEOUT_MS
+let cachedProvider: ReturnType<typeof createAnthropic> | null = null;
+function getProvider() {
+  if (cachedProvider) return cachedProvider;
+  cachedProvider = createAnthropic({
+    apiKey: process.env.ANTHROPIC_API_KEY ?? ""
   });
-  return cachedClient;
+  return cachedProvider;
 }
 
 export async function POST(req: Request): Promise<Response> {
@@ -90,28 +69,22 @@ export async function POST(req: Request): Promise<Response> {
     return Response.json({ ...tpl, recommendation: { ...tpl.recommendation, ask: askMore } });
   }
 
-  // Truncate per spec.
   const safeBrief = brief.slice(0, 500);
 
   try {
-    const client = getClient();
-    const message = await client.messages.create({
-      model: BRIEF_MODEL_ID,
-      max_tokens: BRIEF_MAX_TOKENS,
-      temperature: BRIEF_TEMPERATURE,
+    const anthropic = getProvider();
+    const { output } = await generateText({
+      model: anthropic(BRIEF_MODEL_ID),
+      output: Output.object({ schema: briefResponseSchema }),
       system: buildSystemPrompt(lang),
-      messages: [{ role: "user", content: buildUserPrompt(safeBrief, lang) }]
+      prompt: buildUserPrompt(safeBrief, lang),
+      maxOutputTokens: BRIEF_MAX_TOKENS,
+      temperature: BRIEF_TEMPERATURE,
+      abortSignal: AbortSignal.timeout(BRIEF_TIMEOUT_MS)
     });
-    const text = extractText(message);
-    const json = tryParseJson(text);
-    const validated = briefResponseSchema.safeParse(json);
-    if (!validated.success) {
-      console.warn("[brief] schema validation failed, falling back", validated.error.issues);
-      return Response.json(fallback(safeBrief, lang));
-    }
-    return Response.json(validated.data);
+    return Response.json(output);
   } catch (err) {
-    console.warn("[brief] LLM call failed, falling back", err);
+    console.warn("[brief] structured generation failed, falling back", err);
     return Response.json(fallback(safeBrief, lang));
   }
 }

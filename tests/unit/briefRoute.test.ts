@@ -1,13 +1,15 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
-const createMock = vi.fn();
-vi.mock("@anthropic-ai/sdk", () => {
-  return {
-    default: class {
-      messages = { create: createMock };
-    }
-  };
-});
+const generateTextMock = vi.fn();
+vi.mock("ai", () => ({
+  generateText: (...args: unknown[]) => generateTextMock(...args),
+  Output: {
+    object: (config: unknown) => config
+  }
+}));
+vi.mock("@ai-sdk/anthropic", () => ({
+  createAnthropic: () => () => ({})
+}));
 
 import { POST } from "../../app/api/brief/route";
 
@@ -20,28 +22,22 @@ function makeReq(body: unknown, ip = "9.9.9.9") {
 }
 
 beforeEach(() => {
-  createMock.mockReset();
+  generateTextMock.mockReset();
   vi.useRealTimers();
-  // reset the rate limiter by importing a fresh module isn't trivial; we use a fresh IP per test instead.
 });
 
 describe("/api/brief", () => {
-  it("returns the schema-valid Haiku payload on happy path", async () => {
-    createMock.mockResolvedValueOnce({
-      content: [
-        {
-          type: "text",
-          text: JSON.stringify({
-            agents: [{ name: "AR", color: "lime", tools: ["stripe"] }],
-            logs: [
-              { agent: "AR", action: "did x", ts: "10:00" },
-              { agent: "AR", action: "did y", ts: "10:01" },
-              { agent: "AR", action: "did z", ts: "10:02" }
-            ],
-            recommendation: { headline: "ok", ask: "ok?" }
-          })
-        }
-      ]
+  it("returns the schema-valid AI SDK payload on happy path", async () => {
+    generateTextMock.mockResolvedValueOnce({
+      output: {
+        agents: [{ name: "AR", color: "lime", tools: ["stripe"] }],
+        logs: [
+          { agent: "AR", action: "did x", ts: "10:00" },
+          { agent: "AR", action: "did y", ts: "10:01" },
+          { agent: "AR", action: "did z", ts: "10:02" }
+        ],
+        recommendation: { headline: "ok", ask: "ok?" }
+      }
     });
     const res = await POST(makeReq({ brief: "fakturaene er sene", lang: "no" }, "ip-1"));
     expect(res.status).toBe(200);
@@ -49,19 +45,17 @@ describe("/api/brief", () => {
     expect(body.agents[0].name).toBe("AR");
   });
 
-  it("returns canned fallback when Haiku returns invalid JSON", async () => {
-    createMock.mockResolvedValueOnce({
-      content: [{ type: "text", text: "this is not json" }]
-    });
+  it("returns canned fallback when generateObject throws (validation/network/timeout)", async () => {
+    generateTextMock.mockRejectedValueOnce(new Error("schema validation failed"));
     const res = await POST(makeReq({ brief: "fakturaene er sene", lang: "no" }, "ip-2"));
     expect(res.status).toBe(200);
     const body = await res.json();
-    // ar_cashflow keyword route -> AR-spesialist
+    // ar_cashflow keyword route → AR-spesialist
     expect(body.agents[0].name).toBe("AR-spesialist");
   });
 
-  it("returns canned fallback when Haiku throws (timeout/network)", async () => {
-    createMock.mockRejectedValueOnce(new Error("connection error"));
+  it("returns canned fallback when generateObject rejects on connection error", async () => {
+    generateTextMock.mockRejectedValueOnce(new Error("connection error"));
     const res = await POST(makeReq({ brief: "kundeservice koker", lang: "no" }, "ip-3"));
     expect(res.status).toBe(200);
     const body = await res.json();
@@ -79,21 +73,16 @@ describe("/api/brief", () => {
   });
 
   it("returns 429 after 5 successful submissions from the same IP", async () => {
-    createMock.mockResolvedValue({
-      content: [
-        {
-          type: "text",
-          text: JSON.stringify({
-            agents: [{ name: "AR", color: "lime", tools: ["stripe"] }],
-            logs: [
-              { agent: "AR", action: "x", ts: "10:00" },
-              { agent: "AR", action: "y", ts: "10:01" },
-              { agent: "AR", action: "z", ts: "10:02" }
-            ],
-            recommendation: { headline: "ok", ask: "ok?" }
-          })
-        }
-      ]
+    generateTextMock.mockResolvedValue({
+      output: {
+        agents: [{ name: "AR", color: "lime", tools: ["stripe"] }],
+        logs: [
+          { agent: "AR", action: "x", ts: "10:00" },
+          { agent: "AR", action: "y", ts: "10:01" },
+          { agent: "AR", action: "z", ts: "10:02" }
+        ],
+        recommendation: { headline: "ok", ask: "ok?" }
+      }
     });
     const ip = "ip-rl-" + Date.now();
     for (let i = 0; i < 5; i++) {

@@ -14,8 +14,9 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.95.0",
+    "@ai-sdk/anthropic": "^3.0.75",
     "@notionhq/client": "^2.3.0",
+    "ai": "^6.0.175",
     "next": "^16.0.0",
     "next-intl": "^4.11.0",
     "react": "^19.0.0",

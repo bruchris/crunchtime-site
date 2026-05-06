@@ -161,6 +161,11 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  /* Break out of the 720px shell so the agent panel + feed have room. */
+  position: relative;
+  width: min(calc(100vw - 40px), 1120px);
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .agentRow {
