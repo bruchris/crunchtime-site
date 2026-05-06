@@ -95,13 +95,7 @@
   outline: none;
   color: #f5f3ee;
   font: inherit;
-}
-
-.cursor {
-  width: 8px;
-  height: 18px;
-  background: var(--ct-lime);
-  animation: ct-cursor-blink 1s steps(1) infinite;
+  caret-color: var(--ct-lime);
 }
 
 .inputDimmed { opacity: 0.5; }

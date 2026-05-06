@@ -53,7 +53,6 @@ export function BriefInput({ dimmed, analyzing, onSubmit, noscriptAction, lang }
           disabled={dimmed}
           autoComplete="off"
         />
-        {!dimmed && <span className={styles.cursor} aria-hidden />}
         <button type="submit" hidden>{t("submit")}</button>
       </div>
       {tooltip && <p className={styles.analyzing} role="alert">{tooltip}</p>}
