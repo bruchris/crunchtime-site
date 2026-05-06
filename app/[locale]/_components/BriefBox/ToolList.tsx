@@ -23,12 +23,11 @@ export function ToolList({
             : s === "connecting"
               ? `${styles.toolPill} ${styles.connecting}`
               : styles.toolPill;
-        const suffix =
-          s === "connected" ? ` ${connectedLabel}` : s === "connecting" ? ` ${connectingLabel}` : "";
         return (
-          <li key={tool + i} className={cls}>
+          <li key={tool} className={cls}>
             {tool}
-            {suffix}
+            {s === "connected" && <span className={styles.toolSuffix}>{connectedLabel}</span>}
+            {s === "connecting" && <span className={styles.toolSuffix}>{connectingLabel}</span>}
           </li>
         );
       })}

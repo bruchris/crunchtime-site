@@ -2,9 +2,9 @@ import styles from "./briefBox.module.css";
 
 export function StatusPill({ label }: { label: string }) {
   return (
-    <div className={styles.statusPill} aria-live="off">
+    <div className={styles.statusPill}>
       <span className={styles.statusDot} aria-hidden />
-      <span>● {label}</span>
+      <span>{label}</span>
     </div>
   );
 }

@@ -2,6 +2,14 @@ import styles from "./briefBox.module.css";
 import { ToolList, type ToolState } from "./ToolList";
 import type { Agent } from "../../../_lib/briefSchema";
 
+const colorClass: Record<Agent["color"], string> = {
+  lime: styles.lime,
+  blue: styles.blue,
+  amber: styles.amber,
+  violet: styles.violet,
+  cyan: styles.cyan,
+};
+
 export function AgentCard({
   agent,
   visible,
@@ -20,10 +28,10 @@ export function AgentCard({
   return (
     <article className={`${styles.agentCard} ${visible ? styles.visible : ""}`}>
       <div className={styles.agentName}>
-        <span className={`${styles.agentDot} ${styles[agent.color]}`} aria-hidden />
+        <span className={`${styles.agentDot} ${colorClass[agent.color]}`} aria-hidden />
         {agent.name}
       </div>
-      <div className={styles.agentSpawning}>{spawningLabel}</div>
+      {!visible && <div className={styles.agentSpawning}>{spawningLabel}</div>}
       <ToolList
         tools={agent.tools}
         states={toolStates}

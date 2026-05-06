@@ -187,6 +187,7 @@
 }
 .toolPill.connecting { color: var(--ct-amber); }
 .toolPill.connected { color: var(--ct-lime); border-color: var(--ct-lime); }
+.toolSuffix { margin-left: 0.4rem; }
 
 .logFeed {
   pointer-events: none;

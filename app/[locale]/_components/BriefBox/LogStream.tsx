@@ -12,7 +12,7 @@ export function LogStream({
     <div className={styles.logFeed}>
       {logs.map((log, i) => (
         <div
-          key={i}
+          key={`${log.ts}-${log.agent}-${i}`}
           className={`${styles.logLine} ${i < visibleCount ? styles.visible : ""}`}
         >
           <span className={styles.logTs}>{log.ts}</span>
