@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import styles from "./briefBox.module.css";
 import type { BriefResponse } from "../../../_lib/briefSchema";
@@ -16,20 +16,29 @@ type Status = "idle" | "sending" | "ok" | "err";
 export function EmailCaptureForm({ brief, payload, lang }: Props) {
   const t = useTranslations("endCard.form");
   const [status, setStatus] = useState<Status>("idle");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const submittingRef = useRef(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    // Fix 1: race guard — prevent double-submit that disabled buttons can't fully prevent.
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+
     const form = e.currentTarget;
     const fd = new FormData(form);
 
     // Client-side honeypot guard — silently succeed for bots.
     // The server also runs isHoneypotTriggered() independently.
     if (fd.get("company_phone")) {
+      submittingRef.current = false;
       setStatus("ok");
       return;
     }
 
     setStatus("sending");
+    setErrorMsg(null);
     try {
       const res = await fetch("/api/lead", {
         method: "POST",
@@ -50,11 +59,26 @@ export function EmailCaptureForm({ brief, payload, lang }: Props) {
           company_phone: fd.get("company_phone") ?? "",
         }),
       });
-      if (!res.ok) throw new Error(`status ${res.status}`);
+      if (!res.ok) {
+        // Fix 3: surface specific validation issues from the API response.
+        let specificMsg: string | null = null;
+        try {
+          const body = await res.json();
+          if (Array.isArray(body?.issues) && body.issues.length > 0) {
+            specificMsg = body.issues[0]?.message ?? null;
+          }
+        } catch {
+          // JSON parse failed — fall through to generic error.
+        }
+        setErrorMsg(specificMsg);
+        throw new Error(`status ${res.status}`);
+      }
       setStatus("ok");
       form.reset();
     } catch {
       setStatus("err");
+    } finally {
+      submittingRef.current = false;
     }
   }
 
@@ -139,7 +163,7 @@ export function EmailCaptureForm({ brief, payload, lang }: Props) {
 
       {status === "err" && (
         <p className={styles.emailError} role="alert">
-          {t("error")}
+          {errorMsg ?? t("error")}
         </p>
       )}
     </form>

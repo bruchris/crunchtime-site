@@ -45,7 +45,7 @@
       "name": "navn",
       "email": "e-post",
       "company": "firmanavn",
-      "website": "nettside",
+      "website": "nettside (https://...)",
       "note": "noe annet vi bør vite?",
       "submit": "Send",
       "sending": "sender...",

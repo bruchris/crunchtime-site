@@ -45,7 +45,7 @@
       "name": "name",
       "email": "email",
       "company": "company name",
-      "website": "website",
+      "website": "website (https://...)",
       "note": "anything else we should know?",
       "submit": "Send",
       "sending": "sending...",
