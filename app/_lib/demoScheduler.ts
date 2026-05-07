@@ -29,14 +29,19 @@ interface Timing {
   logStagger: number;    // per-log
 }
 
+// Tuned 2026-05-07: previously the user saw an empty activity feed for
+// ~7.5s after submission (briefIn 500 + teamForms 3000 + toolsConnect 4000
+// before the first log line). That read as "stuck". Compressed so the
+// first log appears at ~3.5s while keeping the staged team-forms /
+// tools-connect choreography readable.
 const FULL: Timing = {
-  briefIn: 500,
-  teamForms: 3000,
-  agentStagger: 700,
-  toolsConnect: 4000,
-  toolStagger: 350,
+  briefIn: 300,
+  teamForms: 1400,
+  agentStagger: 350,
+  toolsConnect: 1800,
+  toolStagger: 180,
   logsStream: 5000,
-  logStagger: 1200
+  logStagger: 850
 };
 
 // Compressed timings for prefers-reduced-motion: entire sequence completes in ~2s
