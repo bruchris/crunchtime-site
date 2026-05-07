@@ -33,7 +33,17 @@
       "leads": "we lose leads",
       "inbox": "email is eating my life",
       "support": "support is on fire",
-      "marketing": "no time for marketing"
+      "marketing": "no time for marketing",
+      "reporting": "reports take forever",
+      "onboarding": "onboarding is chaos",
+      "meetings": "too many meetings",
+      "proposals": "proposals take days",
+      "followup": "we forget to follow up",
+      "data": "data is scattered everywhere",
+      "scheduling": "the calendar is a disaster",
+      "handover": "nobody knows who's on what",
+      "hiring": "hiring takes forever",
+      "manualWork": "we type the same thing three times"
     },
     "railTitle": "AGENTS",
     "railAll": "All activity",

@@ -30,8 +30,8 @@
   position: relative;
   margin: 0 auto;
   width: 100%;
-  max-width: 720px;
-  padding: 80px 20px 120px;
+  max-width: min(1120px, 92vw);
+  padding: 80px clamp(20px, 4vw, 48px) 120px;
 }
 
 .statusPill {
@@ -55,10 +55,11 @@
 .headline {
   font-family: var(--font-syne), sans-serif;
   font-weight: 800;
-  font-size: clamp(2.5rem, 6vw, 5rem);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  font-size: clamp(2.5rem, 7.2vw, 6.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
   margin: 0 0 16px;
+  max-width: 18ch;
 }
 
 .subline {

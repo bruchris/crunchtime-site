@@ -16,7 +16,7 @@
   },
   "briefBox": {
     "statusLive": "live · bergen",
-    "headline": "Slipp en <accent>utfordring</accent>. Møt <accent>teamet</accent> ditt.",
+    "headline": "Fortell oss din <accent>utfordring</accent>. Møt ditt <accent>team</accent>!",
     "subline": "Skriv det som koker. Vi setter sammen et team og viser deg hvordan de ville løst det.",
     "inputPlaceholder": "fortell hva som koker...",
     "inputAriaLabel": "Beskriv en utfordring",
@@ -33,7 +33,17 @@
       "leads": "vi mister leads",
       "inbox": "e-post tar over livet",
       "support": "kundeservice koker",
-      "marketing": "ingen tid til markedsføring"
+      "marketing": "ingen tid til markedsføring",
+      "reporting": "rapporter tar evigheter",
+      "onboarding": "onboarding er kaos",
+      "meetings": "for mange møter",
+      "proposals": "tilbud tar dager",
+      "followup": "vi glemmer å følge opp",
+      "data": "data ligger spredt overalt",
+      "scheduling": "kalenderen er en katastrofe",
+      "handover": "ingen vet hvem som gjør hva",
+      "hiring": "rekruttering tar evig",
+      "manualWork": "vi taster det samme tre ganger"
     },
     "railTitle": "AGENTER",
     "railAll": "All aktivitet",

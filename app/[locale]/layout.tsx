@@ -80,7 +80,7 @@ export default async function LocaleLayout({
     <html lang={locale} className={`${syne.variable} ${dmSans.variable}`} data-scroll-behavior="smooth">
       <body className="page-shell flex min-h-screen flex-col antialiased">
         <NextIntlClientProvider>
-          <header className="sticky top-0 z-50 border-b border-white/8 bg-[rgba(10,10,9,0.84)] backdrop-blur-xl">
+          <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[rgba(10,10,9,0.35)] backdrop-blur-2xl backdrop-saturate-150">
             <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
               <Link href={`/${locale}`} className="font-display flex items-center text-lg font-extrabold tracking-tight">
                 Crunch<span className="text-[var(--color-accent)]">time</span>
