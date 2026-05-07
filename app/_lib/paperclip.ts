@@ -178,9 +178,13 @@ export async function triggerPaperclipResearchAgent(
   } catch (err) {
     if (err instanceof PaperclipClientError) {
       console.error("[paperclip] 4xx — not retrying", { status: err.status }); // eslint-disable-line no-console
-      await markLeadStatus(lead.pageId, "manual-review", {
-        note: `paperclip api 4xx (${err.status}): ${err.body.slice(0, 500)}`
-      });
+      try {
+        await markLeadStatus(lead.pageId, "manual-review", {
+          note: `paperclip api 4xx (${err.status}): ${err.body.slice(0, 500)}`
+        });
+      } catch (notionErr) {
+        console.error("[paperclip] markLeadStatus failed", notionErr); // eslint-disable-line no-console
+      }
       return;
     }
     // 5xx / network — fall through to retry attempts.
@@ -196,23 +200,35 @@ export async function triggerPaperclipResearchAgent(
       console.log("[paperclip] issue created after retry", { leadId: lead.pageId, issue: issue.identifier }); // eslint-disable-line no-console
     } catch (err) {
       if (err instanceof PaperclipClientError) {
-        await markLeadStatus(lead.pageId, "manual-review", {
-          note: `paperclip api 4xx (${err.status}): ${err.body.slice(0, 500)}`
-        });
+        try {
+          await markLeadStatus(lead.pageId, "manual-review", {
+            note: `paperclip api 4xx (${err.status}): ${err.body.slice(0, 500)}`
+          });
+        } catch (notionErr) {
+          console.error("[paperclip] markLeadStatus failed", notionErr); // eslint-disable-line no-console
+        }
         return;
       }
       const message = err instanceof Error ? err.message : String(err);
       console.error("[paperclip] issue creation failed after 3 attempts", { error: message }); // eslint-disable-line no-console
-      await markLeadStatus(lead.pageId, "manual-review", {
-        note: `paperclip api failed after 3 attempts: ${message}`
-      });
+      try {
+        await markLeadStatus(lead.pageId, "manual-review", {
+          note: `paperclip api failed after 3 attempts: ${message}`
+        });
+      } catch (notionErr) {
+        console.error("[paperclip] markLeadStatus failed", notionErr); // eslint-disable-line no-console
+      }
       return;
     }
   }
 
   // Success path: flip Notion status to plan-pending and link the Paperclip issue.
-  await markLeadStatus(lead.pageId, "plan-pending", {
-    paperclipUrl: issue.url,
-    note: `Paperclip issue ${issue.identifier} created and assigned.`
-  });
+  try {
+    await markLeadStatus(lead.pageId, "plan-pending", {
+      paperclipUrl: issue.url,
+      note: `Paperclip issue ${issue.identifier} created and assigned.`
+    });
+  } catch (notionErr) {
+    console.error("[paperclip] markLeadStatus failed", notionErr); // eslint-disable-line no-console
+  }
 }

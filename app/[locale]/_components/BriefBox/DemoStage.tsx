@@ -134,7 +134,8 @@ export function DemoStage({ lang }: Props) {
       });
       schedulerRef.current = sched;
       sched.start();
-    } catch {
+    } catch (err) {
+      console.error("[DemoStage] fetch /api/brief failed", err);
       // Network error: treat as rate-limited to show the graceful fallback.
       setThrottled(true);
     } finally {

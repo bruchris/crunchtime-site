@@ -24,6 +24,8 @@ function makeReq(body: unknown, ip = "9.9.9.9") {
 beforeEach(() => {
   generateTextMock.mockReset();
   vi.useRealTimers();
+  // Satisfy the ANTHROPIC_API_KEY guard (actual calls are mocked via @ai-sdk/anthropic).
+  process.env.ANTHROPIC_API_KEY = "test-key";
 });
 
 describe("/api/brief", () => {

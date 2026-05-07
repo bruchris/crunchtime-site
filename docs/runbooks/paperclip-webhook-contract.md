@@ -42,7 +42,7 @@ Content-Type: application/json; charset=utf-8
 ```
 
 **Caller timeout:** 10s per attempt.
-**Retry:** 3 attempts total (immediate, 1s, 4s) on 5xx / network. 4xx is
+**Retry:** 3 attempts total (1st immediate; 2nd after 1s; 3rd after 4s) on 5xx / network. 4xx is
 terminal and not retried.
 
 ### Response handling

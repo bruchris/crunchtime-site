@@ -23,9 +23,10 @@ Create a full-page database called "Crunchtime Leads" with these properties (exa
 | `Recommendation` | Rich text | — |
 | `Language` | Select | Options: `no`, `en` |
 | `Source` | Select | Options: `brief-box-v1` |
-| `Status` | Select | Options in this order/color: `new` (gray), `plan-pending` (yellow), `plan-delivered` (green), `plan-needs-review` (orange), `manual-review` (red) |
+| `Status` | Select | Options in this order/color: `New` (gray), `plan-pending` (yellow), `plan-delivered` (green), `plan-needs-review` (orange), `manual-review` (red) |
 | `Created` | Created time | (system-managed) |
 | `Plan Sent` | Date | Include time. Optional. |
+| `Linked Paperclip` | URL | Optional. Auto-populated by /api/lead after a Paperclip issue is created. |
 | `Notes` | Rich text | — |
 
 Add the Select options in advance — the API does not auto-create options on first write.
@@ -50,4 +51,4 @@ In Vercel (Project Settings -> Environment Variables), add both for Production, 
 
 ## 6. Smoke test
 
-After Plan 4 lands, hit the form on a preview deploy. A new row should appear in Notion within ~1s with Status = `new`.
+After Plan 4 lands, hit the form on a preview deploy. A new row should appear in Notion within ~1s with Status = `New`.

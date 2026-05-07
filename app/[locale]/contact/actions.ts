@@ -48,7 +48,8 @@ export async function submitContact(formData: FormData) {
       reply_to: email,
       subject: subjectLine,
       text: body
-    })
+    }),
+    signal: AbortSignal.timeout(10_000)
   });
 
   if (!response.ok) {

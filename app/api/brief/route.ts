@@ -30,9 +30,9 @@ function fallback(brief: string, lang: Lang): BriefResponse {
 let cachedProvider: ReturnType<typeof createAnthropic> | null = null;
 function getProvider() {
   if (cachedProvider) return cachedProvider;
-  cachedProvider = createAnthropic({
-    apiKey: process.env.ANTHROPIC_API_KEY ?? ""
-  });
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) throw new Error("ANTHROPIC_API_KEY is not configured");
+  cachedProvider = createAnthropic({ apiKey });
   return cachedProvider;
 }
 
@@ -84,7 +84,7 @@ export async function POST(req: Request): Promise<Response> {
     });
     return Response.json(output);
   } catch (err) {
-    console.warn("[brief] structured generation failed, falling back", err);
+    console.error("[brief] structured generation failed, falling back", err);
     return Response.json(fallback(safeBrief, lang));
   }
 }

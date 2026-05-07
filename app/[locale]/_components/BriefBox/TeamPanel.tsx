@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import styles from "./briefBox.module.css";
-import type { Agent, BriefResponse, LogLine } from "../../../_lib/briefSchema";
+import type { ActivityType, Agent, BriefResponse, LogLine } from "../../../_lib/briefSchema";
 
 interface Props {
   payload: BriefResponse;
@@ -13,13 +13,11 @@ interface Props {
   forceDone?: boolean;
 }
 
-type ActivityKind = "assignment" | "automation" | "issue";
-
 interface CardData {
   index: number;
   log: LogLine;
   id: string;
-  kind: ActivityKind;
+  kind: ActivityType;
   tokens: number;
   agentIndex: number;
   agent: Agent;
@@ -43,7 +41,7 @@ function shortHash(input: string): string {
   return h.toString(16).padStart(8, "0").slice(0, 8);
 }
 
-function defaultKind(action: string): ActivityKind {
+function defaultKind(action: string): ActivityType {
   const a = action.toLowerCase();
   if (/(flagg|alert|warn|missing|stuck|over \d|>\d|>30|>60|escalat|mangle|feilet|failed)/.test(a)) {
     return "issue";
@@ -107,7 +105,7 @@ export function TeamPanel({ payload, agentsVisible, visibleCount, forceDone }: P
   const visibleCards = allCards.slice(0, visibleCount);
 
   // When new cards arrive, enqueue them as "running" then settle to "done" after
-  // a random delay (800–2200ms). Uses a ref-tracked id set to handle Strict Mode
+  // a random delay (2500–8000ms). Uses a ref-tracked id set to handle Strict Mode
   // double-effect idempotently (timer ids cleaned up on re-run).
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = [];
@@ -141,7 +139,7 @@ export function TeamPanel({ payload, agentsVisible, visibleCount, forceDone }: P
       });
 
       for (const id of newIds) {
-        // Per-card random duration: 2.5s to 8s. Each card spins independently
+        // Per-card random duration: 2500–8000ms. Each card spins independently
         // so the feed feels like real work happening at different speeds.
         const delay = 2500 + Math.random() * 5500;
         const t = setTimeout(() => {

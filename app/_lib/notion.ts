@@ -7,7 +7,7 @@ function getClient(): Client {
   if (_client) return _client;
   const token = process.env.NOTION_TOKEN;
   if (!token) throw new Error("NOTION_TOKEN is not configured");
-  _client = new Client({ auth: token });
+  _client = new Client({ auth: token, timeoutMs: 10000 });
   return _client;
 }
 

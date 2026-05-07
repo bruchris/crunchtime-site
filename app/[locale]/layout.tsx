@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Syne } from "next/font/google";
+import { DM_Sans, JetBrains_Mono, Syne } from "next/font/google";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
@@ -7,6 +7,12 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CursorEffect } from "../_components/CursorEffect";
 import { LocaleToggle } from "./_components/LocaleToggle";
 import { routing, type Locale } from "../../i18n/routing";
+import {
+  JsonLd,
+  organizationSchema,
+  websiteSchema,
+  founderSchema
+} from "../_lib/jsonLd";
 import "../globals.css";
 
 const syne = Syne({
@@ -19,6 +25,12 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-dm-sans",
   weight: ["300", "400", "500", "700"]
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
+  weight: ["400", "500"]
 });
 
 export const viewport: Viewport = {
@@ -77,8 +89,15 @@ export default async function LocaleLayout({
   const tFooter = await getTranslations({ locale, namespace: "footer" });
 
   return (
-    <html lang={locale} className={`${syne.variable} ${dmSans.variable}`} data-scroll-behavior="smooth">
+    <html lang={locale} className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`} data-scroll-behavior="smooth">
       <body className="page-shell flex min-h-screen flex-col antialiased">
+        <JsonLd
+          data={[
+            organizationSchema(),
+            websiteSchema(locale as Locale),
+            founderSchema()
+          ]}
+        />
         <NextIntlClientProvider>
           <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[rgba(10,10,9,0.35)] backdrop-blur-2xl backdrop-saturate-150">
             <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">

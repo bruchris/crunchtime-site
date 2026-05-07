@@ -6,7 +6,7 @@ import { LeadAckEn } from "./emails/leadAck.en";
 import { AdminLeadEmail } from "./emails/adminLead";
 
 const FROM = process.env.CONTACT_FROM ?? "Crunchtime <noreply@crunchtime.no>";
-const REPLY_TO = "christian@crunchtime.no";
+const REPLY_TO = process.env.CONTACT_INBOX ?? "christian@crunchtime.no";
 const ADMIN_INBOX = process.env.CONTACT_INBOX ?? "christian@crunchtime.no";
 
 let _client: Resend | null = null;
