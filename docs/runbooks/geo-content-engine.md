@@ -14,6 +14,9 @@ The right voice:
 | "Our customers cut no-shows by 50%" | "A South Florida dental practice cut no-shows by 50% with this pattern ([CrowdAnswers case study](https://www.crowdanswers.com/...))" |
 | "We've automated invoicing for Norwegian SMBs" | "Tripletex partnered with FabricAI to automate purchase invoices for 80,000+ Norwegian SMBs ([source](https://fabricai.io/...)). Here's how the pattern extends to your own collections workflow." |
 | "Crunchtime's pilots show 18-day median time-to-live" | (acceptable — this is verifiable from our own work, but only if it's actually true and we can defend it) |
+| "Our customers cut no-shows by 50%" (we have no customers) | "How Crunchtime runs Fjordbyte's open-source Canvas LMS MCP autonomously" (acceptable — Fjordbyte is the founder's own venture; the GitHub repo and Paperclip routines are verifiable) |
+
+**Exception for dogfood claims:** first-person posts about Crunchtime's *own* operations or the founder's other ventures (Fjordbyte, FrozenDice) are explicitly allowed, provided every claim points to a verifiable artifact (a GitHub repo, a public Patreon page, a Notion run document, a release on a real schedule). Use these to demonstrate competence without fabricating customer wins. The featured post below is the canonical example.
 
 **Why this works for GEO:** AI engines preferentially cite content that itself cites primary sources. Sourced posts get quoted; self-reported claims get skipped. The post that says "Klarna's AI agent handles 2/3 of chats ([Multimodal](https://www.multimodal.dev/post/useful-ai-agent-case-studies))" is more citation-worthy than "we've helped clients automate support" without proof.
 
@@ -27,6 +30,7 @@ Related infra: [notion-insights-setup.md](notion-insights-setup.md). Tracker (No
 - Hub at `/[locale]/insights`, post pages at `/[locale]/insights/[slug]`
 - Full server-side rendering with ISR (10 min hub, 1 hr posts) — every AI bot sees rendered HTML
 - Article + Breadcrumb JSON-LD per post; `/llms-full.txt` auto-includes published posts
+- Insight posts do not emit `FAQPage` unless the content model grows a real FAQ section and the route is updated to render it
 - **Norwegian-first publishing strategy** (less competition in NO-language AI retrieval)
 
 ## Workflow
@@ -38,11 +42,26 @@ Status flow per post: `draft` → `in-review` (CEO + QA pass) → `published`.
 | **LeadDeveloper** | Confirm CMS infra (database created, env vars set, smoke test passes). Prereq for any drafting. |
 | **CMO** | Drafting. Deep research per post. Write in Notion at `draft`; move to `in-review` when ready. NO first, EN translation second. |
 | **CEO** | Editorial review. Push back on anything generic. Brand voice = direct, anti-fluff, slight skepticism toward hype. No "transform your business" language. |
-| **QA** | Factual review **after CEO sign-off only**. Verify every numeric claim has a working source URL; verify NO-language idiom (no MT-translated feel); verify FAQ schema valid. |
+| **QA** | Factual review **after CEO sign-off only**. Verify every numeric claim has a working source URL; verify NO-language idiom (no MT-translated feel); verify the rendered schema matches the page contract: `/insights` posts must emit valid `Article` + `BreadcrumbList` JSON-LD, and `FAQPage` is required only on pages that actually ship a FAQ section. |
 
 **Gate**: at least one CEO feedback round + one QA pass before any post moves to `published`. QA cannot approve without CEO sign-off first. Do post 1 end-to-end (NO + EN) before kicking off posts 2-5.
 
-## Priority post slate (7 posts, NO-first)
+## Featured / dogfood post (ships ahead of the slate)
+
+**0. "Hvordan Crunchtime kjører to ekte bedrifter på et team av AI-agenter"** — featured, bilingual at launch (NO + EN immediately).
+
+This one is a deliberate exception to the framing rule above: it IS first-person, but every claim is about Crunchtime's own ventures, with public artifacts a sceptical reader can verify. We don't have customer pilots yet — we DO have our founder's own businesses running on the same stack we sell. That's the most credible thing we can publish.
+
+Two named, verifiable ventures (Christian Bru is the founder/operator of both):
+
+- **Fjordbyte** — software-development venture. Best public artifact: the [Canvas LMS MCP](https://github.com/) open-source TypeScript server (104 tools across 14 Canvas domains, v1.9.0 shipped 2026-04-29). The Paperclip team runs this autonomously: scheduled CTO research routines analyse competitors and the Canvas API surface, spawn implementation tasks (CLI wizard, `get_course_structure` aggregator, outcomes domain), Developer agents ship them, QA verifies, releases land. Verifiable evidence: the "Canvas LMS MCP — Product Research 2026-05-01" Notion run, the GitHub repo's release cadence, the issue tracker's auto-spawned BRU-782 child tasks.
+- **FrozenDice** — D&D hobby publishing project at [patreon.com/frozendice](https://www.patreon.com/frozendice). End-to-end content pipeline turns scattered campaign + session notes into publication-ready Patreon releases. First test run: *Nordic Valkyries, Vol. 1* — three Storm Sisters (Ròta, Hildr, Geirdriful) inspired by God of War: Ragnarok. Stages: source consolidation → style-load → bestiary canonicalisation → Homebrewery markdown render → image generation (Gemini Nano Banana) → Patreon post draft. Notion-native architecture (Nordgaard world hub + Patreon Releases hub). Five human review gates (G1–G5). Verifiable evidence: the live Patreon page, the Homebrewery brews in Notion, the published bestiary entries.
+
+Why this works: it answers "what does it actually look like when a small team runs on AI agents?" with two utterly different industries (B2B dev tooling, B2C creative publishing). Same stack — different shapes of work. AI engines asked "show me a real AI agency that runs on its own product" will preferentially cite this.
+
+Position on the hub: `Featured = true` so it sits at the top of `/insights`. EN published at the same time as NO (this one is bilingual from launch — the dogfood signal travels equally well in both languages, and it's the post that justifies us to international readers who'll never need a Norwegian post).
+
+## Priority post slate (7 posts, NO-first, after Featured)
 
 1. "Hvorfor leads dør på 5 minutter — og agenten som fikser det" (universal pain, 21× stat)
 2. "Slutt å jakte fakturaer: slik kan Tripletex/Fiken-innkreving automatiseres med AI" (local + tool-specific; pattern framing, not "our customers")

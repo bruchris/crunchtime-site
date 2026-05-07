@@ -165,19 +165,22 @@ export async function listInsights(opts: ListOptions): Promise<InsightSummary[]>
 
 export async function getInsightBySlug(
   slug: string,
-  locale: InsightLocale
+  locale: InsightLocale,
+  opts?: { includeUnpublished?: boolean }
 ): Promise<InsightDetail | null> {
   const client = getClient();
+  const filters: unknown[] = [
+    { property: "Slug", rich_text: { equals: slug } },
+    { property: "Locale", select: { equals: locale } }
+  ];
+  if (!opts?.includeUnpublished) {
+    filters.push({ property: "Status", select: { equals: "published" } });
+  }
+
   const response = await client.databases.query({
     database_id: databaseId(),
     page_size: 1,
-    filter: {
-      and: [
-        { property: "Slug", rich_text: { equals: slug } },
-        { property: "Locale", select: { equals: locale } },
-        { property: "Status", select: { equals: "published" } }
-      ]
-    } as Parameters<typeof client.databases.query>[0]["filter"]
+    filter: { and: filters } as Parameters<typeof client.databases.query>[0]["filter"]
   });
 
   const page = response.results[0];

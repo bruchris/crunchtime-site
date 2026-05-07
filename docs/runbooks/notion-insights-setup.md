@@ -15,7 +15,7 @@ Create a full-page database called **Crunchtime Insights** (in the Crunchtime te
 | `Title` | Title | The post H1; also used as `<title>` |
 | `Slug` | Rich text | URL slug, e.g. `why-leads-die-in-five-minutes`. Lowercase, hyphenated, no locale prefix |
 | `Locale` | Select | Options: `no`, `en` |
-| `Excerpt` | Rich text | 150–250 chars. Used as `<meta description>` and FAQ/Article schema description |
+| `Excerpt` | Rich text | 150–250 chars. Used as `<meta description>` and the Article schema description |
 | `Subtitle` | Rich text | Hero deck (one sentence shown under the H1) |
 | `Vertical` | Multi-select | Options: `accounting`, `ecommerce`, `law`, `dental`, `real-estate`, `hospitality`, `services`, `general` |
 | `Tags` | Multi-select | Freeform — used for `keywords` meta and on-page tag chips |
@@ -70,6 +70,7 @@ In Vercel (Project Settings → Environment Variables), add for Production, Prev
 3. Set `Status = published` and fill `Published` date.
 4. The site shows the post within an hour (ISR) or instantly if a webhook is wired (see §9).
 5. For NO + EN parity: write both locales, set `Pair slug` on each pointing to the other.
+6. Current schema contract for post pages is `Article` + `BreadcrumbList` JSON-LD only. Do not expect `FAQPage` on insights posts unless the page model explicitly adds a FAQ section later.
 
 ## 8. Smoke test
 

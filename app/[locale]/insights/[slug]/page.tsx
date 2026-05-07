@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { draftMode } from "next/headers";
 import Link from "next/link";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { hasLocale } from "next-intl";
@@ -22,7 +23,8 @@ export async function generateMetadata({
   params: Promise<{ locale: Locale; slug: string }>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const post = await safeGet(slug, locale);
+  const preview = await draftMode();
+  const post = await safeGet(slug, locale, preview.isEnabled);
   if (!post) return { title: "Insight" };
 
   const url = `${SITE_URL}/${locale}/insights/${slug}`;
@@ -33,9 +35,13 @@ export async function generateMetadata({
   }
 
   return {
-    title: post.title,
+    title: post.status === "published" ? post.title : `${post.title} (Preview)`,
     description: post.excerpt || post.subtitle,
     alternates: { canonical: `/${locale}/insights/${slug}`, languages },
+    robots:
+      post.status === "published"
+        ? undefined
+        : { index: false, follow: false, googleBot: { index: false, follow: false } },
     openGraph: {
       url,
       title: post.title,
@@ -60,7 +66,8 @@ export default async function InsightPost({
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
 
-  const post = await safeGet(slug, locale as Locale);
+  const preview = await draftMode();
+  const post = await safeGet(slug, locale as Locale, preview.isEnabled);
   if (!post) notFound();
 
   const tNav = await getTranslations({ locale, namespace: "nav" });
@@ -104,6 +111,11 @@ export default async function InsightPost({
       </nav>
 
       <header>
+        {post.status !== "published" ? (
+          <p className="mb-6 inline-flex rounded-full border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/10 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
+            {preview.isEnabled ? "Preview mode" : "Unpublished"}
+          </p>
+        ) : null}
         {post.verticals[0] ? (
           <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--color-accent)]">
             {post.verticals[0]}
@@ -176,9 +188,9 @@ export default async function InsightPost({
   );
 }
 
-async function safeGet(slug: string, locale: Locale) {
+async function safeGet(slug: string, locale: Locale, includeUnpublished = false) {
   try {
-    return await getInsightBySlug(slug, locale);
+    return await getInsightBySlug(slug, locale, { includeUnpublished });
   } catch (err) {
     console.error("[insights] failed to fetch post", { slug, locale, err });
     return null;

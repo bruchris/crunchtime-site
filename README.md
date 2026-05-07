@@ -20,6 +20,7 @@ Dev server on `http://localhost:3000`.
 2. Set env vars in Vercel project settings (see `.env.local.example` for the canonical list):
    - `ANTHROPIC_API_KEY` — required for the Brief Box demo (Haiku call)
    - `NOTION_TOKEN`, `NOTION_DATABASE_ID`, and `NOTION_INSIGHTS_DATABASE_ID` — required for the lead CRM and the `/insights` CMS; schemas documented in `docs/runbooks/notion-crm-setup.md` and `docs/runbooks/notion-insights-setup.md`
+   - `INSIGHTS_PREVIEW_SECRET` — enables `/api/draft?secret=...&locale=no&slug=...` so QA can view in-review insights posts on preview deployments
    - `RESEND_API_KEY` — required for lead ack + admin notification emails (verify `crunchtime.no` in Resend first)
    - `PAPERCLIP_API_BASE`, `PAPERCLIP_API_TOKEN`, `PAPERCLIP_COMPANY_ID`, `PAPERCLIP_PROJECT_ID`, `PAPERCLIP_GOAL_ID`, `PAPERCLIP_AGENT_ID` — required for the Paperclip lead handoff described in `docs/runbooks/paperclip-webhook-contract.md`
    - `CONTACT_INBOX=hello@crunchtime.no`
@@ -54,6 +55,7 @@ Bilingual: every route serves `/no/...` (default) and `/en/...`. Bare `/<path>` 
 | `/contact` | Cal.com iframe + Resend-backed message form | shipped on `feat/redesign` |
 | `/api/brief` | POST: brief → Haiku → demo payload | shipped |
 | `/api/lead` | POST: lead capture → Notion + Resend + Paperclip webhook | shipped |
+| `/api/draft` | GET: enable draft-mode preview for unpublished `/insights` posts | shipped |
 | `/insights` | Notion-backed insights hub + article pages | shipped |
 
 ## What's deliberately not here yet
