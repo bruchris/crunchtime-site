@@ -24,7 +24,9 @@ export const briefLogSchema = z.object({
 
 export const demoPayloadSchema = z.object({
   agents: z.array(briefAgentSchema).min(1).max(6),
-  logs: z.array(briefLogSchema).min(1).max(8),
+  // Keep this aligned with briefResponseSchema.logs.max() in briefSchema.ts.
+  // The brief route can return up to 12 activity items now.
+  logs: z.array(briefLogSchema).min(1).max(12),
   recommendation: briefRecommendationSchema
 });
 
