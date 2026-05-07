@@ -59,7 +59,12 @@ html {
   z-index: 0;
 }
 
-.page-shell > * {
+/* Stack page-shell direct children above the grid background pseudo
+   (.page-shell::before has z-index: 0). The :not() exclusions let
+   modals/dialogs keep their own position:fixed + z-index utilities so
+   they overlay the viewport instead of rendering inline at the bottom
+   of the document. */
+.page-shell > *:not([role="dialog"]):not([data-overlay]) {
   position: relative;
   z-index: 1;
 }
