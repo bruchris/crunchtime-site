@@ -62,7 +62,7 @@ export async function insertLead(input: LeadInput): Promise<InsertedLead> {
 export async function markLeadStatus(
   pageId: string,
   status: LeadStatus,
-  extra?: { note?: string; planSentAt?: Date }
+  extra?: { note?: string; planSentAt?: Date; paperclipUrl?: string }
 ): Promise<void> {
   const client = getClient();
   const properties: Record<string, unknown> = {
@@ -71,6 +71,9 @@ export async function markLeadStatus(
   if (extra?.note) properties.Notes = { rich_text: richText(extra.note) };
   if (extra?.planSentAt) {
     properties["Plan Sent"] = { date: { start: extra.planSentAt.toISOString() } };
+  }
+  if (extra?.paperclipUrl) {
+    properties["Linked Paperclip"] = { url: extra.paperclipUrl };
   }
   await client.pages.update({
     page_id: pageId,

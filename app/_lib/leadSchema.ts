@@ -1,34 +1,21 @@
 import { z } from "zod";
+import {
+  agentSchema,
+  logSchema,
+  recommendationSchema,
+  briefResponseSchema
+} from "./briefSchema";
 
 // Source of truth for the /api/lead JSON contract. The form in
 // app/[locale]/_components/BriefBox/EndCard.tsx must POST a body whose keys
 // exactly match this schema. Honeypot field name is `company_phone`. The
-// hidden `demoPayload` is the JSON returned by /api/brief.
+// hidden `demoPayload` is the JSON returned by /api/brief — so the demo
+// sub-schemas are reused from briefSchema directly to keep them in lockstep.
 
-export const briefRecommendationSchema = z.object({
-  headline: z.string().min(1).max(200),
-  ask: z.string().min(1).max(500)
-});
-
-export const briefAgentSchema = z.object({
-  name: z.string().min(1).max(80),
-  color: z.string().min(1).max(20),
-  tools: z.array(z.string().min(1).max(40)).min(1).max(8)
-});
-
-export const briefLogSchema = z.object({
-  agent: z.string().min(1).max(80),
-  action: z.string().min(1).max(200),
-  ts: z.string().min(1).max(20)
-});
-
-export const demoPayloadSchema = z.object({
-  agents: z.array(briefAgentSchema).min(1).max(6),
-  // Keep this aligned with briefResponseSchema.logs.max() in briefSchema.ts.
-  // The brief route can return up to 12 activity items now.
-  logs: z.array(briefLogSchema).min(1).max(12),
-  recommendation: briefRecommendationSchema
-});
+export const briefRecommendationSchema = recommendationSchema;
+export const briefAgentSchema = agentSchema;
+export const briefLogSchema = logSchema;
+export const demoPayloadSchema = briefResponseSchema;
 
 export const leadInputSchema = z.object({
   // Visible required
