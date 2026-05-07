@@ -108,13 +108,30 @@ function pageToSummary(page: unknown): InsightSummary | null {
     readingTimeMinutes:
       ((props["Reading time"] as { number?: number | null }).number) ?? null,
     featured: !!(props["Featured"] as { checkbox?: boolean }).checkbox,
-    sources: parseSources(plainText((props["Sources"] as { rich_text?: unknown }).rich_text))
+    sources: parseSources(sourcesText((props["Sources"] as { rich_text?: unknown }).rich_text))
   };
+}
+
+// For Sources rich_text, mention-type spans (internal Notion page links) store
+// the page title in plain_text but the actual URL in href. Plain text extraction
+// would lose the URL, causing those source lines to be filtered out. This helper
+// substitutes href for the text of any mention span so parseSources can find the URL.
+function sourcesText(rich: unknown): string {
+  if (!Array.isArray(rich)) return "";
+  return rich
+    .map((r) => {
+      const span = r as { type?: string; plain_text?: string; href?: string | null };
+      if (span.type === "mention" && span.href) return span.href;
+      return span.plain_text ?? "";
+    })
+    .join("");
 }
 
 // Sources field is plain text, one source per line, format:
 //   "Source name — https://url — YYYY-MM-DD"
+//   "Source name — https://url — Publisher, YYYY-MM-DD"
 // Either separator (em dash, en dash, or hyphen-with-spaces) is accepted.
+// Date may appear as its own segment or embedded in a "publisher, date" segment.
 function parseSources(raw: string): InsightSource[] {
   if (!raw) return [];
   return raw
@@ -124,8 +141,16 @@ function parseSources(raw: string): InsightSource[] {
     .map((line) => {
       const parts = line.split(/\s+[—–-]\s+/).map((p) => p.trim());
       const url = parts.find((p) => /^https?:\/\//i.test(p)) ?? "";
-      const date = parts.find((p) => /^\d{4}-\d{2}-\d{2}$/.test(p)) ?? null;
-      const name = parts.find((p) => p !== url && p !== date) ?? url;
+      // First try an exact-match segment; fall back to a date embedded anywhere (e.g. "Publisher, 2024-01-01")
+      const exactDate = parts.find((p) => /^\d{4}-\d{2}-\d{2}$/.test(p)) ?? null;
+      const date = exactDate ?? (() => {
+        for (const p of parts) {
+          const m = p.match(/\b(\d{4}-\d{2}-\d{2})\b/);
+          if (m) return m[1];
+        }
+        return null;
+      })();
+      const name = parts.find((p) => p !== url && p !== exactDate) ?? url;
       return { name, url, datePublished: date };
     })
     .filter((s) => s.url);
