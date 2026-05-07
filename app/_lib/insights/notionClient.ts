@@ -166,14 +166,21 @@ export async function listInsights(opts: ListOptions): Promise<InsightSummary[]>
 export async function getInsightBySlug(
   slug: string,
   locale: InsightLocale,
-  opts?: { includeUnpublished?: boolean }
+  opts?: { includeUnpublished?: boolean; allowedStatuses?: InsightStatus[] }
 ): Promise<InsightDetail | null> {
   const client = getClient();
   const filters: unknown[] = [
     { property: "Slug", rich_text: { equals: slug } },
     { property: "Locale", select: { equals: locale } }
   ];
-  if (!opts?.includeUnpublished) {
+  if (opts?.allowedStatuses?.length) {
+    filters.push({
+      or: opts.allowedStatuses.map((status) => ({
+        property: "Status",
+        select: { equals: status }
+      }))
+    });
+  } else if (!opts?.includeUnpublished) {
     filters.push({ property: "Status", select: { equals: "published" } });
   }
 
