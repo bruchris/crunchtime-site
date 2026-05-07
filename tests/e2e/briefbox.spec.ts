@@ -62,8 +62,8 @@ test.describe("Brief Box demo", () => {
 
     await page.getByRole("button", { name: "fakturaene er sene" }).click();
 
-    // Agent cards are <article> elements — at least one appears.
-    await expect(page.locator("article").first()).toBeVisible({ timeout: 15_000 });
+    // The TeamPanel renders activity cards as <li data-kind="..."> entries.
+    await expect(page.locator("li[data-kind]").first()).toBeVisible({ timeout: 15_000 });
 
     // End card should appear within ~14s of the scheduler completing.
     await expect(page.getByRole("link", { name: /Book en 30-min prat/i })).toBeVisible({

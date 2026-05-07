@@ -10,7 +10,11 @@ const baseValid = {
   brief: "fakturaene våre er sene",
   demoPayload: {
     agents: [{ name: "AR", color: "lime", tools: ["stripe"] }],
-    logs: [{ agent: "AR", action: "did a thing", ts: "11:42" }],
+    logs: [
+      { agent: "AR", action: "did a thing", ts: "11:42" },
+      { agent: "AR", action: "did another thing", ts: "11:43" },
+      { agent: "AR", action: "did a third thing", ts: "11:44" }
+    ],
     recommendation: { headline: "ok", ask: "ja?" }
   },
   language: "no" as const,

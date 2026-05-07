@@ -4,6 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { routing, type Locale } from "../../../i18n/routing";
 
+const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+
+function persistLocale(locale: Locale) {
+  if (typeof document === "undefined") return;
+  document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=${LOCALE_COOKIE_MAX_AGE}; samesite=lax`;
+}
+
 export function LocaleToggle({ currentLocale }: { currentLocale: Locale }) {
   const pathname = usePathname();
 
@@ -24,6 +31,7 @@ export function LocaleToggle({ currentLocale }: { currentLocale: Locale }) {
           key={loc}
           href={switchPath(loc)}
           aria-current={loc === currentLocale ? "true" : undefined}
+          onClick={() => persistLocale(loc)}
           className={
             loc === currentLocale
               ? "text-[var(--color-accent)]"

@@ -20,7 +20,11 @@ test.describe("lead capture form", () => {
         contentType: "application/json",
         body: JSON.stringify({
           agents: [{ name: "AR", color: "lime", tools: ["stripe"] }],
-          logs: [{ agent: "AR", action: "did a thing", ts: "11:42" }],
+          logs: [
+            { agent: "AR", action: "did a thing", ts: "11:42" },
+            { agent: "AR", action: "did another thing", ts: "11:43" },
+            { agent: "AR", action: "did a third thing", ts: "11:44" }
+          ],
           recommendation: { headline: "3 agenter, ~4t/uke spart.", ask: "Vil du sette opp?" }
         })
       });
@@ -28,7 +32,7 @@ test.describe("lead capture form", () => {
 
     await page.goto("/no");
 
-    await page.getByRole("textbox", { name: /brief|problem/i }).first().fill("fakturaene er sene");
+    await page.getByPlaceholder(/fortell hva|tell us/i).fill("fakturaene er sene");
     await page.keyboard.press("Enter");
 
     const skip = page.getByRole("link", { name: /skip|hopp/i });
@@ -38,7 +42,7 @@ test.describe("lead capture form", () => {
 
     await page.getByRole("button", { name: /send.*e-?post/i }).click();
 
-    await page.getByLabel(/navn/i).fill("Ada Lovelace");
+    await page.getByLabel(/^navn$/i).fill("Ada Lovelace");
     await page.getByLabel(/e-?post/i).fill("ada@example.com");
     await page.getByLabel(/firma/i).fill("Analytical Engines AS");
     await page.getByLabel(/nettside/i).fill("https://example.com");
@@ -67,7 +71,11 @@ test.describe("lead capture form", () => {
         website: "https://bot.example.com", notes: "", brief: "test",
         demoPayload: {
           agents: [{ name: "x", color: "lime", tools: ["a"] }],
-          logs: [{ agent: "x", action: "y", ts: "00:00" }],
+          logs: [
+            { agent: "x", action: "y", ts: "00:00" },
+            { agent: "x", action: "z", ts: "00:01" },
+            { agent: "x", action: "w", ts: "00:02" }
+          ],
           recommendation: { headline: "h", ask: "a" }
         },
         language: "no", source: "brief-box-v1",

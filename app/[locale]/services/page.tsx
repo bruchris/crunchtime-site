@@ -57,20 +57,20 @@ export default async function ServicesPage({
   const rawBrief = Array.isArray(sp["from-brief"]) ? sp["from-brief"][0] : sp["from-brief"];
   const excerpt = briefExcerpt(rawBrief);
 
-  void (process.env.NEXT_PUBLIC_CAL_BOOKING_LINK ?? BOOKING_FALLBACK);
+  const bookingHref = process.env.NEXT_PUBLIC_CAL_BOOKING_LINK ?? BOOKING_FALLBACK;
 
   return (
     <>
       {excerpt ? (
-        <BriefHandoffCallout excerpt={excerpt} bookingHref={`/${locale}/contact`} />
+        <BriefHandoffCallout excerpt={excerpt} bookingHref={bookingHref} />
       ) : null}
       <ServicesHero locale={locale} />
       <ServicesGrid locale={locale} />
       <ProcessSteps locale={locale} />
       <ResultsGrid locale={locale} />
-      <PricingTiers locale={locale} bookingHref={`/${locale}/contact`} />
+      <PricingTiers locale={locale} bookingHref={bookingHref} />
       <FaqList locale={locale} />
-      <CtaBanner locale={locale} bookingHref={`/${locale}/contact`} />
+      <CtaBanner locale={locale} bookingHref={bookingHref} />
     </>
   );
 }
