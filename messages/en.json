@@ -2,12 +2,33 @@
   "nav": {
     "home": "Home",
     "services": "Services",
+    "insights": "Insights",
     "contact": "Contact",
     "cta": "Book a call"
+  },
+  "insights": {
+    "meta": {
+      "title": "Insights",
+      "description": "Patterns, numbers, and sources from real AI agent deployments — distilled into playbooks Norwegian SMBs can apply. Every claim is sourced."
+    },
+    "hub": {
+      "eyebrow": "Insights",
+      "headline": "How AI agents are actually being used in SMBs — with sources.",
+      "subline": "Patterns, numbers, and lessons from real deployments — Klarna, DNB, Tripletex, and others. We distill what works and how it translates to Norwegian businesses. Every claim is cited.",
+      "empty": "No posts yet — first one lands soon."
+    },
+    "cta": {
+      "headline": "Want to test a pattern like this in your own business?",
+      "subline": "30 minutes on a call. We sketch how the workflow could look for you — and tell you honestly whether an agent fits.",
+      "button": "Book a free call"
+    }
   },
   "footer": {
     "tagline": "Norwegian AI agency, based in Bergen.",
     "rights": "All rights reserved"
+  },
+  "booking": {
+    "close": "Close"
   },
   "localeToggle": {
     "label": "Language",

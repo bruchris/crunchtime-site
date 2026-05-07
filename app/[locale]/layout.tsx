@@ -6,6 +6,7 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CursorEffect } from "../_components/CursorEffect";
 import { LocaleToggle } from "./_components/LocaleToggle";
+import { BookingModalProvider } from "./_components/BookingModal/BookingModal";
 import { routing, type Locale } from "../../i18n/routing";
 import {
   JsonLd,
@@ -14,6 +15,9 @@ import {
   founderSchema
 } from "../_lib/jsonLd";
 import "../globals.css";
+
+const BOOKING_FALLBACK =
+  "https://calendar.google.com/calendar/appointments/schedules/AcZssZ3I8SZIfyI8qMSoX5wo0tY3dlfxajUj0eDlrgpzpN29AcUzDT3EEyQmH9PJpCjZ-Q0-DrtAX5oa?gv=true";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -87,6 +91,8 @@ export default async function LocaleLayout({
 
   const t = await getTranslations({ locale, namespace: "nav" });
   const tFooter = await getTranslations({ locale, namespace: "footer" });
+  const tBooking = await getTranslations({ locale, namespace: "booking" });
+  const bookingHref = process.env.NEXT_PUBLIC_CAL_BOOKING_LINK ?? BOOKING_FALLBACK;
 
   return (
     <html lang={locale} className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`} data-scroll-behavior="smooth">
@@ -99,6 +105,7 @@ export default async function LocaleLayout({
           ]}
         />
         <NextIntlClientProvider>
+         <BookingModalProvider bookingHref={bookingHref} closeLabel={tBooking("close")}>
           <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[rgba(10,10,9,0.35)] backdrop-blur-2xl backdrop-saturate-150">
             <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
               <Link href={`/${locale}`} className="font-display flex items-center text-lg font-extrabold tracking-tight">
@@ -108,6 +115,11 @@ export default async function LocaleLayout({
                 <li>
                   <Link href={`/${locale}/services`} className="hover:text-[var(--color-fg)]">
                     {t("services")}
+                  </Link>
+                </li>
+                <li>
+                  <Link href={`/${locale}/insights`} className="hover:text-[var(--color-fg)]">
+                    {t("insights")}
                   </Link>
                 </li>
                 <li>
@@ -131,17 +143,46 @@ export default async function LocaleLayout({
           <main className="flex-1">{children}</main>
 
           <footer className="border-t border-white/8 bg-[var(--color-surface)]">
-            <div className="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-10 text-sm text-[var(--color-muted)] sm:flex-row sm:items-center sm:justify-between sm:px-8">
+            <div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 text-sm text-[var(--color-muted)] sm:grid-cols-[1fr_auto] sm:px-8">
               <div>
                 <p className="font-display text-base font-extrabold text-[var(--color-fg)]">
                   Crunch<span className="text-[var(--color-accent)]">time</span>
                 </p>
-                <p className="mt-1">{tFooter("tagline")}</p>
+                <p className="mt-1 max-w-md">{tFooter("tagline")}</p>
               </div>
-              <p>© {new Date().getFullYear()} Crunchtime. {tFooter("rights")}.</p>
+              <nav aria-label={t("services")} className="grid grid-cols-2 gap-x-10 gap-y-2 sm:justify-end sm:text-right">
+                <Link href={`/${locale}/services`} className="hover:text-[var(--color-fg)]">
+                  {t("services")}
+                </Link>
+                <Link href={`/${locale}/insights`} className="hover:text-[var(--color-fg)]">
+                  {t("insights")}
+                </Link>
+                <Link href={`/${locale}/facts`} className="hover:text-[var(--color-fg)]">
+                  {locale === "no" ? "Fakta" : "Facts"}
+                </Link>
+                {locale === "no" ? (
+                  <Link href="/no/ordliste" className="hover:text-[var(--color-fg)]">
+                    Ordliste
+                  </Link>
+                ) : (
+                  <span aria-hidden />
+                )}
+                <Link href={`/${locale}/contact`} className="hover:text-[var(--color-fg)]">
+                  {t("contact")}
+                </Link>
+                <a href="/llms-full.txt" className="font-mono text-xs hover:text-[var(--color-fg)]" rel="alternate" type="text/markdown">
+                  llms-full.txt
+                </a>
+              </nav>
+            </div>
+            <div className="border-t border-white/8">
+              <p className="mx-auto max-w-7xl px-5 py-5 text-xs text-[var(--color-muted)] sm:px-8">
+                © {new Date().getFullYear()} Crunchtime. {tFooter("rights")}.
+              </p>
             </div>
           </footer>
           <CursorEffect />
+         </BookingModalProvider>
         </NextIntlClientProvider>
       </body>
     </html>

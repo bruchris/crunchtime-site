@@ -12,6 +12,26 @@ import { FaqList } from "./_components/FaqList";
 import { CtaBanner } from "./_components/CtaBanner";
 import { BriefHandoffCallout } from "./_components/BriefHandoffCallout";
 import { briefExcerpt } from "./_lib/briefExcerpt";
+import {
+  JsonLd,
+  SITE_URL,
+  faqSchema,
+  serviceSchema,
+  breadcrumbSchema
+} from "../../_lib/jsonLd";
+
+const FAQ_KEYS = [
+  "safety",
+  "messy",
+  "waiting",
+  "ownership",
+  "team",
+  "languages",
+  "industries",
+  "starting"
+] as const;
+
+const SERVICE_KEYS = ["automation", "strategy", "implementation"] as const;
 
 const BOOKING_FALLBACK =
   "https://calendar.google.com/calendar/appointments/schedules/AcZssZ3I8SZIfyI8qMSoX5wo0tY3dlfxajUj0eDlrgpzpN29AcUzDT3EEyQmH9PJpCjZ-Q0-DrtAX5oa?gv=true";
@@ -59,8 +79,37 @@ export default async function ServicesPage({
 
   const bookingHref = process.env.NEXT_PUBLIC_CAL_BOOKING_LINK ?? BOOKING_FALLBACK;
 
+  const tFaq = await getTranslations({ locale, namespace: "services.faq" });
+  const tGrid = await getTranslations({ locale, namespace: "services.servicesGrid" });
+  const tNav = await getTranslations({ locale, namespace: "nav" });
+
+  const pageUrl = `${SITE_URL}/${locale}/services`;
+
+  const faq = faqSchema(
+    FAQ_KEYS.map((k) => ({
+      q: tFaq(`items.${k}.q`),
+      a: tFaq(`items.${k}.a`),
+      url: `${pageUrl}#faq-${k}`
+    }))
+  );
+
+  const services = SERVICE_KEYS.map((k) =>
+    serviceSchema({
+      name: tGrid(`items.${k}.title`),
+      description: tGrid(`items.${k}.body`),
+      serviceType: tGrid(`items.${k}.title`),
+      url: `${pageUrl}#${k}`
+    })
+  );
+
+  const breadcrumbs = breadcrumbSchema([
+    { name: "Crunchtime", url: `${SITE_URL}/${locale}` },
+    { name: tNav("services"), url: pageUrl }
+  ]);
+
   return (
     <>
+      <JsonLd data={[faq, breadcrumbs, ...services]} />
       {excerpt ? (
         <BriefHandoffCallout excerpt={excerpt} bookingHref={bookingHref} />
       ) : null}

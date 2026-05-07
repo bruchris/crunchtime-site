@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "echo 'lint: skipped (Next 16 removed next lint; ESLint not configured for this project yet)' && exit 0",
+    "notion:read-draft": "node scripts/read_insights_draft.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

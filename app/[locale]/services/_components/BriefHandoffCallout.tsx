@@ -2,16 +2,18 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useBookingModal } from "../../_components/BookingModal/BookingModal";
 
 export function BriefHandoffCallout({
-  excerpt,
-  bookingHref
+  excerpt
 }: {
   excerpt: string;
-  bookingHref: string;
+  // bookingHref kept for API compatibility but unused — modal uses provider's URL
+  bookingHref?: string;
 }) {
   const t = useTranslations("services.briefHandoff");
   const [open, setOpen] = useState(true);
+  const { open: openBooking } = useBookingModal();
   if (!open) return null;
   return (
     <aside
@@ -24,12 +26,13 @@ export function BriefHandoffCallout({
         <span className="text-[var(--color-muted)]">{t("ask")}</span>
       </div>
       <div className="flex items-center gap-3">
-        <a
-          href={bookingHref}
+        <button
+          type="button"
+          onClick={openBooking}
           className="rounded-sm bg-[var(--color-accent)] px-4 py-2 text-sm font-bold text-black hover:bg-[var(--color-accent-strong)]"
         >
           {t("cta")} →
-        </a>
+        </button>
         <button
           type="button"
           onClick={() => setOpen(false)}

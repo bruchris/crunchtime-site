@@ -16,18 +16,19 @@ Dev server on `http://localhost:3000`.
 
 ## Deploy (Vercel)
 
-1. `npx vercel link` in this directory (or push to GitHub + connect Vercel project).
+1. `npx vercel link --scope bru-broch` in this directory (or push to GitHub + connect Vercel project under the `Bru_Broch` team).
 2. Set env vars in Vercel project settings (see `.env.local.example` for the canonical list):
    - `ANTHROPIC_API_KEY` — required for the Brief Box demo (Haiku call)
-   - `NOTION_TOKEN` and `NOTION_DATABASE_ID` — required for lead capture; CRM schema documented in `docs/runbooks/notion-crm-setup.md`
+   - `NOTION_TOKEN`, `NOTION_DATABASE_ID`, and `NOTION_INSIGHTS_DATABASE_ID` — required for the lead CRM and the `/insights` CMS; schemas documented in `docs/runbooks/notion-crm-setup.md` and `docs/runbooks/notion-insights-setup.md`
    - `RESEND_API_KEY` — required for lead ack + admin notification emails (verify `crunchtime.no` in Resend first)
-   - `PAPERCLIP_WEBHOOK_URL` — Paperclip endpoint that triggers the research agent for "email me a plan" leads
+   - `PAPERCLIP_API_BASE`, `PAPERCLIP_API_TOKEN`, `PAPERCLIP_COMPANY_ID`, `PAPERCLIP_PROJECT_ID`, `PAPERCLIP_GOAL_ID`, `PAPERCLIP_AGENT_ID` — required for the Paperclip lead handoff described in `docs/runbooks/paperclip-webhook-contract.md`
    - `CONTACT_INBOX=hello@crunchtime.no`
    - `CONTACT_FROM=Crunchtime <noreply@crunchtime.no>`
    - `NEXT_PUBLIC_CAL_BOOKING_LINK` — Cal.com link for the booking CTA (optional; falls back to `/contact`)
-3. Production deploy: `npx vercel --prod`.
-4. In Vercel Project → Settings → Domains: add `crunchtime.no` + `www.crunchtime.no`.
-5. Confirm Cloudflare DNS records resolve to Vercel (A `76.76.21.21` + CNAME `www → cname.vercel-dns.com`, both DNS-only / grey cloud).
+3. Optional sync helper: `node scripts/push-vercel-envs.mjs` reads `.env.local` and upserts the canonical vars to the linked Vercel project.
+4. Production deploy: `npx vercel --prod`.
+5. In Vercel Project → Settings → Domains: add `crunchtime.no` + `www.crunchtime.no`.
+6. Confirm Cloudflare DNS records resolve to Vercel (A `76.76.21.21` + CNAME `www → cname.vercel-dns.com`, both DNS-only / grey cloud).
 
 ## Human-required setup (once per environment)
 
@@ -53,11 +54,10 @@ Bilingual: every route serves `/no/...` (default) and `/en/...`. Bare `/<path>` 
 | `/contact` | Cal.com iframe + Resend-backed message form | shipped on `feat/redesign` |
 | `/api/brief` | POST: brief → Haiku → demo payload | shipped |
 | `/api/lead` | POST: lead capture → Notion + Resend + Paperclip webhook | shipped |
-| `/insights` (blog) | v1.1 (week 3–4) as MDX in repo | deferred |
+| `/insights` | Notion-backed insights hub + article pages | shipped |
 
 ## What's deliberately not here yet
 
-- **No `/insights` blog.** Ships in v1.1 (week 3–4) as MDX in repo.
 - **No trial-flow UI for Back-Office Finance.** Wires into [CRUA-32](../../../../CRUA/issues/CRUA-32) MVP; v2 scope.
 - **No interactive demo sandbox.** v2.
 - **No analytics platform beyond Vercel Web Analytics.** Revisit if we need funnel analytics.

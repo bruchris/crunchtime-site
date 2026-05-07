@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+// 404 pages add noise to AI search indexes — explicitly opt out so a
+// scraper that stumbles into one doesn't treat the empty-state copy
+// as a real page about Crunchtime.
+export const metadata: Metadata = {
+  robots: { index: false, follow: false }
+};
 
 export default function NotFound() {
   return (

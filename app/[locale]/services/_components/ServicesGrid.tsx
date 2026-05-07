@@ -14,6 +14,7 @@ export async function ServicesGrid({ locale }: { locale: string }) {
           {KEYS.map((key) => (
             <li
               key={key}
+              id={key}
               className="group relative bg-[var(--color-surface)] p-8 transition-colors duration-300 hover:bg-[#15150f]"
             >
               <p className="font-mono text-xs text-[var(--color-muted)]">

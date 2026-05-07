@@ -1,13 +1,14 @@
 import { getTranslations } from "next-intl/server";
+import { BookingButton } from "../../_components/BookingModal/BookingButton";
 
 const TIERS = ["discovery", "pilot", "retainer"] as const;
 
 export async function PricingTiers({
-  locale,
-  bookingHref
+  locale
 }: {
   locale: string;
-  bookingHref: string;
+  // bookingHref kept for API compatibility but unused — modal uses provider's URL
+  bookingHref?: string;
 }) {
   const t = await getTranslations({ locale, namespace: "services.pricing" });
   return (
@@ -25,6 +26,7 @@ export async function PricingTiers({
           return (
             <li
               key={tier}
+              id={`pricing-${tier}`}
               className={
                 recommended
                   ? "relative flex flex-col rounded-md border border-[var(--color-accent)] bg-[var(--color-surface)] p-7"
@@ -49,8 +51,7 @@ export async function PricingTiers({
               <p className="mt-4 text-sm leading-6 text-[var(--color-muted)]">
                 {t(`tiers.${tier}.detail`)}
               </p>
-              <a
-                href={bookingHref}
+              <BookingButton
                 className={
                   recommended
                     ? "mt-7 inline-block rounded-sm bg-[var(--color-accent)] px-4 py-3 text-center text-sm font-bold text-black hover:bg-[var(--color-accent-strong)]"
@@ -58,7 +59,7 @@ export async function PricingTiers({
                 }
               >
                 {t(`tiers.${tier}.cta`)}
-              </a>
+              </BookingButton>
             </li>
           );
         })}

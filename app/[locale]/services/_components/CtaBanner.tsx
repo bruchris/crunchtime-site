@@ -1,11 +1,12 @@
 import { getTranslations } from "next-intl/server";
+import { BookingButton } from "../../_components/BookingModal/BookingButton";
 
 export async function CtaBanner({
-  locale,
-  bookingHref
+  locale
 }: {
   locale: string;
-  bookingHref: string;
+  // bookingHref kept for API compatibility but unused — modal uses provider's URL
+  bookingHref?: string;
 }) {
   const t = await getTranslations({ locale, namespace: "services.ctaBanner" });
   return (
@@ -17,12 +18,9 @@ export async function CtaBanner({
           </h2>
           <p className="mt-3 text-base font-medium leading-7 text-black/80">{t("subline")}</p>
         </div>
-        <a
-          href={bookingHref}
-          className="rounded-sm bg-black px-6 py-4 text-sm font-bold text-[var(--color-accent)] hover:bg-[#1a1a18]"
-        >
+        <BookingButton className="rounded-sm bg-black px-6 py-4 text-sm font-bold text-[var(--color-accent)] hover:bg-[#1a1a18]">
           {t("button")}
-        </a>
+        </BookingButton>
       </div>
     </section>
   );

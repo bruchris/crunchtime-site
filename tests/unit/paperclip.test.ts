@@ -5,7 +5,7 @@ const baseLead = {
   name: "Ada", email: "ada@example.com", company: "AE", website: "https://example.com",
   notes: "", brief: "fakturaene er sene",
   demoPayload: {
-    agents: [{ name: "AR", color: "lime", tools: ["stripe"] }],
+    agents: [{ name: "AR", color: "lime" as const, tools: ["stripe"] }],
     logs: [{ agent: "AR", action: "did", ts: "11:42" }],
     recommendation: { headline: "3 agenter", ask: "ok?" }
   },

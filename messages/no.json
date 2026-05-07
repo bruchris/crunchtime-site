@@ -2,12 +2,33 @@
   "nav": {
     "home": "Hjem",
     "services": "Tjenester",
+    "insights": "Innsikt",
     "contact": "Kontakt",
     "cta": "Book en prat"
+  },
+  "insights": {
+    "meta": {
+      "title": "Innsikt",
+      "description": "Mønstre, tall og kilder fra ekte AI-utrullinger — destillert til noe norske SMB-er kan ta i bruk. Hver artikkel siterer primærkilder."
+    },
+    "hub": {
+      "eyebrow": "Innsikt",
+      "headline": "Hvordan AI-agenter faktisk brukes i SMB-er — med kilder.",
+      "subline": "Mønstre, tall og lærdommer fra ekte utrullinger — Klarna, DNB, Tripletex og andre. Vi destillerer hva som virker, og hvordan det kan oversettes til norske bedrifter. Hver påstand er kildebelagt.",
+      "empty": "Ingen artikler ennå — første kommer snart."
+    },
+    "cta": {
+      "headline": "Vil du teste et slikt mønster i din egen bedrift?",
+      "subline": "30 minutter på en samtale. Vi skisserer hvordan workflowen kan se ut hos deg — og sier ærlig om en agent passer.",
+      "button": "Book en gratis prat"
+    }
   },
   "footer": {
     "tagline": "Norsk AI-byrå, basert i Bergen.",
     "rights": "Alle rettigheter forbeholdt"
+  },
+  "booking": {
+    "close": "Lukk"
   },
   "localeToggle": {
     "label": "Språk",

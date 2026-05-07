@@ -22,8 +22,9 @@ const POOL = [
   "manualWork"
 ] as const;
 
+const ALL = [PINNED, ...POOL] as const;
 const ROTATING = 3;
-type ChipKey = typeof PINNED | (typeof POOL)[number];
+type ChipKey = (typeof ALL)[number];
 
 // Stable initial set used for SSR and the first client render so hydration
 // matches. After mount, useEffect swaps in a random sample.
@@ -46,23 +47,26 @@ export function ChipRow({
   onPick: (label: string) => void;
 }) {
   const t = useTranslations("briefBox.chips");
-  const [keys, setKeys] = useState<ChipKey[]>(INITIAL);
+  const [visible, setVisible] = useState<Set<ChipKey>>(() => new Set(INITIAL));
 
   useEffect(() => {
-    setKeys([PINNED, ...sample(POOL, ROTATING)]);
+    setVisible(new Set([PINNED, ...sample(POOL, ROTATING)]));
   }, []);
 
   if (hidden) return null;
   return (
     <div className={styles.chips}>
-      {keys.map((key) => {
+      {ALL.map((key) => {
         const label = t(key);
+        const isVisible = visible.has(key);
         return (
           <button
             key={key}
             type="button"
-            className={styles.chip}
+            className={`${styles.chip} ${!isVisible ? styles.chipHidden : ""}`}
             onClick={() => onPick(label)}
+            tabIndex={isVisible ? 0 : -1}
+            {...(!isVisible ? { "aria-hidden": "true" } : {})}
           >
             {label}
           </button>

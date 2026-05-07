@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Push Brief Box / Lead / Paperclip env vars to Vercel for all three
+// Push Brief Box / Lead / Insights CMS / Paperclip env vars to Vercel for all
+// three
 // environments (production + preview + development) in one POST per var.
 //
 //   node scripts/push-vercel-envs.mjs            # upsert (replaces existing)
@@ -18,19 +19,25 @@ const VARS = [
   "ANTHROPIC_API_KEY",
   "NOTION_TOKEN",
   "NOTION_DATABASE_ID",
+  "NOTION_INSIGHTS_DATABASE_ID",
   "PAPERCLIP_API_BASE",
   "PAPERCLIP_API_TOKEN",
   "PAPERCLIP_COMPANY_ID",
   "PAPERCLIP_PROJECT_ID",
   "PAPERCLIP_GOAL_ID",
-  "PAPERCLIP_AGENT_ID"
+  "PAPERCLIP_AGENT_ID",
+  "RESEND_API_KEY",
+  "CONTACT_INBOX",
+  "CONTACT_FROM",
+  "NEXT_PUBLIC_CAL_BOOKING_LINK"
 ];
 
 // Vercel "type" values: encrypted (default), sensitive (write-only), plain.
 const SENSITIVE = new Set([
   "ANTHROPIC_API_KEY",
   "NOTION_TOKEN",
-  "PAPERCLIP_API_TOKEN"
+  "PAPERCLIP_API_TOKEN",
+  "RESEND_API_KEY"
 ]);
 
 const project = JSON.parse(readFileSync(".vercel/project.json", "utf8"));

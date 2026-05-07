@@ -149,6 +149,12 @@
 
 .chip:hover { border-color: var(--ct-lime); color: var(--ct-lime); }
 
+/* Non-visible chips stay in the SSR HTML for crawlers/LLMs but are hidden
+   from the visual layout. Use display:none rather than visibility:hidden so
+   they don't take grid space. Combined with aria-hidden + tabIndex=-1 they
+   are inert for assistive tech and keyboard users. */
+.chipHidden { display: none; }
+
 .skipLink {
   position: absolute;
   top: 80px;

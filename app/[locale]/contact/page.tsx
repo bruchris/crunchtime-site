@@ -4,6 +4,13 @@ import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing, type Locale } from "../../../i18n/routing";
 import { submitContact } from "./actions";
+import {
+  JsonLd,
+  SITE_URL,
+  contactPointSchema,
+  localBusinessSchema,
+  breadcrumbSchema
+} from "../../_lib/jsonLd";
 
 const BOOKING_FALLBACK =
   "https://calendar.google.com/calendar/appointments/schedules/AcZssZ3I8SZIfyI8qMSoX5wo0tY3dlfxajUj0eDlrgpzpN29AcUzDT3EEyQmH9PJpCjZ-Q0-DrtAX5oa?gv=true";
@@ -52,8 +59,15 @@ export default async function ContactPage({
 
   const bookingLink = process.env.NEXT_PUBLIC_CAL_BOOKING_LINK ?? BOOKING_FALLBACK;
 
+  const tNav = await getTranslations({ locale, namespace: "nav" });
+  const breadcrumbs = breadcrumbSchema([
+    { name: "Crunchtime", url: `${SITE_URL}/${locale}` },
+    { name: tNav("contact"), url: `${SITE_URL}/${locale}/contact` }
+  ]);
+
   return (
     <div className="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-28">
+      <JsonLd data={[contactPointSchema(), localBusinessSchema(), breadcrumbs]} />
       <section>
         <p className="text-xs uppercase tracking-[0.24em] text-[var(--color-accent)]">
           {tHero("eyebrow")}

@@ -14,7 +14,7 @@ const ITEMS = [
 export async function FaqList({ locale }: { locale: string }) {
   const t = await getTranslations({ locale, namespace: "services.faq" });
   return (
-    <section className="border-t border-white/8 bg-[var(--color-surface)]">
+    <section id="faq" className="border-t border-white/8 bg-[var(--color-surface)]">
       <div className="mx-auto max-w-4xl px-5 py-20 sm:px-8 sm:py-28">
         <p className="text-xs uppercase tracking-[0.24em] text-[var(--color-muted)]">
           {t("sectionLabel")}
@@ -24,7 +24,7 @@ export async function FaqList({ locale }: { locale: string }) {
         </h2>
         <ul className="mt-12 divide-y divide-white/8 border-y border-white/8">
           {ITEMS.map((item) => (
-            <li key={item}>
+            <li key={item} id={`faq-${item}`}>
               <details className="group py-6">
                 <summary className="flex cursor-pointer items-center justify-between gap-6 font-display text-base font-bold tracking-tight sm:text-lg">
                   <span>{t(`items.${item}.q`)}</span>
