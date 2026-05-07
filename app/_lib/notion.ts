@@ -16,8 +16,12 @@ function richText(value: string) {
   return [{ type: "text" as const, text: { content: value.slice(0, 2000) } }];
 }
 
+// Status values match the Notion CRM Select options exactly (case-sensitive).
+// "New" (capitalized) is the existing CRM-wide "fresh lead" state we share with
+// manual outreach; the lowercase plan-* / manual-review options are brief-box
+// specific and added to support the Paperclip pipeline.
 export type LeadStatus =
-  | "new"
+  | "New"
   | "plan-pending"
   | "plan-delivered"
   | "plan-needs-review"
@@ -46,7 +50,7 @@ export async function insertLead(input: LeadInput): Promise<InsertedLead> {
       Recommendation: { rich_text: richText(recommendationText) },
       Language: { select: { name: input.language } },
       Source: { select: { name: input.source } },
-      Status: { select: { name: "new" satisfies LeadStatus } },
+      Status: { select: { name: "New" satisfies LeadStatus } },
       Notes: { rich_text: richText(input.notes ?? "") }
     }
   });
