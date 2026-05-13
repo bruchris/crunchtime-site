@@ -15,7 +15,8 @@ const STATIC_ROUTES: ReadonlyArray<{
   locales?: ReadonlyArray<Locale>;
 }> = [
   { path: "", lastModified: "2026-05-07", changeFrequency: "weekly", priority: 1.0 },
-  { path: "/services", lastModified: "2026-05-07", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/services", lastModified: "2026-05-13", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/cases", lastModified: "2026-05-13", changeFrequency: "monthly", priority: 0.7 },
   { path: "/insights", lastModified: "2026-05-07", changeFrequency: "weekly", priority: 0.8 },
   { path: "/facts", lastModified: "2026-05-07", changeFrequency: "monthly", priority: 0.5 },
   { path: "/ordliste", lastModified: "2026-05-07", changeFrequency: "monthly", priority: 0.6, locales: ["no"] },

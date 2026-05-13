@@ -2,6 +2,7 @@
   "nav": {
     "home": "Home",
     "services": "Services",
+    "cases": "Use cases",
     "insights": "Insights",
     "contact": "Contact",
     "cta": "Book a call"
@@ -100,12 +101,12 @@
   "services": {
     "meta": {
       "title": "Services",
-      "description": "AI teams that actually do the work. Three services, four steps, fixed price."
+      "description": "We build the intelligent layer that wires AI into sales, ops, customer service, and development — and keeps it all running."
     },
     "hero": {
-      "eyebrow": "Services",
-      "headline": "AI teams that actually do the work.",
-      "subline": "We build agents that take the repetitive work off your calendar. Fixed price, live in under a month."
+      "eyebrow": "AI OS",
+      "headline": "AI wired into every layer of your business.",
+      "subline": "We're not a single automation tool. We build the intelligent layer that wires AI into sales, ops, customer service, and development — and keeps it all running."
     },
     "servicesGrid": {
       "sectionLabel": "What we do",
@@ -264,6 +265,48 @@
       "ask": "Want to book a call instead?",
       "cta": "Book",
       "dismiss": "Dismiss"
+    }
+  },
+  "cases": {
+    "meta": {
+      "title": "Use cases",
+      "description": "AI OS in practice: four concrete use cases showing how Crunchtime wires AI into websites, customer ops, development, and operational visibility."
+    },
+    "hero": {
+      "eyebrow": "Use cases",
+      "headline": "AI OS in practice.",
+      "subline": "Four concrete use cases showing how we wire AI into the sales surface, customer pipeline, development loop, and ops view — without asking your team to build a new operating system from scratch."
+    },
+    "breadcrumb": {
+      "home": "Crunchtime"
+    },
+    "grid": {
+      "sectionLabel": "Use cases",
+      "headline": "What it looks like when AI becomes part of operations.",
+      "subline": "Three cards show capabilities we can install across your business. One card shows a named client already running the model live.",
+      "linkLabel": "Read the insight",
+      "cards": {
+        "website": {
+          "title": "Dynamic AI website",
+          "summary": "The site adapts to each visitor — personalised content, contextual messaging, and AI agents that act on buying signals automatically. When someone shows intent, the system qualifies the lead, triggers an outreach sequence, and books a meeting without anyone touching a keyboard. Your website stops being a brochure and becomes the most active sales rep on your team.",
+          "tags": ["Website", "Sales", "Booking"]
+        },
+        "ops": {
+          "title": "Automated customer ops",
+          "summary": "A customer registers, and the system takes it from there. Personalised email sequences, automatic booking links, smart follow-ups, and re-engagement triggers — all without a human in the loop. Your team handles relationships; the AI handles the pipeline. Zero dropped leads, zero manual steps between a new registration and a booked first meeting. It runs the same way at 9 AM and 11 PM.",
+          "tags": ["Customer ops", "Email", "Follow-up"]
+        },
+        "dev": {
+          "title": "AI development pipeline",
+          "summary": "Fjordbyte runs its entire software development lifecycle through Paperclip — an AI-native project layer where agents plan, write, review, and ship code, with humans in the loop only for high-leverage decisions. Smaller teams move faster, quality gates run automatically, and senior engineers spend their time on architecture rather than admin. Live proof that a software company can be operated as an AI OS.",
+          "tags": ["Client", "Fjordbyte", "Paperclip"]
+        },
+        "intelligence": {
+          "title": "AI-powered ops intelligence",
+          "summary": "Your financial, sales, and operational data connected to an AI layer that surfaces what matters. Natural language queries replace manual reports, anomaly alerts replace weekly check-ins, and forecasts replace guesswork. We wire your existing tools — Tripletex, Fiken, Shopify, HubSpot — into a single AI-powered ops view. Your team spends time acting on decisions, not pulling the numbers to make them.",
+          "tags": ["Ops", "Data", "Decisions"]
+        }
+      }
     }
   },
   "contact": {

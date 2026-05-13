@@ -2,6 +2,7 @@
   "nav": {
     "home": "Hjem",
     "services": "Tjenester",
+    "cases": "Bruksområder",
     "insights": "Innsikt",
     "contact": "Kontakt",
     "cta": "Book en prat"
@@ -100,12 +101,12 @@
   "services": {
     "meta": {
       "title": "Tjenester",
-      "description": "AI-team som faktisk gjør jobben. Tre tjenester, fire steg, fast pris."
+      "description": "Vi bygger det intelligente laget som kobler AI inn i salg, drift, kundehåndtering og utvikling — og holder det hele kjørende."
     },
     "hero": {
-      "eyebrow": "Tjenester",
-      "headline": "AI-team som faktisk gjør jobben.",
-      "subline": "Vi bygger agenter som tar det repetitive arbeidet ut av kalenderen din. Fast pris, klar i drift på under en måned."
+      "eyebrow": "AI OS",
+      "headline": "AI inn i hvert lag av virksomheten din.",
+      "subline": "Vi er ikke ett automatiseringsverktøy. Vi bygger det intelligente laget som kobler AI inn i salg, drift, kundehåndtering og utvikling — og holder det hele kjørende."
     },
     "servicesGrid": {
       "sectionLabel": "Hva vi gjør",
@@ -264,6 +265,48 @@
       "ask": "Vil du heller booke en prat?",
       "cta": "Book",
       "dismiss": "Lukk"
+    }
+  },
+  "cases": {
+    "meta": {
+      "title": "Bruksområder",
+      "description": "AI OS i praksis: fire konkrete bruksområder som viser hvordan Crunchtime kobler AI inn i nettsted, kundehåndtering, utvikling og driftsoversikt."
+    },
+    "hero": {
+      "eyebrow": "Bruksområder",
+      "headline": "AI OS i praksis.",
+      "subline": "Fire konkrete bruksområder som viser hvordan vi kobler AI inn i salgsflaten, kundehåndteringen, utviklingsløpet og driftsbildet — uten at teamet ditt må bygge et nytt operativsystem selv."
+    },
+    "breadcrumb": {
+      "home": "Crunchtime"
+    },
+    "grid": {
+      "sectionLabel": "Bruksområder",
+      "headline": "Hvordan det ser ut når AI blir en del av driften.",
+      "subline": "Tre kort viser kapabiliteter vi kan installere i virksomheten din. Ett kort viser en navngitt kunde som allerede kjører modellen live.",
+      "linkLabel": "Les innsikten",
+      "cards": {
+        "website": {
+          "title": "Dynamisk AI-nettside",
+          "summary": "Nettstedet tilpasser seg hver besøkende — tilpasset innhold, kontekstuell melding og AI-agenter som handler på kjøpssignaler automatisk. Når noen viser interesse, kvalifiserer systemet leaden, starter en kontaktsekvens og booker et møte — uten at noen rører tastaturet. Nettstedet ditt slutter å være en brosjyre og blir det mest aktive salgsmedlemmet i teamet ditt.",
+          "tags": ["Nettside", "Salg", "Booking"]
+        },
+        "ops": {
+          "title": "Automatisert kundehåndtering",
+          "summary": "En kunde registrerer seg, og systemet tar det derfra. Tilpassede e-postsekvenser, automatisk booking, smarte oppfølginger og reaktiveringssekvenser — alt uten menneskelig inngripen. Teamet ditt håndterer relasjonene, AI-en håndterer pipelinen. Null tapte leads, null manuelle steg mellom ny registrering og booket første møte. Det kjører likt klokken ni om morgenen og elleve om kvelden.",
+          "tags": ["Kundeops", "E-post", "Oppfølging"]
+        },
+        "dev": {
+          "title": "AI-utviklingspipeline",
+          "summary": "Fjordbyte kjører hele programvareutviklingslivssyklusen gjennom Paperclip — et AI-nativt prosjektlag der agenter planlegger, skriver, reviewer og shipper kode, med mennesker i loopen kun for høyverdi-beslutninger. Mindre team beveger seg raskere, kvalitetskontroller kjører automatisk, og seniorutviklere bruker tiden på arkitektur heller enn administrasjon. Levende bevis på at et programvareselskap kan driftes som et AI OS.",
+          "tags": ["Kunde", "Fjordbyte", "Paperclip"]
+        },
+        "intelligence": {
+          "title": "AI-drevet driftsinnsikt",
+          "summary": "Finans-, salgs- og driftsdata koblet til et AI-lag som fremhever det som betyr noe. Naturlige spørsmål erstatter manuelle rapporter, anomalivarsler erstatter ukentlige gjennomganger, og prognoser erstatter gjetning. Vi kobler de eksisterende verktøyene dine — Tripletex, Fiken, Shopify, HubSpot — inn i en AI-drevet driftsoversikt som forteller deg hva du bør handle på.",
+          "tags": ["Drift", "Data", "Beslutninger"]
+        }
+      }
     }
   },
   "contact": {

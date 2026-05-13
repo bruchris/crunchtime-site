@@ -118,6 +118,11 @@ export default async function LocaleLayout({
                   </Link>
                 </li>
                 <li>
+                  <Link href={`/${locale}/cases`} className="hover:text-[var(--color-fg)]">
+                    {t("cases")}
+                  </Link>
+                </li>
+                <li>
                   <Link href={`/${locale}/insights`} className="hover:text-[var(--color-fg)]">
                     {t("insights")}
                   </Link>
@@ -153,6 +158,9 @@ export default async function LocaleLayout({
               <nav aria-label={t("services")} className="grid grid-cols-2 gap-x-10 gap-y-2 sm:justify-end sm:text-right">
                 <Link href={`/${locale}/services`} className="hover:text-[var(--color-fg)]">
                   {t("services")}
+                </Link>
+                <Link href={`/${locale}/cases`} className="hover:text-[var(--color-fg)]">
+                  {t("cases")}
                 </Link>
                 <Link href={`/${locale}/insights`} className="hover:text-[var(--color-fg)]">
                   {t("insights")}
