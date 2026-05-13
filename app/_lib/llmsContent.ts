@@ -57,6 +57,7 @@ export async function llmsTxt(): Promise<string> {
     `- [Insights](${SITE}/en/insights): Sourced patterns and use cases on AI automation for SMBs (cited third-party case studies).`,
     `- [Facts](${SITE}/en/facts): Provable identity facts about Crunchtime — for grounding "what is Crunchtime" answers.`,
     `- [Contact](${SITE}/en/contact): Book a 30-minute call or send a message. Email: hello@crunchtime.no.`,
+    `- [AI Glossary](${SITE}/en/ordliste): 30 AI terms defined concisely and citably — agents, RAG, MCP, and more.`,
     "",
     "## Norwegian (Norsk)",
     "",

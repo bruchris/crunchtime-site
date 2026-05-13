@@ -93,6 +93,12 @@ export default async function LocaleLayout({
   const tFooter = await getTranslations({ locale, namespace: "footer" });
   const tBooking = await getTranslations({ locale, namespace: "booking" });
   const bookingHref = process.env.NEXT_PUBLIC_CAL_BOOKING_LINK ?? BOOKING_FALLBACK;
+  const navItems = [
+    { href: `/${locale}/services`, label: t("services") },
+    { href: `/${locale}/cases`, label: t("cases") },
+    { href: `/${locale}/insights`, label: t("insights") },
+    { href: `/${locale}/contact`, label: t("contact") }
+  ];
 
   return (
     <html lang={locale} className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`} data-scroll-behavior="smooth">
@@ -107,40 +113,56 @@ export default async function LocaleLayout({
         <NextIntlClientProvider>
          <BookingModalProvider bookingHref={bookingHref} closeLabel={tBooking("close")}>
           <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[rgba(10,10,9,0.35)] backdrop-blur-2xl backdrop-saturate-150">
-            <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
+            <nav className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-4 sm:px-8">
               <Link href={`/${locale}`} className="font-display flex items-center text-lg font-extrabold tracking-tight">
                 Crunch<span className="text-[var(--color-accent)]">time</span>
               </Link>
               <ul className="hidden gap-8 text-sm text-[var(--color-muted)] sm:flex">
-                <li>
-                  <Link href={`/${locale}/services`} className="hover:text-[var(--color-fg)]">
-                    {t("services")}
-                  </Link>
-                </li>
-                <li>
-                  <Link href={`/${locale}/cases`} className="hover:text-[var(--color-fg)]">
-                    {t("cases")}
-                  </Link>
-                </li>
-                <li>
-                  <Link href={`/${locale}/insights`} className="hover:text-[var(--color-fg)]">
-                    {t("insights")}
-                  </Link>
-                </li>
-                <li>
-                  <Link href={`/${locale}/contact`} className="hover:text-[var(--color-fg)]">
-                    {t("contact")}
-                  </Link>
-                </li>
+                {navItems.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className="hover:text-[var(--color-fg)]">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
               </ul>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 sm:gap-4">
                 <LocaleToggle currentLocale={locale as Locale} />
                 <Link
                   href={`/${locale}/contact`}
-                  className="rounded-sm bg-[var(--color-accent)] px-4 py-2 text-sm font-bold text-black hover:bg-[var(--color-accent-strong)]"
+                  className="hidden rounded-sm bg-[var(--color-accent)] px-4 py-2 text-sm font-bold text-black hover:bg-[var(--color-accent-strong)] sm:inline-flex"
                 >
                   {t("cta")}
                 </Link>
+                <details className="group relative sm:hidden">
+                  <summary className="flex list-none items-center gap-2 rounded-sm border border-white/10 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-fg)] marker:hidden [&::-webkit-details-marker]:hidden">
+                    <span className="flex h-3.5 w-4 flex-col justify-between" aria-hidden>
+                      <span className="block h-px w-full bg-current" />
+                      <span className="block h-px w-full bg-current" />
+                      <span className="block h-px w-full bg-current" />
+                    </span>
+                    Menu
+                  </summary>
+                  <div className="absolute right-0 top-[calc(100%+0.75rem)] w-[min(18rem,calc(100vw-2.5rem))] rounded-2xl border border-white/10 bg-[rgba(14,14,13,0.96)] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+                    <div className="flex flex-col gap-2 text-sm text-[var(--color-muted)]">
+                      {navItems.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="rounded-xl border border-transparent px-3 py-2 hover:border-white/10 hover:bg-white/[0.04] hover:text-[var(--color-fg)]"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                    <Link
+                      href={`/${locale}/contact`}
+                      className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-[var(--color-accent)] px-4 py-3 text-sm font-bold text-black hover:bg-[var(--color-accent-strong)]"
+                    >
+                      {t("cta")}
+                    </Link>
+                  </div>
+                </details>
               </div>
             </nav>
           </header>
@@ -168,13 +190,9 @@ export default async function LocaleLayout({
                 <Link href={`/${locale}/facts`} className="hover:text-[var(--color-fg)]">
                   {locale === "no" ? "Fakta" : "Facts"}
                 </Link>
-                {locale === "no" ? (
-                  <Link href="/no/ordliste" className="hover:text-[var(--color-fg)]">
-                    Ordliste
-                  </Link>
-                ) : (
-                  <span aria-hidden />
-                )}
+                <Link href={`/${locale}/ordliste`} className="hover:text-[var(--color-fg)]">
+                  {locale === "no" ? "Ordliste" : "Glossary"}
+                </Link>
                 <Link href={`/${locale}/contact`} className="hover:text-[var(--color-fg)]">
                   {t("contact")}
                 </Link>
