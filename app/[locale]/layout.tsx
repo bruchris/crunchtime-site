@@ -143,7 +143,7 @@ export default async function LocaleLayout({
                     </span>
                     Menu
                   </summary>
-                  <div className="absolute right-0 top-[calc(100%+0.75rem)] w-[min(18rem,calc(100vw-2.5rem))] rounded-2xl border border-white/10 bg-[rgba(14,14,13,0.96)] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+                  <div className="absolute right-0 top-[calc(100%+0.75rem)] w-[min(18rem,calc(100vw-2.5rem))] rounded-2xl border border-white/10 bg-[var(--color-surface)] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.6)]">
                     <div className="flex flex-col gap-2 text-sm text-[var(--color-muted)]">
                       {navItems.map((item) => (
                         <Link
