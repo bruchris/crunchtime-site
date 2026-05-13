@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CursorEffect } from "../_components/CursorEffect";
+import { MobileNav } from "../_components/MobileNav";
 import { LocaleToggle } from "./_components/LocaleToggle";
 import { BookingModalProvider } from "./_components/BookingModal/BookingModal";
 import { routing, type Locale } from "../../i18n/routing";
@@ -134,35 +135,11 @@ export default async function LocaleLayout({
                 >
                   {t("cta")}
                 </Link>
-                <details className="group relative sm:hidden">
-                  <summary className="flex list-none items-center gap-2 rounded-sm border border-white/10 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-fg)] marker:hidden [&::-webkit-details-marker]:hidden">
-                    <span className="flex h-3.5 w-4 flex-col justify-between" aria-hidden>
-                      <span className="block h-px w-full bg-current" />
-                      <span className="block h-px w-full bg-current" />
-                      <span className="block h-px w-full bg-current" />
-                    </span>
-                    Menu
-                  </summary>
-                  <div className="absolute right-0 top-[calc(100%+0.75rem)] w-[min(18rem,calc(100vw-2.5rem))] rounded-2xl border border-white/10 p-4 shadow-[0_32px_80px_rgba(0,0,0,0.7)] backdrop-blur-2xl backdrop-saturate-150" style={{ background: 'rgba(10,10,9,0.88)' }}>
-                    <div className="flex flex-col gap-2 text-sm text-[var(--color-muted)]">
-                      {navItems.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="rounded-xl border border-transparent px-3 py-2 hover:border-white/10 hover:bg-white/[0.04] hover:text-[var(--color-fg)]"
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                    <Link
-                      href={`/${locale}/contact`}
-                      className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-[var(--color-accent)] px-4 py-3 text-sm font-bold text-black hover:bg-[var(--color-accent-strong)]"
-                    >
-                      {t("cta")}
-                    </Link>
-                  </div>
-                </details>
+                <MobileNav
+                  items={navItems}
+                  ctaHref={`/${locale}/contact`}
+                  ctaLabel={t("cta")}
+                />
               </div>
             </nav>
           </header>
